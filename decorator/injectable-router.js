@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Options = exports.Use = exports.Param = exports.All = exports.Put = exports.Delete = exports.Get = exports.Post = exports.InjectableRouter = void 0;
-const di_1 = require("@fm/di");
-const express_1 = require("express");
+import { getProvider, Injector } from '@fm/di';
+import { Router } from 'express';
 var RouterMethod;
 (function (RouterMethod) {
     RouterMethod["post"] = "post";
@@ -15,7 +12,7 @@ var RouterMethod;
     RouterMethod["use"] = "use";
 })(RouterMethod || (RouterMethod = {}));
 const __ROUTER__ = '__ROUTER__';
-const rootInjector = (0, di_1.getProvider)(di_1.Injector);
+const rootInjector = getProvider(Injector);
 const factoryRouterDecoratorMethod = (method) => (url) => (prototype, key) => {
     if (!prototype[__ROUTER__]) {
         Object.defineProperty(prototype, __ROUTER__, { value: [] });
@@ -23,7 +20,7 @@ const factoryRouterDecoratorMethod = (method) => (url) => (prototype, key) => {
     prototype[__ROUTER__].push({ method, url, agent: prototype[key] });
 };
 const createFactoryRouter = (baseUrl, clazz) => (injector) => {
-    const router = (0, express_1.Router)();
+    const router = Router();
     const routeItems = clazz.prototype[__ROUTER__] || [];
     const newClazz = injector.createClass(clazz);
     routeItems.forEach(({ method, url, agent }) => {
@@ -32,16 +29,15 @@ const createFactoryRouter = (baseUrl, clazz) => (injector) => {
     });
     return router;
 };
-const InjectableRouter = (baseUrl = '') => (clazz) => {
-    rootInjector.set(clazz, { provide: clazz, useFactory: createFactoryRouter(baseUrl, clazz), deps: [di_1.Injector] });
+export const InjectableRouter = (baseUrl = '') => (clazz) => {
+    rootInjector.set(clazz, { provide: clazz, useFactory: createFactoryRouter(baseUrl, clazz), deps: [Injector] });
     return clazz;
 };
-exports.InjectableRouter = InjectableRouter;
-exports.Post = factoryRouterDecoratorMethod(RouterMethod.post);
-exports.Get = factoryRouterDecoratorMethod(RouterMethod.get);
-exports.Delete = factoryRouterDecoratorMethod(RouterMethod.delete);
-exports.Put = factoryRouterDecoratorMethod(RouterMethod.put);
-exports.All = factoryRouterDecoratorMethod(RouterMethod.all);
-exports.Param = factoryRouterDecoratorMethod(RouterMethod.param);
-exports.Use = factoryRouterDecoratorMethod(RouterMethod.use);
-exports.Options = factoryRouterDecoratorMethod(RouterMethod.options);
+export const Post = factoryRouterDecoratorMethod(RouterMethod.post);
+export const Get = factoryRouterDecoratorMethod(RouterMethod.get);
+export const Delete = factoryRouterDecoratorMethod(RouterMethod.delete);
+export const Put = factoryRouterDecoratorMethod(RouterMethod.put);
+export const All = factoryRouterDecoratorMethod(RouterMethod.all);
+export const Param = factoryRouterDecoratorMethod(RouterMethod.param);
+export const Use = factoryRouterDecoratorMethod(RouterMethod.use);
+export const Options = factoryRouterDecoratorMethod(RouterMethod.options);
