@@ -5,17 +5,18 @@ const tslib_1 = require("tslib");
 const di_1 = require("@fm/di");
 const express_1 = tslib_1.__importDefault(require("express"));
 const http_1 = require("http");
-const token_1 = require("../../token");
 class ExpressServerPlatform {
+    port;
     providers;
     rootInjector = (0, di_1.getProvider)(di_1.Injector);
-    constructor(providers) {
+    constructor(port, providers) {
+        this.port = port;
         this.providers = providers;
     }
     async bootstrapStart(start) {
-        const injector = this.beforeBootstrapStart([{ provide: express_1.default, useValue: (0, express_1.default)() }]);
-        const port = injector.get(token_1.PORT) || 3000;
-        await start(injector).then(() => this.listen(port, injector.get(express_1.default)));
+        const app = (0, express_1.default)();
+        const injector = this.beforeBootstrapStart([{ provide: express_1.default, useValue: app }]);
+        await start(injector).then(() => this.listen(this.port, app));
     }
     beforeBootstrapStart(providers = []) {
         const injector = new di_1.StaticInjector(this.rootInjector, { isScope: 'self' });

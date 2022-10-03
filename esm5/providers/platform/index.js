@@ -1,2 +1,2 @@
 import { ExpressServerPlatform } from './platform';
-export const dyanmicServer = (providers = []) => new ExpressServerPlatform(providers);
+export const dyanmicServer = (port, providers = []) => new ExpressServerPlatform(port, providers);

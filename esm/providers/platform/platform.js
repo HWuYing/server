@@ -1,17 +1,18 @@
 import { getProvider, Injector, StaticInjector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
-import { PORT } from '../../token';
 export class ExpressServerPlatform {
+    port;
     providers;
     rootInjector = getProvider(Injector);
-    constructor(providers) {
+    constructor(port, providers) {
+        this.port = port;
         this.providers = providers;
     }
     async bootstrapStart(start) {
-        const injector = this.beforeBootstrapStart([{ provide: express, useValue: express() }]);
-        const port = injector.get(PORT) || 3000;
-        await start(injector).then(() => this.listen(port, injector.get(express)));
+        const app = express();
+        const injector = this.beforeBootstrapStart([{ provide: express, useValue: app }]);
+        await start(injector).then(() => this.listen(this.port, app));
     }
     beforeBootstrapStart(providers = []) {
         const injector = new StaticInjector(this.rootInjector, { isScope: 'self' });
