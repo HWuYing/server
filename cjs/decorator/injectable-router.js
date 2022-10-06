@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Options = exports.Use = exports.Param = exports.All = exports.Put = exports.Delete = exports.Get = exports.Post = exports.InjectableRouter = void 0;
-const di_1 = require("@fm/di");
-const express_1 = require("express");
+var tslib_1 = require("tslib");
+var di_1 = require("@fm/di");
+var express_1 = require("express");
 var RouterMethod;
 (function (RouterMethod) {
     RouterMethod["post"] = "post";
@@ -14,27 +15,39 @@ var RouterMethod;
     RouterMethod["param"] = "param";
     RouterMethod["use"] = "use";
 })(RouterMethod || (RouterMethod = {}));
-const __ROUTER__ = '__ROUTER__';
-const rootInjector = (0, di_1.getProvider)(di_1.Injector);
-const factoryRouterDecoratorMethod = (method) => (url) => (prototype, key) => {
+var __ROUTER__ = '__ROUTER__';
+var rootInjector = (0, di_1.getProvider)(di_1.Injector);
+var factoryRouterDecoratorMethod = function (method) { return function (url) { return function (prototype, key) {
     if (!prototype[__ROUTER__]) {
         Object.defineProperty(prototype, __ROUTER__, { value: [] });
     }
-    prototype[__ROUTER__].push({ method, url, agent: prototype[key] });
-};
-const createFactoryRouter = (baseUrl, clazz) => (injector) => {
-    const router = (0, express_1.Router)();
-    const routeItems = clazz.prototype[__ROUTER__] || [];
-    const newClazz = injector.createClass(clazz);
-    routeItems.forEach(({ method, url, agent }) => {
-        const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
-        router[method].call(router, routeUrl, [], async (...args) => agent.apply(newClazz, args));
+    prototype[__ROUTER__].push({ method: method, url: url, agent: prototype[key] });
+}; }; };
+var createFactoryRouter = function (baseUrl, clazz) { return function (injector) {
+    var router = (0, express_1.Router)();
+    var routeItems = clazz.prototype[__ROUTER__] || [];
+    var newClazz = injector.createClass(clazz);
+    routeItems.forEach(function (_a) {
+        var method = _a.method, url = _a.url, agent = _a.agent;
+        var routeUrl = "".concat(baseUrl, "/").concat(url).replace(/[\\/]+/g, '/');
+        router[method].call(router, routeUrl, [], function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return tslib_1.__awaiter(void 0, void 0, void 0, function () { return tslib_1.__generator(this, function (_a) {
+                return [2 /*return*/, agent.apply(newClazz, args)];
+            }); });
+        });
     });
     return router;
-};
-const InjectableRouter = (baseUrl = '') => (clazz) => {
-    rootInjector.set(clazz, { provide: clazz, useFactory: createFactoryRouter(baseUrl, clazz), deps: [di_1.Injector] });
-    return clazz;
+}; };
+var InjectableRouter = function (baseUrl) {
+    if (baseUrl === void 0) { baseUrl = ''; }
+    return function (clazz) {
+        rootInjector.set(clazz, { provide: clazz, useFactory: createFactoryRouter(baseUrl, clazz), deps: [di_1.Injector] });
+        return clazz;
+    };
 };
 exports.InjectableRouter = InjectableRouter;
 exports.Post = factoryRouterDecoratorMethod(RouterMethod.post);

@@ -1,5 +1,6 @@
+import { __assign } from "tslib";
 import { Injectable } from '@fm/di';
-export const createInjectableModel = (sequelize) => (attributes, options) => (clazz) => {
-    clazz.init(attributes, { sequelize, ...options });
+export var createInjectableModel = function (sequelize) { return function (attributes, options) { return function (clazz) {
+    clazz.init(attributes, __assign({ sequelize: sequelize }, options));
     return Injectable()(clazz);
-};
+}; }; };

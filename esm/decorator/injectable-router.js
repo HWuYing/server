@@ -1,3 +1,4 @@
+import { __awaiter } from "tslib";
 import { getProvider, Injector } from '@fm/di';
 import { Router } from 'express';
 var RouterMethod;
@@ -25,7 +26,7 @@ const createFactoryRouter = (baseUrl, clazz) => (injector) => {
     const newClazz = injector.createClass(clazz);
     routeItems.forEach(({ method, url, agent }) => {
         const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
-        router[method].call(router, routeUrl, [], async (...args) => agent.apply(newClazz, args));
+        router[method].call(router, routeUrl, [], (...args) => __awaiter(void 0, void 0, void 0, function* () { return agent.apply(newClazz, args); }));
     });
     return router;
 };
