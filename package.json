@@ -18,11 +18,23 @@
 			"es2015": "./esm/decorator/index.js",
 			"default": "./esm5/decorator/index.js"
 		},
+		"./decorator/*": {
+			"node": "./cjs/decorator/*.js",
+			"require": "./cjs/decorator/*.js",
+			"es2015": "./esm/decorator/*.js",
+			"default": "./esm5/decorator/*.js"
+		},
 		"./decorator/injectable-router": {
 			"node": "./cjs/decorator/injectable-router/index.js",
 			"require": "./cjs/decorator/injectable-router/index.js",
 			"es2015": "./esm/decorator/injectable-router/index.js",
 			"default": "./esm5/decorator/injectable-router/index.js"
+		},
+		"./decorator/injectable-router/*": {
+			"node": "./cjs/decorator/injectable-router/*.js",
+			"require": "./cjs/decorator/injectable-router/*.js",
+			"es2015": "./esm/decorator/injectable-router/*.js",
+			"default": "./esm5/decorator/injectable-router/*.js"
 		},
 		"./decorator/sequelize": {
 			"node": "./cjs/decorator/sequelize/index.js",
@@ -30,11 +42,23 @@
 			"es2015": "./esm/decorator/sequelize/index.js",
 			"default": "./esm5/decorator/sequelize/index.js"
 		},
+		"./decorator/sequelize/*": {
+			"node": "./cjs/decorator/sequelize/*.js",
+			"require": "./cjs/decorator/sequelize/*.js",
+			"es2015": "./esm/decorator/sequelize/*.js",
+			"default": "./esm5/decorator/sequelize/*.js"
+		},
 		"./extension": {
 			"node": "./cjs/extension/index.js",
 			"require": "./cjs/extension/index.js",
 			"es2015": "./esm/extension/index.js",
 			"default": "./esm5/extension/index.js"
+		},
+		"./extension/*": {
+			"node": "./cjs/extension/*.js",
+			"require": "./cjs/extension/*.js",
+			"es2015": "./esm/extension/*.js",
+			"default": "./esm5/extension/*.js"
 		},
 		"./providers": {
 			"node": "./cjs/providers/index.js",
@@ -42,17 +66,35 @@
 			"es2015": "./esm/providers/index.js",
 			"default": "./esm5/providers/index.js"
 		},
+		"./providers/*": {
+			"node": "./cjs/providers/*.js",
+			"require": "./cjs/providers/*.js",
+			"es2015": "./esm/providers/*.js",
+			"default": "./esm5/providers/*.js"
+		},
 		"./providers/platform": {
 			"node": "./cjs/providers/platform/index.js",
 			"require": "./cjs/providers/platform/index.js",
 			"es2015": "./esm/providers/platform/index.js",
 			"default": "./esm5/providers/platform/index.js"
 		},
+		"./providers/platform/*": {
+			"node": "./cjs/providers/platform/*.js",
+			"require": "./cjs/providers/platform/*.js",
+			"es2015": "./esm/providers/platform/*.js",
+			"default": "./esm5/providers/platform/*.js"
+		},
 		"./token": {
 			"node": "./cjs/token/index.js",
 			"require": "./cjs/token/index.js",
 			"es2015": "./esm/token/index.js",
 			"default": "./esm5/token/index.js"
+		},
+		"./token/*": {
+			"node": "./cjs/token/*.js",
+			"require": "./cjs/token/*.js",
+			"es2015": "./esm/token/*.js",
+			"default": "./esm5/token/*.js"
 		}
 	},
 	"dependencies": {},
