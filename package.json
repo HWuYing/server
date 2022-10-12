@@ -24,30 +24,6 @@
 			"es2015": "./esm/decorator/*.js",
 			"default": "./esm5/decorator/*.js"
 		},
-		"./decorator/injectable-router": {
-			"node": "./cjs/decorator/injectable-router/index.js",
-			"require": "./cjs/decorator/injectable-router/index.js",
-			"es2015": "./esm/decorator/injectable-router/index.js",
-			"default": "./esm5/decorator/injectable-router/index.js"
-		},
-		"./decorator/injectable-router/*": {
-			"node": "./cjs/decorator/injectable-router/*.js",
-			"require": "./cjs/decorator/injectable-router/*.js",
-			"es2015": "./esm/decorator/injectable-router/*.js",
-			"default": "./esm5/decorator/injectable-router/*.js"
-		},
-		"./decorator/sequelize": {
-			"node": "./cjs/decorator/sequelize/index.js",
-			"require": "./cjs/decorator/sequelize/index.js",
-			"es2015": "./esm/decorator/sequelize/index.js",
-			"default": "./esm5/decorator/sequelize/index.js"
-		},
-		"./decorator/sequelize/*": {
-			"node": "./cjs/decorator/sequelize/*.js",
-			"require": "./cjs/decorator/sequelize/*.js",
-			"es2015": "./esm/decorator/sequelize/*.js",
-			"default": "./esm5/decorator/sequelize/*.js"
-		},
 		"./extension": {
 			"node": "./cjs/extension/index.js",
 			"require": "./cjs/extension/index.js",
