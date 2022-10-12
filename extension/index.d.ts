@@ -1,1 +1,1 @@
-export * from './data-error';
+export { DataError } from './data-error';

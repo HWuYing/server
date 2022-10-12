@@ -1,1 +1,1 @@
-export * from './platform';
+export { dyanmicServer } from './platform';
