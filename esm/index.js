@@ -1,4 +1,4 @@
-export { InjectableRouter, Post, Get, Delete, Put, All, Param, Use, Options } from './decorator/injectable-router';
+export { All, Controller, Delete, Get, Options, Param, Post, Put, Use } from './decorator/controller';
 export { createInjectableModel } from './decorator/sequelize';
 export { DataError } from './extension/data-error';
 export { dyanmicServer } from './providers/platform';

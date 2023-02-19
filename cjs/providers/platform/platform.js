@@ -6,23 +6,23 @@ var di_1 = require("@fm/di");
 var express_1 = tslib_1.__importDefault(require("express"));
 var http_1 = require("http");
 var ExpressServerPlatform = /** @class */ (function () {
-    function ExpressServerPlatform(port, providers) {
+    function ExpressServerPlatform(port, platformInjector) {
         this.port = port;
-        this.providers = providers;
-        this.rootInjector = (0, di_1.getProvider)(di_1.Injector);
+        this.platformInjector = platformInjector;
     }
-    ExpressServerPlatform.prototype.bootstrapStart = function (start) {
+    ExpressServerPlatform.prototype.bootstrapStart = function (additionalProviders, start) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var app, injector;
+            var app, _a, _b, providers, _start, injector;
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
+            return tslib_1.__generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         app = (0, express_1.default)();
-                        injector = this.beforeBootstrapStart([{ provide: express_1.default, useValue: app }]);
-                        return [4 /*yield*/, start(injector).then(function () { return _this.listen(_this.port, app); })];
+                        _a = this.parseParams(additionalProviders, start), _b = _a[0], providers = _b === void 0 ? [] : _b, _start = _a[1];
+                        injector = this.beforeBootstrapStart(tslib_1.__spreadArray(tslib_1.__spreadArray([], providers, true), [{ provide: express_1.default, useValue: app }], false));
+                        return [4 /*yield*/, _start(injector).then(function () { return _this.listen(_this.port, app); })];
                     case 1:
-                        _a.sent();
+                        _c.sent();
                         return [2 /*return*/];
                 }
             });
@@ -30,9 +30,10 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        var injector = new di_1.StaticInjector(this.rootInjector, { isScope: 'self' });
-        tslib_1.__spreadArray(tslib_1.__spreadArray([], this.providers, true), providers, true).forEach(function (provider) { return injector.set(provider.provide, provider); });
-        return injector;
+        return di_1.Injector.create(tslib_1.__spreadArray([{ provide: di_1.INJECTOR_SCOPE, useValue: 'root' }], providers, true), this.platformInjector);
+    };
+    ExpressServerPlatform.prototype.parseParams = function (providers, start) {
+        return typeof providers === 'function' ? [[], providers] : [tslib_1.__spreadArray([], providers, true), start];
     };
     ExpressServerPlatform.prototype.listen = function (port, app) {
         global.hotHttpHost = "http://localhost:".concat(port, "/");

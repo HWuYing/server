@@ -1,24 +1,25 @@
 import { __awaiter } from "tslib";
-import { getProvider, Injector, StaticInjector } from '@fm/di';
+import { Injector, INJECTOR_SCOPE } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
 export class ExpressServerPlatform {
-    constructor(port, providers) {
+    constructor(port, platformInjector) {
         this.port = port;
-        this.providers = providers;
-        this.rootInjector = getProvider(Injector);
+        this.platformInjector = platformInjector;
     }
-    bootstrapStart(start) {
+    bootstrapStart(additionalProviders, start) {
         return __awaiter(this, void 0, void 0, function* () {
             const app = express();
-            const injector = this.beforeBootstrapStart([{ provide: express, useValue: app }]);
-            yield start(injector).then(() => this.listen(this.port, app));
+            const [providers = [], _start] = this.parseParams(additionalProviders, start);
+            const injector = this.beforeBootstrapStart([...providers, { provide: express, useValue: app }]);
+            yield _start(injector).then(() => this.listen(this.port, app));
         });
     }
     beforeBootstrapStart(providers = []) {
-        const injector = new StaticInjector(this.rootInjector, { isScope: 'self' });
-        [...this.providers, ...providers].forEach((provider) => injector.set(provider.provide, provider));
-        return injector;
+        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, ...providers], this.platformInjector);
+    }
+    parseParams(providers, start) {
+        return typeof providers === 'function' ? [[], providers] : [[...providers], start];
     }
     listen(port, app) {
         global.hotHttpHost = `http://localhost:${port}/`;
