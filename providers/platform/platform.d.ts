@@ -1,6 +1,6 @@
 import { Injector, Provider } from '@fm/di';
 import { Express } from 'express';
-declare type StartFn = (injector: Injector) => Promise<void>;
+type StartFn = (injector: Injector) => Promise<void>;
 export declare class ExpressServerPlatform {
     private port;
     private platformInjector;
