@@ -11,12 +11,12 @@ export class ExpressServerPlatform {
         return __awaiter(this, void 0, void 0, function* () {
             const app = express();
             const [providers = [], _start] = this.parseParams(additionalProviders, start);
-            const injector = this.beforeBootstrapStart([...providers, { provide: express, useValue: app }]);
+            const injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
             yield _start(injector).then(() => this.listen(this.port, app));
         });
     }
     beforeBootstrapStart(providers = []) {
-        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, ...providers], this.platformInjector);
+        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, providers], this.platformInjector);
     }
     parseParams(providers, start) {
         return typeof providers === 'function' ? [[], providers] : [[...providers], start];

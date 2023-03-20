@@ -16,7 +16,7 @@ var ExpressServerPlatform = /** @class */ (function () {
                     case 0:
                         app = express();
                         _a = this.parseParams(additionalProviders, start), _b = _a[0], providers = _b === void 0 ? [] : _b, _start = _a[1];
-                        injector = this.beforeBootstrapStart(__spreadArray(__spreadArray([], providers, true), [{ provide: express, useValue: app }], false));
+                        injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
                         return [4 /*yield*/, _start(injector).then(function () { return _this.listen(_this.port, app); })];
                     case 1:
                         _c.sent();
@@ -27,7 +27,7 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return Injector.create(__spreadArray([{ provide: INJECTOR_SCOPE, useValue: 'root' }], providers, true), this.platformInjector);
+        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, providers], this.platformInjector);
     };
     ExpressServerPlatform.prototype.parseParams = function (providers, start) {
         return typeof providers === 'function' ? [[], providers] : [__spreadArray([], providers, true), start];

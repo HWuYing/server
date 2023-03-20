@@ -1,4 +1,4 @@
-import { covertToFactory, makeDecorator, makeMethodDecorator, setInjectableDef } from '@fm/di';
+import { convertToFactory, makeDecorator, makeMethodDecorator, setInjectableDef } from '@fm/di';
 import { Router } from 'express';
 var CONTROLL = 'Controll';
 var RequestMethod;
@@ -14,14 +14,14 @@ var RequestMethod;
 })(RequestMethod || (RequestMethod = {}));
 var props = function (url) { return ({ url: url }); };
 var createFactoryRouter = function (baseUrl, clazz) {
-    var factory = covertToFactory(clazz);
+    var factory = convertToFactory(clazz);
     return function () {
         var newClazz = factory();
         var router = Router();
         var prototype = clazz.prototype;
         var methods = prototype.__methods__ || [];
         methods.forEach(function (_a) {
-            var method = _a.method, _b = _a.annotationInstance, url = _b.url, metadataName = _b.metadataName;
+            var descriptor = _a.descriptor, _b = _a.annotationInstance, url = _b.url, metadataName = _b.metadataName;
             if (metadataName === RequestMethod[metadataName]) {
                 var routeUrl = "".concat(baseUrl, "/").concat(url).replace(/[\\/]+/g, '/');
                 var agent = function () {
@@ -29,7 +29,7 @@ var createFactoryRouter = function (baseUrl, clazz) {
                     for (var _i = 0; _i < arguments.length; _i++) {
                         args[_i] = arguments[_i];
                     }
-                    return clazz.prototype[method].apply(newClazz, args);
+                    return descriptor.value.apply(newClazz, args);
                 };
                 router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
             }
