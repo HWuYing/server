@@ -18,9 +18,8 @@ const createFactoryRouter = (baseUrl, clazz) => {
     return () => {
         const newClazz = factory();
         const router = Router();
-        const prototype = clazz.prototype;
-        const methods = prototype.__methods__ || [];
-        methods.forEach(({ descriptor, annotationInstance: { url, metadataName } }) => {
+        const { __methods__ = [] } = clazz;
+        __methods__.forEach(({ descriptor, annotationInstance: { url, metadataName } }) => {
             if (metadataName === RequestMethod[metadataName]) {
                 const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
                 const agent = (...args) => descriptor.value.apply(newClazz, args);

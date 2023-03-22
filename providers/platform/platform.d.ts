@@ -7,6 +7,7 @@ export declare class ExpressServerPlatform {
     constructor(port: number, platformInjector: Injector);
     bootstrapStart(additionalProviders: Provider[] | StartFn, start?: StartFn): Promise<void>;
     private beforeBootstrapStart;
+    private runStart;
     private parseParams;
     listen(port: number, app: Express): void;
 }

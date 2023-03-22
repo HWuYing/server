@@ -21,9 +21,8 @@ var createFactoryRouter = function (baseUrl, clazz) {
     return function () {
         var newClazz = factory();
         var router = (0, express_1.Router)();
-        var prototype = clazz.prototype;
-        var methods = prototype.__methods__ || [];
-        methods.forEach(function (_a) {
+        var _a = clazz.__methods__, __methods__ = _a === void 0 ? [] : _a;
+        __methods__.forEach(function (_a) {
             var descriptor = _a.descriptor, _b = _a.annotationInstance, url = _b.url, metadataName = _b.metadataName;
             if (metadataName === RequestMethod[metadataName]) {
                 var routeUrl = "".concat(baseUrl, "/").concat(url).replace(/[\\/]+/g, '/');
