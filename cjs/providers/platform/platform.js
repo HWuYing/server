@@ -31,7 +31,7 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return di_1.Injector.create([{ provide: di_1.INJECTOR_SCOPE, useValue: 'root' }, providers], this.platformInjector);
+        return di_1.Injector.create([providers], this.platformInjector);
     };
     ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
         var application = injector.get(platform_1.APPLICATION_TOKEN);

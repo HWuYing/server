@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Prov = exports.Application = exports.dyanmicServer = exports.PLATFORM_SCOPE = void 0;
+exports.Input = exports.Prov = exports.Application = exports.dyanmicServer = exports.PLATFORM_SCOPE = void 0;
 var platform_1 = require("@fm/core/providers/platform");
 var token_1 = require("@fm/core/token");
 var di_1 = require("@fm/di");
@@ -22,3 +22,4 @@ var dyanmicServer = function (port, providers) {
 exports.dyanmicServer = dyanmicServer;
 exports.Application = applicationContext.makeApplicationDecorator();
 exports.Prov = applicationContext.makeProvDecorator('MethodDecorator');
+exports.Input = applicationContext.makePropInput('InputPropDecorator');

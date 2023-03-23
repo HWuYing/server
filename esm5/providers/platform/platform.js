@@ -1,6 +1,6 @@
 import { __awaiter, __generator, __spreadArray } from "tslib";
 import { APPLICATION_METDATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
-import { Injector, INJECTOR_SCOPE } from '@fm/di';
+import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
 var ExpressServerPlatform = /** @class */ (function () {
@@ -28,7 +28,7 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, providers], this.platformInjector);
+        return Injector.create([providers], this.platformInjector);
     };
     ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
         var application = injector.get(APPLICATION_TOKEN);

@@ -17,3 +17,4 @@ export var dyanmicServer = function (port, providers) {
 };
 export var Application = applicationContext.makeApplicationDecorator();
 export var Prov = applicationContext.makeProvDecorator('MethodDecorator');
+export var Input = applicationContext.makePropInput('InputPropDecorator');

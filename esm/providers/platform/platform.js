@@ -1,6 +1,6 @@
 import { __awaiter } from "tslib";
 import { APPLICATION_METDATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
-import { Injector, INJECTOR_SCOPE } from '@fm/di';
+import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
 export class ExpressServerPlatform {
@@ -18,7 +18,7 @@ export class ExpressServerPlatform {
         });
     }
     beforeBootstrapStart(providers = []) {
-        return Injector.create([{ provide: INJECTOR_SCOPE, useValue: 'root' }, providers], this.platformInjector);
+        return Injector.create([providers], this.platformInjector);
     }
     runStart(injector, options, start) {
         const application = injector.get(APPLICATION_TOKEN);

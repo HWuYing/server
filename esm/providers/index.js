@@ -1,1 +1,1 @@
-export { Application, dyanmicServer, PLATFORM_SCOPE, Prov } from './platform';
+export { Application, dyanmicServer, Input, PLATFORM_SCOPE, Prov } from './platform';

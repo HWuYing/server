@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Prov = exports.PLATFORM_SCOPE = exports.dyanmicServer = exports.Application = exports.DataError = exports.createInjectableModel = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Get = exports.Delete = exports.Controller = exports.All = void 0;
+exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dyanmicServer = exports.Application = exports.DataError = exports.createInjectableModel = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Get = exports.Delete = exports.Controller = exports.All = void 0;
 var controller_1 = require("./decorator/controller");
 Object.defineProperty(exports, "All", { enumerable: true, get: function () { return controller_1.All; } });
 Object.defineProperty(exports, "Controller", { enumerable: true, get: function () { return controller_1.Controller; } });
@@ -18,5 +18,6 @@ Object.defineProperty(exports, "DataError", { enumerable: true, get: function ()
 var platform_1 = require("./providers/platform");
 Object.defineProperty(exports, "Application", { enumerable: true, get: function () { return platform_1.Application; } });
 Object.defineProperty(exports, "dyanmicServer", { enumerable: true, get: function () { return platform_1.dyanmicServer; } });
+Object.defineProperty(exports, "Input", { enumerable: true, get: function () { return platform_1.Input; } });
 Object.defineProperty(exports, "PLATFORM_SCOPE", { enumerable: true, get: function () { return platform_1.PLATFORM_SCOPE; } });
 Object.defineProperty(exports, "Prov", { enumerable: true, get: function () { return platform_1.Prov; } });
