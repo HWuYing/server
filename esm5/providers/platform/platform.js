@@ -1,5 +1,5 @@
 import { __awaiter, __generator, __spreadArray } from "tslib";
-import { APPLICATION_METDATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
+import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
@@ -38,7 +38,7 @@ var ExpressServerPlatform = /** @class */ (function () {
         return typeof providers === 'function' ? [[], providers] : [__spreadArray([], providers, true), start];
     };
     ExpressServerPlatform.prototype.listen = function (port, app) {
-        var _a = (this.platformInjector.get(APPLICATION_METDATA) || {}).port, metadataPort = _a === void 0 ? port : _a;
+        var _a = (this.platformInjector.get(APPLICATION_METADATA) || {}).port, metadataPort = _a === void 0 ? port : _a;
         global.hotHttpHost = "http://localhost:".concat(metadataPort, "/");
         global.hotHttpServer = createServer(app).listen(metadataPort, function () {
             console.log("The server is running at ".concat(global.hotHttpHost));

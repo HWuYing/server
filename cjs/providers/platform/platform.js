@@ -41,7 +41,7 @@ var ExpressServerPlatform = /** @class */ (function () {
         return typeof providers === 'function' ? [[], providers] : [tslib_1.__spreadArray([], providers, true), start];
     };
     ExpressServerPlatform.prototype.listen = function (port, app) {
-        var _a = (this.platformInjector.get(platform_1.APPLICATION_METDATA) || {}).port, metadataPort = _a === void 0 ? port : _a;
+        var _a = (this.platformInjector.get(platform_1.APPLICATION_METADATA) || {}).port, metadataPort = _a === void 0 ? port : _a;
         global.hotHttpHost = "http://localhost:".concat(metadataPort, "/");
         global.hotHttpServer = (0, http_1.createServer)(app).listen(metadataPort, function () {
             console.log("The server is running at ".concat(global.hotHttpHost));

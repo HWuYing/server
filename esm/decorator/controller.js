@@ -1,6 +1,6 @@
 import { convertToFactory, makeDecorator, makeMethodDecorator, setInjectableDef } from '@fm/di';
 import { Router } from 'express';
-const CONTROLL = 'Controll';
+const CONTROL = 'Control';
 var RequestMethod;
 (function (RequestMethod) {
     RequestMethod["post"] = "post";
@@ -33,7 +33,7 @@ const createFactoryRouter = (baseUrl, clazz) => {
     };
 };
 // eslint-disable-next-line max-len
-export const Controller = makeDecorator(CONTROLL, (baseUrl = '') => ({ baseUrl }), (injectableType, meta = '') => {
+export const Controller = makeDecorator(CONTROL, (baseUrl = '') => ({ baseUrl }), (injectableType, meta = '') => {
     setInjectableDef(injectableType, { token: injectableType, providedIn: 'root', factory: createFactoryRouter(meta, injectableType) });
 });
 export const Post = makeMethodDecorator(RequestMethod.post, props);

@@ -1,5 +1,5 @@
 import { __awaiter } from "tslib";
-import { APPLICATION_METDATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
+import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
@@ -28,7 +28,7 @@ export class ExpressServerPlatform {
         return typeof providers === 'function' ? [[], providers] : [[...providers], start];
     }
     listen(port, app) {
-        const { port: metadataPort = port } = this.platformInjector.get(APPLICATION_METDATA) || {};
+        const { port: metadataPort = port } = this.platformInjector.get(APPLICATION_METADATA) || {};
         global.hotHttpHost = `http://localhost:${metadataPort}/`;
         global.hotHttpServer = createServer(app).listen(metadataPort, () => {
             console.log(`The server is running at ${global.hotHttpHost}`);

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Options = exports.Use = exports.Param = exports.All = exports.Put = exports.Delete = exports.Get = exports.Post = exports.Controller = void 0;
 var di_1 = require("@fm/di");
 var express_1 = require("express");
-var CONTROLL = 'Controll';
+var CONTROL = 'Control';
 var RequestMethod;
 (function (RequestMethod) {
     RequestMethod["post"] = "post";
@@ -43,7 +43,7 @@ var createFactoryRouter = function (baseUrl, clazz) {
     };
 };
 // eslint-disable-next-line max-len
-exports.Controller = (0, di_1.makeDecorator)(CONTROLL, function (baseUrl) {
+exports.Controller = (0, di_1.makeDecorator)(CONTROL, function (baseUrl) {
     if (baseUrl === void 0) { baseUrl = ''; }
     return ({ baseUrl: baseUrl });
 }, function (injectableType, meta) {

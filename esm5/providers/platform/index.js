@@ -1,4 +1,4 @@
-import { ApplicationContext, createPlafformFactory, PlatformOptions } from '@fm/core/providers/platform';
+import { ApplicationContext, createPlatformFactory, PlatformOptions } from '@fm/core/providers/platform';
 import { PLATFORM } from '@fm/core/token';
 import { Injector } from '@fm/di';
 import { ExpressServerPlatform } from './platform';
@@ -8,10 +8,10 @@ var _CORE_PLATFORM_PROVIDERS = [
     { provide: PLATFORM, useExisting: ExpressServerPlatform },
     { provide: ApplicationContext, useFactory: function () { return applicationContext; } }
 ];
-var createPlatform = createPlafformFactory(null, _CORE_PLATFORM_PROVIDERS);
-applicationContext.regeditStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });
+var createPlatform = createPlatformFactory(null, _CORE_PLATFORM_PROVIDERS);
+applicationContext.registerStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });
 export { PLATFORM_SCOPE } from '@fm/core/providers/platform';
-export var dyanmicServer = function (port, providers) {
+export var dynamicServer = function (port, providers) {
     if (providers === void 0) { providers = []; }
     return createPlatform(applicationContext, providers, { provide: PlatformOptions, useValue: port });
 };

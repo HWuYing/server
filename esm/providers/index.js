@@ -1,1 +1,1 @@
-export { Application, dyanmicServer, Input, PLATFORM_SCOPE, Prov } from './platform';
+export { Application, dynamicServer, Input, PLATFORM_SCOPE, Prov } from './platform';
