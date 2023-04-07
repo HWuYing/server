@@ -13,27 +13,30 @@ var RequestMethod;
     RequestMethod["use"] = "use";
 })(RequestMethod || (RequestMethod = {}));
 var props = function (url) { return ({ url: url }); };
+function createRouter(baseUrl, __methods__, newClazz) {
+    var router = Router();
+    __methods__.forEach(function (_a) {
+        var descriptor = _a.descriptor, _b = _a.annotationInstance, url = _b.url, metadataName = _b.metadataName;
+        if (metadataName === RequestMethod[metadataName]) {
+            var routeUrl = "".concat(baseUrl, "/").concat(url).replace(/[\\/]+/g, '/');
+            var agent = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                return descriptor.value.apply(newClazz, args);
+            };
+            router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
+        }
+    });
+    return router;
+}
 var createFactoryRouter = function (baseUrl, clazz) {
     var factory = convertToFactory(clazz);
     return function () {
         var newClazz = factory();
-        var router = Router();
-        var _a = clazz.__methods__, __methods__ = _a === void 0 ? [] : _a;
-        __methods__.forEach(function (_a) {
-            var descriptor = _a.descriptor, _b = _a.annotationInstance, url = _b.url, metadataName = _b.metadataName;
-            if (metadataName === RequestMethod[metadataName]) {
-                var routeUrl = "".concat(baseUrl, "/").concat(url).replace(/[\\/]+/g, '/');
-                var agent = function () {
-                    var args = [];
-                    for (var _i = 0; _i < arguments.length; _i++) {
-                        args[_i] = arguments[_i];
-                    }
-                    return descriptor.value.apply(newClazz, args);
-                };
-                router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
-            }
-        });
-        return router;
+        newClazz.router = createRouter(baseUrl, clazz.__methods__ || [], newClazz);
+        return newClazz;
     };
 };
 // eslint-disable-next-line max-len

@@ -13,20 +13,23 @@ var RequestMethod;
     RequestMethod["use"] = "use";
 })(RequestMethod || (RequestMethod = {}));
 const props = (url) => ({ url });
+function createRouter(baseUrl, __methods__, newClazz) {
+    const router = Router();
+    __methods__.forEach(({ descriptor, annotationInstance: { url, metadataName } }) => {
+        if (metadataName === RequestMethod[metadataName]) {
+            const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
+            const agent = (...args) => descriptor.value.apply(newClazz, args);
+            router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
+        }
+    });
+    return router;
+}
 const createFactoryRouter = (baseUrl, clazz) => {
     const factory = convertToFactory(clazz);
     return () => {
         const newClazz = factory();
-        const router = Router();
-        const { __methods__ = [] } = clazz;
-        __methods__.forEach(({ descriptor, annotationInstance: { url, metadataName } }) => {
-            if (metadataName === RequestMethod[metadataName]) {
-                const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
-                const agent = (...args) => descriptor.value.apply(newClazz, args);
-                router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
-            }
-        });
-        return router;
+        newClazz.router = createRouter(baseUrl, clazz.__methods__ || [], newClazz);
+        return newClazz;
     };
 };
 // eslint-disable-next-line max-len
