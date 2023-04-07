@@ -1,10 +1,10 @@
 import { Type } from '@fm/di';
 import { Router } from 'express';
-export interface ControlerInterface {
+export interface ControllerInterface {
     router: Router;
 }
 interface ControllerDecorator {
-    (baseUrl?: string): <T extends ControlerInterface>(type: Type<T>) => Type<T>;
+    (baseUrl?: string): <T extends ControllerInterface>(type: Type<T>) => Type<T>;
 }
 export declare const Controller: ControllerDecorator;
 export declare const Post: (this: unknown, ...args: any[]) => any;
