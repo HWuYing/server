@@ -9,6 +9,6 @@ export declare class ExpressServerPlatform {
     private beforeBootstrapStart;
     private runStart;
     private parseParams;
-    listen(port: number, app: Express): void;
+    listen(injector: Injector, app: Express): void;
 }
 export {};

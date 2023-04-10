@@ -8,8 +8,7 @@ var platform_2 = require("./platform");
 var applicationContext = new platform_1.ApplicationContext();
 var _CORE_PLATFORM_PROVIDERS = [
     { provide: platform_2.ExpressServerPlatform, deps: [platform_1.PlatformOptions, di_1.Injector] },
-    { provide: token_1.PLATFORM, useExisting: platform_2.ExpressServerPlatform },
-    { provide: platform_1.ApplicationContext, useFactory: function () { return applicationContext; } }
+    { provide: token_1.PLATFORM, useExisting: platform_2.ExpressServerPlatform }
 ];
 var createPlatform = (0, platform_1.createPlatformFactory)(null, _CORE_PLATFORM_PROVIDERS);
 applicationContext.registerStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });

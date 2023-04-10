@@ -5,8 +5,7 @@ import { ExpressServerPlatform } from './platform';
 var applicationContext = new ApplicationContext();
 var _CORE_PLATFORM_PROVIDERS = [
     { provide: ExpressServerPlatform, deps: [PlatformOptions, Injector] },
-    { provide: PLATFORM, useExisting: ExpressServerPlatform },
-    { provide: ApplicationContext, useFactory: function () { return applicationContext; } }
+    { provide: PLATFORM, useExisting: ExpressServerPlatform }
 ];
 var createPlatform = createPlatformFactory(null, _CORE_PLATFORM_PROVIDERS);
 applicationContext.registerStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });
