@@ -1,6 +1,8 @@
-import { convertToFactory, makeDecorator, makeMethodDecorator, setInjectableDef } from '@fm/di';
+import { attachInjectFlag, convertToFactory, makeDecorator, makeMethodDecorator, ROOT_SCOPE, setInjectableDef } from '@fm/di';
 import { Router } from 'express';
 const CONTROL = 'Control';
+const FACTORY = 0b0001;
+const MIDDLEWARE = 'MIDDLEWARE';
 var RequestMethod;
 (function (RequestMethod) {
     RequestMethod["post"] = "post";
@@ -12,35 +14,49 @@ var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
 })(RequestMethod || (RequestMethod = {}));
-const props = (url) => ({ url });
-function createRouter(baseUrl, __methods__, newClazz) {
-    const router = Router();
-    __methods__.forEach(({ descriptor, annotationInstance: { url, metadataName } }) => {
-        if (metadataName === RequestMethod[metadataName]) {
-            const routeUrl = `${baseUrl}/${url}`.replace(/[\\/]+/g, '/');
-            const agent = (...args) => descriptor.value.apply(newClazz, args);
-            router[metadataName.toLocaleLowerCase()].call(router, routeUrl, [], agent);
-        }
+const props = (url, ...handlers) => ({ url, handlers });
+function callMiddleware(router, methodMetadata, cls) {
+    const { descriptor, annotationInstance: { metadataName } } = methodMetadata;
+    if (metadataName == MIDDLEWARE)
+        return descriptor.value.call(cls, router);
+}
+function registerRouter(baseUrl, methods, cls) {
+    const map = new Map();
+    const router = cls.router;
+    methods.forEach((methodMetadata) => {
+        const { descriptor, annotationInstance: { __DI_FLAG__, url, handlers, metadataName } } = methodMetadata;
+        const _descriptor = descriptor.value;
+        if (metadataName !== RequestMethod[metadataName])
+            return callMiddleware(router, methodMetadata, cls);
+        if (!map.has(descriptor))
+            map.set(descriptor, __DI_FLAG__ === FACTORY ? _descriptor.apply(cls) : _descriptor.bind(cls));
+        const params = baseUrl ? [baseUrl] : [];
+        typeof url === 'string' ? params[0] = `${baseUrl || ''}/${url}`.replace(/[\\/]+/g, '/') : url && params.push(url);
+        router[metadataName].call(router, ...params.concat(handlers, map.get(descriptor)));
     });
+    map.clear();
     return router;
 }
-const createFactoryRouter = (baseUrl, clazz) => {
-    const factory = convertToFactory(clazz);
+const createFactoryRouter = (cls, baseUrl) => {
+    const factory = convertToFactory(cls);
     return () => {
-        const newClazz = factory();
-        newClazz.router = createRouter(baseUrl, clazz.__methods__ || [], newClazz);
-        return newClazz;
+        const newCls = factory();
+        newCls.router = Router();
+        registerRouter(baseUrl, cls.__methods__ || [], newCls);
+        return newCls;
     };
 };
-// eslint-disable-next-line max-len
-export const Controller = makeDecorator(CONTROL, (baseUrl = '') => ({ baseUrl }), (injectableType, meta = '') => {
-    setInjectableDef(injectableType, { token: injectableType, providedIn: 'root', factory: createFactoryRouter(meta, injectableType) });
+export const Controller = makeDecorator(CONTROL, (baseUrl) => ({ baseUrl }), (cls, meta) => {
+    setInjectableDef(cls, { token: cls, providedIn: ROOT_SCOPE, factory: createFactoryRouter(cls, meta) });
 });
-export const Post = makeMethodDecorator(RequestMethod.post, props);
-export const Get = makeMethodDecorator(RequestMethod.get, props);
-export const Delete = makeMethodDecorator(RequestMethod.delete, props);
-export const Put = makeMethodDecorator(RequestMethod.put, props);
-export const All = makeMethodDecorator(RequestMethod.all, props);
-export const Param = makeMethodDecorator(RequestMethod.param, props);
-export const Use = makeMethodDecorator(RequestMethod.use, props);
-export const Options = makeMethodDecorator(RequestMethod.options, props);
+export const Middleware = makeMethodDecorator(MIDDLEWARE);
+export const [[Get, FactoryGet], [All, FactoryAll], [Use, FactoryUse], [Put, FactoryPut], [Post, FactoryPost], [Param, FactoryParam], [Delete, FactoryDelete], [Options, FactoryOptions]] = [
+    RequestMethod.get,
+    RequestMethod.all,
+    RequestMethod.use,
+    RequestMethod.put,
+    RequestMethod.post,
+    RequestMethod.param,
+    RequestMethod.delete,
+    RequestMethod.options
+].map((method) => [makeMethodDecorator(method, props), attachInjectFlag(makeMethodDecorator(method, props), FACTORY)]);
