@@ -1,9 +1,9 @@
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+var _b;
 import { __spreadArray } from "tslib";
-import { attachInjectFlag, convertToFactory, makeDecorator, makeMethodDecorator, ROOT_SCOPE, setInjectableDef } from '@fm/di';
-import { Router } from 'express';
+/* eslint-disable max-params */
+import { convertToFactory, Injector, makeDecorator, makeMethodDecorator, reflectCapabilities, setInjectableDef } from '@fm/di';
+import express, { Router } from 'express';
 var CONTROL = 'Control';
-var FACTORY = 1;
 var MIDDLEWARE = 'MIDDLEWARE';
 var RequestMethod;
 (function (RequestMethod) {
@@ -17,49 +17,83 @@ var RequestMethod;
     RequestMethod["use"] = "use";
 })(RequestMethod || (RequestMethod = {}));
 var props = function (url) {
-    var handlers = [];
+    var middleware = [];
     for (var _i = 1; _i < arguments.length; _i++) {
-        handlers[_i - 1] = arguments[_i];
+        middleware[_i - 1] = arguments[_i];
     }
-    return ({ url: url, handlers: handlers });
+    return ({ url: url, middleware: middleware });
 };
-function callMiddleware(router, methodMetadata, cls) {
-    var descriptor = methodMetadata.descriptor, metadataName = methodMetadata.annotationInstance.metadataName;
-    if (metadataName == MIDDLEWARE)
-        return descriptor.value.call(cls, router);
+function type(typeName) {
+    return function (obj) { return Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName; };
 }
-function registerRouter(baseUrl, methods, cls) {
+function replaceUrl(url) {
+    return "/".concat(url).replace(/[\\/]+/g, '/');
+}
+var typeFunc = type('function');
+var typeString = type('string');
+function excelAnnotations(annotations) {
+    var options = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        options[_i - 1] = arguments[_i];
+    }
+    var result = options;
+    var _annotations = __spreadArray([], annotations, true);
+    while (_annotations.length) {
+        var annotation = _annotations.shift();
+        var _b = annotation.hook, hook = _b === void 0 ? function (_a, r) { return r; } : _b;
+        result = __spreadArray([typeFunc(hook) ? hook.apply(void 0, __spreadArray([annotation], result, false)) : hook], options, true);
+    }
+    return result.shift();
+}
+function methodParams(injector, type, cls, method, agent) {
+    var paramAnnotations = reflectCapabilities.getParamAnnotations(type, method);
+    return function () {
+        var params = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            params[_i] = arguments[_i];
+        }
+        if (paramAnnotations.length) {
+            params = paramAnnotations.map(function (annotations) { return excelAnnotations.apply(void 0, __spreadArray([annotations, injector], params, false)); });
+        }
+        return agent.apply(void 0, params);
+    };
+}
+function registerRouter(injector, type, cls) {
     var map = new Map();
-    var router = cls.router;
-    methods.forEach(function (methodMetadata) {
-        var _a;
-        var descriptor = methodMetadata.descriptor, _b = methodMetadata.annotationInstance, __DI_FLAG__ = _b.__DI_FLAG__, url = _b.url, handlers = _b.handlers, metadataName = _b.metadataName;
-        var _descriptor = descriptor.value;
-        if (metadataName !== RequestMethod[metadataName])
-            return callMiddleware(router, methodMetadata, cls);
-        if (!map.has(descriptor))
-            map.set(descriptor, __DI_FLAG__ === FACTORY ? _descriptor.apply(cls) : _descriptor.bind(cls));
-        var params = baseUrl ? [baseUrl] : [];
-        typeof url === 'string' ? params[0] = "".concat(baseUrl || '', "/").concat(url).replace(/[\\/]+/g, '/') : url && params.push(url);
-        (_a = router[metadataName]).call.apply(_a, __spreadArray([router], params.concat(handlers, map.get(descriptor)), false));
+    var router = Router();
+    var _b = type.__methods__, __methods__ = _b === void 0 ? [] : _b;
+    __methods__.forEach(function (methodMetadata) {
+        var _b;
+        var descriptor = methodMetadata.descriptor, method = methodMetadata.method, _c = methodMetadata.annotationInstance, url = _c.url, middleware = _c.middleware, metadataName = _c.metadataName;
+        if (!map.has(descriptor)) {
+            map.set(descriptor, methodParams(injector, type, cls, method, function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                return descriptor.value.apply(cls, args);
+            }));
+        }
+        if (metadataName === MIDDLEWARE)
+            return map.get(descriptor)(router);
+        if (metadataName === RequestMethod[metadataName]) {
+            var params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
+            (_b = router[metadataName]).call.apply(_b, __spreadArray([router], params.concat.apply(params, __spreadArray(__spreadArray([], middleware, false), [map.get(descriptor)], false)), false));
+        }
     });
     map.clear();
     return router;
 }
-var createFactoryRouter = function (cls, baseUrl) {
-    var factory = convertToFactory(cls);
-    return function () {
-        var newCls = factory();
-        newCls.router = Router();
-        registerRouter(baseUrl, cls.__methods__ || [], newCls);
+export var Controller = makeDecorator(CONTROL, undefined, function (cls, baseUrl) {
+    function useFactory(app, injector) {
+        var newCls = convertToFactory(cls)();
+        var router = registerRouter(injector, cls, newCls);
+        typeString(baseUrl) ? app.use(replaceUrl(baseUrl), router) : app.use(router);
         return newCls;
-    };
-};
-export var Controller = makeDecorator(CONTROL, function (baseUrl) { return ({ baseUrl: baseUrl }); }, function (cls, meta) {
-    setInjectableDef(cls, { token: cls, providedIn: ROOT_SCOPE, factory: createFactoryRouter(cls, meta) });
+    }
+    setInjectableDef(cls, { provide: cls, useFactory: useFactory, deps: [express, Injector] });
 });
-export var Middleware = makeMethodDecorator(MIDDLEWARE);
-export var Get = (_a = [
+export var Get = (_b = [
     RequestMethod.get,
     RequestMethod.all,
     RequestMethod.use,
@@ -67,5 +101,6 @@ export var Get = (_a = [
     RequestMethod.post,
     RequestMethod.param,
     RequestMethod.delete,
-    RequestMethod.options
-].map(function (method) { return [makeMethodDecorator(method, props), attachInjectFlag(makeMethodDecorator(method, props), FACTORY)]; }), _b = _a[0], _b[0]), FactoryGet = _b[1], All = (_c = _a[1], _c[0]), FactoryAll = _c[1], Use = (_d = _a[2], _d[0]), FactoryUse = _d[1], Put = (_e = _a[3], _e[0]), FactoryPut = _e[1], Post = (_f = _a[4], _f[0]), FactoryPost = _f[1], Param = (_g = _a[5], _g[0]), FactoryParam = _g[1], Delete = (_h = _a[6], _h[0]), FactoryDelete = _h[1], Options = (_j = _a[7], _j[0]), FactoryOptions = _j[1];
+    RequestMethod.options,
+    MIDDLEWARE
+].map(function (method) { return makeMethodDecorator(method, props); }), _b[0]), All = _b[1], Use = _b[2], Put = _b[3], Post = _b[4], Param = _b[5], Delete = _b[6], Options = _b[7], Middleware = _b[8];
