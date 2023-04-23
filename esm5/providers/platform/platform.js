@@ -3,6 +3,7 @@ import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/providers/plat
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
+import { ControllerManager } from '../../controller';
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(port, platformInjector) {
         this.port = port;
@@ -38,6 +39,9 @@ var ExpressServerPlatform = /** @class */ (function () {
                     case 0: return [4 /*yield*/, injector.get(APPLICATION_TOKEN)];
                     case 1:
                         application = _a.sent();
+                        return [4 /*yield*/, injector.get(ControllerManager).register()];
+                    case 2:
+                        _a.sent();
                         return [2 /*return*/, (start || application.start).call(application, injector, options)];
                 }
             });

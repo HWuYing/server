@@ -3,6 +3,7 @@ import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/providers/plat
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
+import { ControllerManager } from '../../controller';
 export class ExpressServerPlatform {
     constructor(port, platformInjector) {
         this.port = port;
@@ -23,6 +24,7 @@ export class ExpressServerPlatform {
     runStart(injector, options, start) {
         return __awaiter(this, void 0, void 0, function* () {
             const application = yield injector.get(APPLICATION_TOKEN);
+            yield injector.get(ControllerManager).register();
             return (start || application.start).call(application, injector, options);
         });
     }

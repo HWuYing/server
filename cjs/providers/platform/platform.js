@@ -6,6 +6,7 @@ var platform_1 = require("@fm/core/providers/platform");
 var di_1 = require("@fm/di");
 var express_1 = tslib_1.__importDefault(require("express"));
 var http_1 = require("http");
+var controller_1 = require("../../controller");
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(port, platformInjector) {
         this.port = port;
@@ -41,6 +42,9 @@ var ExpressServerPlatform = /** @class */ (function () {
                     case 0: return [4 /*yield*/, injector.get(platform_1.APPLICATION_TOKEN)];
                     case 1:
                         application = _a.sent();
+                        return [4 /*yield*/, injector.get(controller_1.ControllerManager).register()];
+                    case 2:
+                        _a.sent();
                         return [2 /*return*/, (start || application.start).call(application, injector, options)];
                 }
             });

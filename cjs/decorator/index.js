@@ -1,16 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createInjectableModel = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Middleware = exports.Get = exports.Delete = exports.Controller = exports.All = void 0;
-var controller_1 = require("./controller");
-Object.defineProperty(exports, "All", { enumerable: true, get: function () { return controller_1.All; } });
-Object.defineProperty(exports, "Controller", { enumerable: true, get: function () { return controller_1.Controller; } });
-Object.defineProperty(exports, "Delete", { enumerable: true, get: function () { return controller_1.Delete; } });
-Object.defineProperty(exports, "Get", { enumerable: true, get: function () { return controller_1.Get; } });
-Object.defineProperty(exports, "Middleware", { enumerable: true, get: function () { return controller_1.Middleware; } });
-Object.defineProperty(exports, "Options", { enumerable: true, get: function () { return controller_1.Options; } });
-Object.defineProperty(exports, "Param", { enumerable: true, get: function () { return controller_1.Param; } });
-Object.defineProperty(exports, "Post", { enumerable: true, get: function () { return controller_1.Post; } });
-Object.defineProperty(exports, "Put", { enumerable: true, get: function () { return controller_1.Put; } });
-Object.defineProperty(exports, "Use", { enumerable: true, get: function () { return controller_1.Use; } });
+exports.createInjectableModel = void 0;
 var sequelize_1 = require("./sequelize");
 Object.defineProperty(exports, "createInjectableModel", { enumerable: true, get: function () { return sequelize_1.createInjectableModel; } });
