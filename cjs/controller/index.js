@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Res = exports.Req = exports.Next = exports.CustomParams = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Middleware = exports.Get = exports.Delete = exports.Controller = exports.All = void 0;
+exports.Res = exports.Req = exports.Query = exports.Params = exports.Next = exports.Ip = exports.Headers = exports.CustomParams = exports.Body = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Middleware = exports.Get = exports.Delete = exports.ControllerModel = exports.Controller = exports.All = void 0;
 var tslib_1 = require("tslib");
+require("./built-in/built-in.module");
 var decorator_1 = require("./decorator");
 Object.defineProperty(exports, "All", { enumerable: true, get: function () { return decorator_1.All; } });
 Object.defineProperty(exports, "Controller", { enumerable: true, get: function () { return decorator_1.Controller; } });
+Object.defineProperty(exports, "ControllerModel", { enumerable: true, get: function () { return decorator_1.ControllerModel; } });
 Object.defineProperty(exports, "Delete", { enumerable: true, get: function () { return decorator_1.Delete; } });
 Object.defineProperty(exports, "Get", { enumerable: true, get: function () { return decorator_1.Get; } });
 Object.defineProperty(exports, "Middleware", { enumerable: true, get: function () { return decorator_1.Middleware; } });
@@ -14,8 +16,13 @@ Object.defineProperty(exports, "Post", { enumerable: true, get: function () { re
 Object.defineProperty(exports, "Put", { enumerable: true, get: function () { return decorator_1.Put; } });
 Object.defineProperty(exports, "Use", { enumerable: true, get: function () { return decorator_1.Use; } });
 var decorator_2 = require("./decorator");
+Object.defineProperty(exports, "Body", { enumerable: true, get: function () { return decorator_2.Body; } });
 Object.defineProperty(exports, "CustomParams", { enumerable: true, get: function () { return decorator_2.CustomParams; } });
+Object.defineProperty(exports, "Headers", { enumerable: true, get: function () { return decorator_2.Headers; } });
+Object.defineProperty(exports, "Ip", { enumerable: true, get: function () { return decorator_2.Ip; } });
 Object.defineProperty(exports, "Next", { enumerable: true, get: function () { return decorator_2.Next; } });
+Object.defineProperty(exports, "Params", { enumerable: true, get: function () { return decorator_2.Params; } });
+Object.defineProperty(exports, "Query", { enumerable: true, get: function () { return decorator_2.Query; } });
 Object.defineProperty(exports, "Req", { enumerable: true, get: function () { return decorator_2.Req; } });
 Object.defineProperty(exports, "Res", { enumerable: true, get: function () { return decorator_2.Res; } });
 tslib_1.__exportStar(require("./manager"), exports);

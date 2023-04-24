@@ -1,20 +1,12 @@
 import { Injector, Type } from '@fm/di';
-import { Express } from 'express';
-export declare enum RequestMethod {
-    post = "post",
-    get = "get",
-    delete = "delete",
-    put = "put",
-    all = "all",
-    options = "options",
-    param = "param",
-    use = "use",
-    middleware = "middleware"
-}
+import { Express, RouterOptions } from 'express';
+export type ControllerOptions = {
+    options?: RouterOptions;
+};
 export declare class RouterManager {
     app: Express;
     injector: Injector;
     private methodParams;
     private createRouter;
-    register(controller: Type<any>): any;
+    register(_module: any, controller: Type<any>): any;
 }

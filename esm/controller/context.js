@@ -1,29 +1,30 @@
-export var RouterParams;
-(function (RouterParams) {
-    RouterParams["req"] = "req";
-    RouterParams["res"] = "res";
-    RouterParams["next"] = "next";
-    RouterParams["custom"] = "custom";
-})(RouterParams || (RouterParams = {}));
+import { RouterParams } from './constant';
 export class Context {
     constructor(injector, req, res) {
         this.injector = injector;
         this.req = req;
         this.res = res;
     }
+    getObjectByKey(obj, { key }) {
+        return key ? obj && obj[key] : obj;
+    }
     getParamByMetadata(metadata, data, next) {
         switch (metadata.metadataName) {
             case RouterParams.next: return next;
             case RouterParams.req: return this.req;
             case RouterParams.res: return this.res;
-            case RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.hook(metadata, data, this, next);
+            case RouterParams.ip: return this.req.ip;
+            case RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
+            case RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
+            case RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
+            case RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(metadata, data, this, next);
         }
     }
     excelAnnotations(annotations, next) {
         let result;
         const _annotations = [...annotations];
         let annotation;
-        while (_annotations.length && (annotation = _annotations.shift())) {
+        while (_annotations.length && (annotation = _annotations.pop())) {
             const { metadataName } = annotation;
             if (metadataName === RouterParams[metadataName]) {
                 result = this.getParamByMetadata(annotation, result, next);

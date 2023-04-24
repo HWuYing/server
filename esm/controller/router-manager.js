@@ -1,24 +1,13 @@
 import { __decorate, __metadata } from "tslib";
 import { Injectable, Injector, Prop, reflectCapabilities } from '@fm/di';
 import express, { Router } from 'express';
+import { CONTROLLER, RequestMethod } from './constant';
 function type(typeName) {
     return (obj) => Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName;
 }
 const typeString = type('string');
 const typeObject = type('object');
 const replaceUrl = (url) => `/${url}`.replace(/[\\/]+/g, '/');
-export var RequestMethod;
-(function (RequestMethod) {
-    RequestMethod["post"] = "post";
-    RequestMethod["get"] = "get";
-    RequestMethod["delete"] = "delete";
-    RequestMethod["put"] = "put";
-    RequestMethod["all"] = "all";
-    RequestMethod["options"] = "options";
-    RequestMethod["param"] = "param";
-    RequestMethod["use"] = "use";
-    RequestMethod["middleware"] = "middleware";
-})(RequestMethod || (RequestMethod = {}));
 let RouterManager = class RouterManager {
     methodParams(type, method, agent) {
         const annotations = reflectCapabilities.getParamAnnotations(type, method);
@@ -46,11 +35,11 @@ let RouterManager = class RouterManager {
         map.clear();
         return router;
     }
-    register(controller) {
+    register(_module, controller) {
         const cls = this.injector.get(controller);
-        const metadata = reflectCapabilities.getAnnotation(controller, 'Control');
+        const metadata = reflectCapabilities.getAnnotation(controller, CONTROLLER);
         if (metadata) {
-            const { baseUrl, options } = metadata;
+            const { baseUrl, options: { options } } = metadata;
             const _options = typeObject(baseUrl) ? baseUrl : options;
             const router = this.createRouter(controller, cls, _options);
             Object.defineProperty(cls, '__router__', { value: router, enumerable: false, writable: false });

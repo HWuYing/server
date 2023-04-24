@@ -1,3 +1,4 @@
-export { All, Controller, Delete, Get, Middleware, Options, Param, Post, Put, Use } from './decorator';
-export { CustomParams, Next, Req, Res } from './decorator';
+import './built-in/built-in.module';
+export { All, Controller, ControllerModel, Delete, Get, Middleware, Options, Param, Post, Put, Use } from './decorator';
+export { Body, CustomParams, Headers, Ip, Next, Params, Query, Req, Res } from './decorator';
 export * from './manager';

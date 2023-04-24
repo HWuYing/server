@@ -1,27 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RouterManager = exports.RequestMethod = void 0;
+exports.RouterManager = void 0;
 var tslib_1 = require("tslib");
 var di_1 = require("@fm/di");
 var express_1 = tslib_1.__importStar(require("express"));
+var constant_1 = require("./constant");
 function type(typeName) {
     return function (obj) { return Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName; };
 }
 var typeString = type('string');
 var typeObject = type('object');
 var replaceUrl = function (url) { return "/".concat(url).replace(/[\\/]+/g, '/'); };
-var RequestMethod;
-(function (RequestMethod) {
-    RequestMethod["post"] = "post";
-    RequestMethod["get"] = "get";
-    RequestMethod["delete"] = "delete";
-    RequestMethod["put"] = "put";
-    RequestMethod["all"] = "all";
-    RequestMethod["options"] = "options";
-    RequestMethod["param"] = "param";
-    RequestMethod["use"] = "use";
-    RequestMethod["middleware"] = "middleware";
-})(RequestMethod = exports.RequestMethod || (exports.RequestMethod = {}));
 var RouterManager = /** @class */ (function () {
     function RouterManager() {
     }
@@ -49,9 +38,9 @@ var RouterManager = /** @class */ (function () {
                     return descriptor.value.apply(cls, args);
                 }));
             }
-            if (metadataName === RequestMethod.middleware)
+            if (metadataName === constant_1.RequestMethod.middleware)
                 return map.get(descriptor)(router);
-            if (metadataName === RequestMethod[metadataName]) {
+            if (metadataName === constant_1.RequestMethod[metadataName]) {
                 var params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
                 (_a = router[metadataName]).call.apply(_a, tslib_1.__spreadArray([router], params.concat.apply(params, tslib_1.__spreadArray(tslib_1.__spreadArray([], middleware, false), [map.get(descriptor)], false)), false));
             }
@@ -59,11 +48,11 @@ var RouterManager = /** @class */ (function () {
         map.clear();
         return router;
     };
-    RouterManager.prototype.register = function (controller) {
+    RouterManager.prototype.register = function (_module, controller) {
         var cls = this.injector.get(controller);
-        var metadata = di_1.reflectCapabilities.getAnnotation(controller, 'Control');
+        var metadata = di_1.reflectCapabilities.getAnnotation(controller, constant_1.CONTROLLER);
         if (metadata) {
-            var baseUrl = metadata.baseUrl, options = metadata.options;
+            var baseUrl = metadata.baseUrl, options = metadata.options.options;
             var _options = typeObject(baseUrl) ? baseUrl : options;
             var router = this.createRouter(controller, cls, _options);
             Object.defineProperty(cls, '__router__', { value: router, enumerable: false, writable: false });

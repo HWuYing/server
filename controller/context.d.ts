@@ -1,11 +1,5 @@
 import { Injector } from '@fm/di';
 import { NextFunction, Request, Response } from 'express';
-export declare enum RouterParams {
-    req = "req",
-    res = "res",
-    next = "next",
-    custom = "custom"
-}
 export interface FmContext {
     readonly injector: Injector;
     readonly req: Request;
@@ -17,6 +11,7 @@ export declare class Context implements FmContext {
     readonly req: Request;
     readonly res: Response;
     constructor(injector: Injector, req: Request, res: Response);
+    private getObjectByKey;
     private getParamByMetadata;
     private excelAnnotations;
     injectArgs(annotations: any[], _req: Request, _res: Response, next: NextFunction): any[];

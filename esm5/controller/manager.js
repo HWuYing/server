@@ -1,33 +1,36 @@
 import { __awaiter, __decorate, __generator, __metadata } from "tslib";
-import { Injectable, Injector, InjectorToken, Prop } from '@fm/di';
-import { Ctx } from './built-in/ctx.controller';
+import { Injectable, Injector, Prop, reflectCapabilities, setInjectableDef } from '@fm/di';
+import { CONTROLLER_MODULE } from './constant';
 import { RouterManager } from './router-manager';
-export var CONTROLLER_MODEL = InjectorToken.get('CONTROLLER_MODEL');
 var ControllerManager = /** @class */ (function () {
     function ControllerManager() {
     }
     ControllerManager_1 = ControllerManager;
-    ControllerManager.getFactoryControlModel = function (type, options) {
-        var useFactory = function (manage) { return manage.registerControllerModel(type, options); };
-        return { provide: CONTROLLER_MODEL, useFactory: useFactory, multi: true, deps: [ControllerManager_1] };
+    ControllerManager.getFactoryControlModel = function (type) {
+        setInjectableDef(type);
+        ControllerManager_1.moduleQueue.push(type);
     };
-    ControllerManager.prototype.registerControllerModel = function (type, options) {
-        var _a = options.controller, controller = _a === void 0 ? [] : _a;
+    ControllerManager.prototype.registerControllerModel = function (type) {
+        var _a = reflectCapabilities.getAnnotation(type, CONTROLLER_MODULE).controller, controller = _a === void 0 ? [] : _a;
+        var module = this.injector.get(type);
         for (var i = 0; i < controller.length; i++) {
-            this.routerManager.register(controller[i]);
+            this.routerManager.register(module, controller[i]);
         }
-        return this.injector.get(type);
+        return module;
     };
     ControllerManager.prototype.register = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var moduleList;
+            var _this = this;
             return __generator(this, function (_a) {
-                this.routerManager.register(Ctx);
-                this.injector.get(CONTROLLER_MODEL);
-                return [2 /*return*/];
+                moduleList = ControllerManager_1.moduleQueue.sort(function (module) { return module.__order__ || 0; });
+                moduleList.forEach(function (module) { return _this.registerControllerModel(module); });
+                return [2 /*return*/, this];
             });
         });
     };
     var ControllerManager_1;
+    ControllerManager.moduleQueue = [];
     __decorate([
         Prop(Injector),
         __metadata("design:type", Injector)
