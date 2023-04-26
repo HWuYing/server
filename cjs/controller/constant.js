@@ -26,4 +26,5 @@ var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
+    RequestMethod["custom"] = "custom";
 })(RequestMethod = exports.RequestMethod || (exports.RequestMethod = {}));

@@ -5,7 +5,7 @@ export interface FmContext {
     readonly req: Request;
     readonly res: Response;
 }
-export type hookFunc = (metadata: any, data: any, ctx: FmContext, next: NextFunction) => any;
+export type hookFunc = (data: any, metadata: any, ctx: FmContext, next: NextFunction) => any;
 export declare class Context implements FmContext {
     readonly injector: Injector;
     readonly req: Request;

@@ -16,6 +16,9 @@ export const Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export const Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export const Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export const Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
+export const CustomerMethod = (hook) => {
+    return makeMethodDecorator(RequestMethod.custom, (options) => (Object.assign({ hook }, options)));
+};
 export const Ip = makeParamDecorator(RouterParams.ip);
 export const Req = makeParamDecorator(RouterParams.req);
 export const Res = makeParamDecorator(RouterParams.res);

@@ -13,7 +13,7 @@ var Ctx = /** @class */ (function () {
         next();
     };
     tslib_1.__decorate([
-        (0, di_1.Prop)(di_1.Injector),
+        (0, di_1.Inject)(di_1.Injector),
         tslib_1.__metadata("design:type", di_1.Injector)
     ], Ctx.prototype, "injector", void 0);
     tslib_1.__decorate([

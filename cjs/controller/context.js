@@ -22,7 +22,7 @@ var Context = /** @class */ (function () {
             case constant_1.RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case constant_1.RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
             case constant_1.RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
-            case constant_1.RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(metadata, data, this, next);
+            case constant_1.RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(data, metadata, this, next);
         }
     };
     Context.prototype.excelAnnotations = function (annotations, next) {
@@ -41,7 +41,7 @@ var Context = /** @class */ (function () {
         var _this = this;
         if (!annotations.length)
             return [this.req, this.res, next];
-        return annotations.map(function (annotations) { return _this.excelAnnotations(annotations, next); });
+        return annotations.map(function (annotation) { return _this.excelAnnotations(annotation, next); });
     };
     return Context;
 }());

@@ -20,5 +20,6 @@ export declare enum RequestMethod {
     options = "options",
     param = "param",
     use = "use",
-    middleware = "middleware"
+    middleware = "middleware",
+    custom = "custom"
 }

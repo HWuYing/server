@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dynamicServer = exports.Application = exports.DataError = exports.createInjectableModel = exports.Res = exports.Req = exports.Query = exports.Params = exports.Next = exports.Ip = exports.Headers = exports.CustomParams = exports.Body = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Middleware = exports.Get = exports.Delete = exports.ControllerModel = exports.Controller = exports.All = void 0;
+exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dynamicServer = exports.Application = exports.DataError = exports.createInjectableModel = exports.Res = exports.Req = exports.Query = exports.Params = exports.Next = exports.Ip = exports.Headers = exports.CustomParams = exports.CustomerMethod = exports.Body = exports.Use = exports.Put = exports.Post = exports.Param = exports.Options = exports.Middleware = exports.Get = exports.Delete = exports.ControllerModel = exports.Controller = exports.All = void 0;
 var decorator_1 = require("./controller/decorator");
 Object.defineProperty(exports, "All", { enumerable: true, get: function () { return decorator_1.All; } });
 Object.defineProperty(exports, "Controller", { enumerable: true, get: function () { return decorator_1.Controller; } });
@@ -15,6 +15,7 @@ Object.defineProperty(exports, "Put", { enumerable: true, get: function () { ret
 Object.defineProperty(exports, "Use", { enumerable: true, get: function () { return decorator_1.Use; } });
 var decorator_2 = require("./controller/decorator");
 Object.defineProperty(exports, "Body", { enumerable: true, get: function () { return decorator_2.Body; } });
+Object.defineProperty(exports, "CustomerMethod", { enumerable: true, get: function () { return decorator_2.CustomerMethod; } });
 Object.defineProperty(exports, "CustomParams", { enumerable: true, get: function () { return decorator_2.CustomParams; } });
 Object.defineProperty(exports, "Headers", { enumerable: true, get: function () { return decorator_2.Headers; } });
 Object.defineProperty(exports, "Ip", { enumerable: true, get: function () { return decorator_2.Ip; } });

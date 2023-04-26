@@ -17,7 +17,7 @@ export class Context {
             case RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
             case RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
-            case RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(metadata, data, this, next);
+            case RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(data, metadata, this, next);
         }
     }
     excelAnnotations(annotations, next) {
@@ -35,6 +35,6 @@ export class Context {
     injectArgs(annotations, _req, _res, next) {
         if (!annotations.length)
             return [this.req, this.res, next];
-        return annotations.map((annotations) => this.excelAnnotations(annotations, next));
+        return annotations.map((annotation) => this.excelAnnotations(annotation, next));
     }
 }

@@ -1,7 +1,7 @@
 import { Type } from '@fm/di';
 import { hookFunc } from './context';
 import { ModelOptions } from './manager';
-import { ControllerOptions } from './router-manager';
+import { ControllerOptions, MethodHookFunc } from './router-manager';
 interface TypeDecorator {
     <T>(type: Type<T>): any;
 }
@@ -22,6 +22,7 @@ export declare const Param: (this: unknown, ...args: any[]) => any;
 export declare const Delete: (this: unknown, ...args: any[]) => any;
 export declare const Options: (this: unknown, ...args: any[]) => any;
 export declare const Middleware: (this: unknown, ...args: any[]) => any;
+export declare const CustomerMethod: (hook: MethodHookFunc) => (this: unknown, ...args: any[]) => any;
 export declare const Ip: (this: unknown, ...args: any[]) => any;
 export declare const Req: (this: unknown, ...args: any[]) => any;
 export declare const Res: (this: unknown, ...args: any[]) => any;

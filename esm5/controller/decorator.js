@@ -26,6 +26,9 @@ export var Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export var Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export var Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export var Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
+export var CustomerMethod = function (hook) {
+    return makeMethodDecorator(RequestMethod.custom, function (options) { return (__assign({ hook: hook }, options)); });
+};
 export var Ip = makeParamDecorator(RouterParams.ip);
 export var Req = makeParamDecorator(RouterParams.req);
 export var Res = makeParamDecorator(RouterParams.res);

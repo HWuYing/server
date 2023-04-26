@@ -1,5 +1,5 @@
 import { __decorate, __metadata } from "tslib";
-import { Injector, Prop } from '@fm/di';
+import { Inject, Injector } from '@fm/di';
 import { Context } from '../context';
 import { Controller, Use } from '../decorator';
 let Ctx = class Ctx {
@@ -9,7 +9,7 @@ let Ctx = class Ctx {
     }
 };
 __decorate([
-    Prop(Injector),
+    Inject(Injector),
     __metadata("design:type", Injector)
 ], Ctx.prototype, "injector", void 0);
 __decorate([
