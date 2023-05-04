@@ -1,9 +1,9 @@
 import { __awaiter } from "tslib";
-import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/providers/platform';
+import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
-import { ControllerManager } from '../../controller';
+import { ControllerManager } from '../controller';
 export class ExpressServerPlatform {
     constructor(port, platformInjector) {
         this.port = port;
@@ -15,6 +15,7 @@ export class ExpressServerPlatform {
             const [providers = [], _start] = this.parseParams(additionalProviders, start);
             const injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
             yield this.runStart(injector, undefined, _start);
+            yield injector.get(ControllerManager).register();
             this.listen(injector, app);
         });
     }
@@ -24,7 +25,6 @@ export class ExpressServerPlatform {
     runStart(injector, options, start) {
         return __awaiter(this, void 0, void 0, function* () {
             const application = yield injector.get(APPLICATION_TOKEN);
-            yield injector.get(ControllerManager).register();
             return (start || application.start).call(application, injector, options);
         });
     }

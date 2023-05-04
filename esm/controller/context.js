@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import { RouterParams } from './constant';
 export class Context {
     constructor(injector, req, res) {
@@ -6,7 +7,7 @@ export class Context {
         this.res = res;
     }
     getObjectByKey(obj, { key }) {
-        return key ? obj && obj[key] : obj;
+        return key ? obj && get(obj, key) : obj;
     }
     getParamByMetadata(metadata, data, next) {
         switch (metadata.metadataName) {
@@ -17,24 +18,8 @@ export class Context {
             case RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
             case RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
-            case RouterParams.custom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(data, metadata, this, next);
+            case RouterParams.routerCustom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(metadata, data, this, next);
         }
-    }
-    excelAnnotations(annotations, next) {
-        let result;
-        const _annotations = [...annotations];
-        let annotation;
-        while (_annotations.length && (annotation = _annotations.pop())) {
-            const { metadataName } = annotation;
-            if (metadataName === RouterParams[metadataName]) {
-                result = this.getParamByMetadata(annotation, result, next);
-            }
-        }
-        return result;
-    }
-    injectArgs(annotations, _req, _res, next) {
-        if (!annotations.length)
-            return [this.req, this.res, next];
-        return annotations.map((annotation) => this.excelAnnotations(annotation, next));
+        return data;
     }
 }

@@ -1,10 +1,14 @@
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
 import { ControllerManager } from './manager';
-const paramsProps = (key) => ({ key });
+function paramsTransform(annotation, data, ...[req, , next]) {
+    const { __fmCtx__: ctx } = req;
+    return ctx.getParamByMetadata(annotation, data, next);
+}
 const moduleProps = (options) => (Object.assign({}, options));
-const controllerProps = (baseUrl, options = {}) => ({ baseUrl, options });
+const paramsProps = (key) => ({ key, transform: paramsTransform });
 const methodProps = (url, ...middleware) => ({ url, middleware });
+const controllerProps = (baseUrl, options = {}) => ({ baseUrl, options });
 export const Controller = makeDecorator(CONTROLLER, controllerProps, setInjectableDef);
 export const ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, ControllerManager.getFactoryControlModel);
 export const Get = makeMethodDecorator(RequestMethod.get, methodProps);
@@ -17,16 +21,16 @@ export const Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export const Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export const Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
 export const CustomerMethod = (hook) => {
-    return makeMethodDecorator(RequestMethod.custom, (options) => (Object.assign({ hook }, options)));
+    return makeMethodDecorator(RequestMethod.requestCustom, (options) => (Object.assign({ hook }, options)));
 };
-export const Ip = makeParamDecorator(RouterParams.ip);
-export const Req = makeParamDecorator(RouterParams.req);
-export const Res = makeParamDecorator(RouterParams.res);
-export const Next = makeParamDecorator(RouterParams.next);
+export const Ip = makeParamDecorator(RouterParams.ip, paramsProps);
+export const Req = makeParamDecorator(RouterParams.req, paramsProps);
+export const Res = makeParamDecorator(RouterParams.res, paramsProps);
+export const Next = makeParamDecorator(RouterParams.next, paramsProps);
 export const Body = makeParamDecorator(RouterParams.body, paramsProps);
 export const Query = makeParamDecorator(RouterParams.query, paramsProps);
 export const Params = makeParamDecorator(RouterParams.params, paramsProps);
 export const Headers = makeParamDecorator(RouterParams.headers, paramsProps);
 export function CustomParams(transform) {
-    return makeParamDecorator(RouterParams.custom, (options) => (Object.assign({ transform }, options)));
+    return makeParamDecorator(RouterParams.routerCustom, (options) => (Object.assign({ transform }, options)));
 }

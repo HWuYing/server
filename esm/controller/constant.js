@@ -10,7 +10,7 @@ export var RouterParams;
     RouterParams["query"] = "query";
     RouterParams["params"] = "params";
     RouterParams["headers"] = "headers";
-    RouterParams["custom"] = "custom";
+    RouterParams["routerCustom"] = "routerCustom";
 })(RouterParams || (RouterParams = {}));
 export var RequestMethod;
 (function (RequestMethod) {
@@ -23,5 +23,5 @@ export var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
-    RequestMethod["custom"] = "custom";
+    RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod || (RequestMethod = {}));

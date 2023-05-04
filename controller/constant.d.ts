@@ -9,7 +9,7 @@ export declare enum RouterParams {
     query = "query",
     params = "params",
     headers = "headers",
-    custom = "custom"
+    routerCustom = "routerCustom"
 }
 export declare enum RequestMethod {
     post = "post",
@@ -21,5 +21,5 @@ export declare enum RequestMethod {
     param = "param",
     use = "use",
     middleware = "middleware",
-    custom = "custom"
+    requestCustom = "requestCustom"
 }

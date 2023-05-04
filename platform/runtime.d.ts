@@ -1,8 +1,8 @@
 import { Provider } from '@fm/di';
-import { ExpressServerPlatform } from './platform';
-export { PLATFORM_SCOPE } from '@fm/core/providers/platform';
+import { ExpressServerPlatform } from './index';
+export { PLATFORM_SCOPE } from '@fm/core/platform/application';
 export declare const dynamicServer: (port: number, providers?: Provider[]) => ExpressServerPlatform;
-export declare const Application: <M extends import("../..").MetadataInfo>(metadata?: {
+export declare const Application: <M extends import("@fm/core/platform/application").MetadataInfo>(metadata?: {
     [key: string]: any;
 } | import("@fm/di").Type<M>) => <T = any>(cls: import("@fm/di").Type<T>) => import("@fm/di").Type<T>;
 export declare const Prov: (token: import("@fm/di").TokenKey, provider?: {

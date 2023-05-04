@@ -2,18 +2,27 @@ import { __assign } from "tslib";
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
 import { ControllerManager } from './manager';
-var paramsProps = function (key) { return ({ key: key }); };
+function paramsTransform(annotation, data) {
+    var _a = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        _a[_i - 2] = arguments[_i];
+    }
+    var req = _a[0], next = _a[2];
+    var ctx = req.__fmCtx__;
+    return ctx.getParamByMetadata(annotation, data, next);
+}
 var moduleProps = function (options) { return (__assign({}, options)); };
-var controllerProps = function (baseUrl, options) {
-    if (options === void 0) { options = {}; }
-    return ({ baseUrl: baseUrl, options: options });
-};
+var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
 var methodProps = function (url) {
     var middleware = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         middleware[_i - 1] = arguments[_i];
     }
     return ({ url: url, middleware: middleware });
+};
+var controllerProps = function (baseUrl, options) {
+    if (options === void 0) { options = {}; }
+    return ({ baseUrl: baseUrl, options: options });
 };
 export var Controller = makeDecorator(CONTROLLER, controllerProps, setInjectableDef);
 export var ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, ControllerManager.getFactoryControlModel);
@@ -27,16 +36,16 @@ export var Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export var Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export var Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
 export var CustomerMethod = function (hook) {
-    return makeMethodDecorator(RequestMethod.custom, function (options) { return (__assign({ hook: hook }, options)); });
+    return makeMethodDecorator(RequestMethod.requestCustom, function (options) { return (__assign({ hook: hook }, options)); });
 };
-export var Ip = makeParamDecorator(RouterParams.ip);
-export var Req = makeParamDecorator(RouterParams.req);
-export var Res = makeParamDecorator(RouterParams.res);
-export var Next = makeParamDecorator(RouterParams.next);
+export var Ip = makeParamDecorator(RouterParams.ip, paramsProps);
+export var Req = makeParamDecorator(RouterParams.req, paramsProps);
+export var Res = makeParamDecorator(RouterParams.res, paramsProps);
+export var Next = makeParamDecorator(RouterParams.next, paramsProps);
 export var Body = makeParamDecorator(RouterParams.body, paramsProps);
 export var Query = makeParamDecorator(RouterParams.query, paramsProps);
 export var Params = makeParamDecorator(RouterParams.params, paramsProps);
 export var Headers = makeParamDecorator(RouterParams.headers, paramsProps);
 export function CustomParams(transform) {
-    return makeParamDecorator(RouterParams.custom, function (options) { return (__assign({ transform: transform }, options)); });
+    return makeParamDecorator(RouterParams.routerCustom, function (options) { return (__assign({ transform: transform }, options)); });
 }

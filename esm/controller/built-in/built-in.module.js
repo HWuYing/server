@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { ControllerModel } from '@fm/server';
+import { ControllerModel } from '../decorator';
 import { Ctx } from './ctx.controller';
 let BuiltIn = class BuiltIn {
 };

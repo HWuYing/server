@@ -1,4 +1,4 @@
-import { Injector, Type } from '@fm/di';
+import { Injector, MethodProxy, Type } from '@fm/di';
 import { Express, NextFunction, RouterOptions } from 'express';
 import { FmContext } from './context';
 export type ControllerOptions = {
@@ -8,8 +8,10 @@ export type MethodHookFunc = (metadata: any, ctx: FmContext, next: NextFunction)
 export declare class RouterManager {
     app: Express;
     injector: Injector;
-    private excelMethodAnnotations;
+    mp: MethodProxy;
+    private checkRouterMethod;
     private methodParams;
+    private createAgent;
     private createRouter;
     register(_module: any, controller: Type<any>): Promise<any>;
 }

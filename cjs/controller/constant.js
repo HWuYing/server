@@ -13,7 +13,7 @@ var RouterParams;
     RouterParams["query"] = "query";
     RouterParams["params"] = "params";
     RouterParams["headers"] = "headers";
-    RouterParams["custom"] = "custom";
+    RouterParams["routerCustom"] = "routerCustom";
 })(RouterParams = exports.RouterParams || (exports.RouterParams = {}));
 var RequestMethod;
 (function (RequestMethod) {
@@ -26,5 +26,5 @@ var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
-    RequestMethod["custom"] = "custom";
+    RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod = exports.RequestMethod || (exports.RequestMethod = {}));

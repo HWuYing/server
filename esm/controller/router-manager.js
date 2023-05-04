@@ -1,6 +1,6 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
+import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '@fm/di';
 import express, { Router } from 'express';
 import { CONTROLLER, RequestMethod } from './constant';
 function type(typeName) {
@@ -10,32 +10,21 @@ const typeString = type('string');
 const typeObject = type('object');
 const replaceUrl = (url) => `/${url}`.replace(/[\\/]+/g, '/');
 let RouterManager = class RouterManager {
-    excelMethodAnnotations(methodAnnotations, ctx, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let annotation;
-            let nextExcelStatus = false;
-            const customAnnotations = [...methodAnnotations];
-            const proxyNext = (err) => (nextExcelStatus = true, next(err));
-            while (customAnnotations.length && (annotation = customAnnotations.shift())) {
-                const { annotationInstance } = annotation;
-                if (annotationInstance.metadataName !== RequestMethod.custom)
-                    continue;
-                yield annotationInstance.hook(annotationInstance, ctx, proxyNext);
-                if (nextExcelStatus || ctx.res.headersSent)
-                    return false;
-            }
-            return true;
-        });
+    checkRouterMethod(metadataName) {
+        return metadataName !== RequestMethod[metadataName] || metadataName === RequestMethod.requestCustom;
     }
-    methodParams(type, method, agent) {
+    methodParams(type, method, cls, descriptor) {
+        const agent = (...args) => descriptor.value.apply(cls, args);
         const annotations = reflectCapabilities.getParamAnnotations(type, method);
-        const methodAnnotations = reflectCapabilities.getMethodAnnotations(type, method);
-        return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const { __fmCtx__: ctx } = req;
-            if (yield this.excelMethodAnnotations(methodAnnotations, ctx, next)) {
-                return agent(...ctx ? ctx.injectArgs(annotations, req, res, next) : [req, res, next]);
-            }
-        });
+        const methodAnnotations = reflectCapabilities.getMethodAnnotations(type, method)
+            .filter(({ annotationInstance: { metadataName } }) => this.checkRouterMethod(metadataName));
+        const _agent = this.mp.createAgent(annotations, methodAnnotations, agent);
+        return (...args) => __awaiter(this, void 0, void 0, function* () { return new Promise(resolve => _agent(resolve, ...args)); });
+    }
+    createAgent(metadataName, agent) {
+        if (metadataName === RequestMethod.middleware)
+            return agent;
+        return (req, res, next) => __awaiter(this, void 0, void 0, function* () { return agent(req, res, next); });
     }
     createRouter(type, cls, options) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -44,10 +33,10 @@ let RouterManager = class RouterManager {
             const router = Router(options);
             for (const methodMetadata of __methods__) {
                 const { descriptor, method, annotationInstance: { url, middleware, metadataName } } = methodMetadata;
-                if (metadataName !== RequestMethod[metadataName] || metadataName === RequestMethod.custom)
+                if (this.checkRouterMethod(metadataName))
                     continue;
                 if (!map.has(descriptor)) {
-                    map.set(descriptor, this.methodParams(type, method, (...args) => descriptor.value.apply(cls, args)));
+                    map.set(descriptor, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
                 }
                 if (metadataName === RequestMethod.middleware) {
                     yield map.get(descriptor)(router);
@@ -83,6 +72,10 @@ __decorate([
     Inject(Injector),
     __metadata("design:type", Injector)
 ], RouterManager.prototype, "injector", void 0);
+__decorate([
+    Inject(MethodProxy),
+    __metadata("design:type", MethodProxy)
+], RouterManager.prototype, "mp", void 0);
 RouterManager = __decorate([
     Injectable()
 ], RouterManager);
