@@ -3,14 +3,13 @@ import { __awaiter, __decorate, __generator, __metadata } from "tslib";
 import { Inject, Injectable, Injector, reflectCapabilities, setInjectableDef } from '@fm/di';
 import { CONTROLLER_MODULE } from './constant';
 import { RouterManager } from './router-manager';
+var moduleQueue = [];
+export function getFactoryControlModel(type) {
+    moduleQueue.push(setInjectableDef(type));
+}
 var ControllerManager = /** @class */ (function () {
     function ControllerManager() {
     }
-    ControllerManager_1 = ControllerManager;
-    ControllerManager.getFactoryControlModel = function (type) {
-        setInjectableDef(type);
-        ControllerManager_1.moduleQueue.push(type);
-    };
     ControllerManager.prototype.registerControllerModel = function (type) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, controller, module, _i, controller_1, control;
@@ -42,7 +41,7 @@ var ControllerManager = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        moduleList = ControllerManager_1.moduleQueue.sort(function (module) { return module.__order__ || 0; });
+                        moduleList = moduleQueue.sort(function (module) { return module.__order__ || 0; });
                         _i = 0, moduleList_1 = moduleList;
                         _a.label = 1;
                     case 1:
@@ -60,8 +59,6 @@ var ControllerManager = /** @class */ (function () {
             });
         });
     };
-    var ControllerManager_1;
-    ControllerManager.moduleQueue = [];
     __decorate([
         Inject(Injector),
         __metadata("design:type", Injector)
@@ -70,7 +67,7 @@ var ControllerManager = /** @class */ (function () {
         Inject(RouterManager),
         __metadata("design:type", RouterManager)
     ], ControllerManager.prototype, "routerManager", void 0);
-    ControllerManager = ControllerManager_1 = __decorate([
+    ControllerManager = __decorate([
         Injectable()
     ], ControllerManager);
     return ControllerManager;

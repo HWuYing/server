@@ -1,7 +1,9 @@
 import { Type } from '@fm/di';
 import { hookFunc } from './context';
-import { ModelOptions } from './manager';
 import { ControllerOptions, MethodHookFunc } from './router-manager';
+type ModelOptions = {
+    controller: Type<any>[];
+};
 interface TypeDecorator {
     <T>(type: Type<T>): any;
 }

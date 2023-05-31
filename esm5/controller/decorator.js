@@ -1,7 +1,7 @@
 import { __assign } from "tslib";
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
-import { ControllerManager } from './manager';
+import { getFactoryControlModel } from './manager';
 function paramsTransform(annotation, data) {
     var _a = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -25,7 +25,7 @@ var controllerProps = function (baseUrl, options) {
     return ({ baseUrl: baseUrl, options: options });
 };
 export var Controller = makeDecorator(CONTROLLER, controllerProps, setInjectableDef);
-export var ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, ControllerManager.getFactoryControlModel);
+export var ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, getFactoryControlModel);
 export var Get = makeMethodDecorator(RequestMethod.get, methodProps);
 export var All = makeMethodDecorator(RequestMethod.all, methodProps);
 export var Use = makeMethodDecorator(RequestMethod.use, methodProps);

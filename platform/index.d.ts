@@ -1,5 +1,6 @@
+/// <reference types="node" />
 import { Injector, Provider } from '@fm/di';
-import { Express } from 'express';
+import { Server } from 'http';
 type StartFn = (injector: Injector) => Promise<void>;
 export declare class ExpressServerPlatform {
     private port;
@@ -9,6 +10,6 @@ export declare class ExpressServerPlatform {
     private beforeBootstrapStart;
     private runStart;
     private parseParams;
-    listen(injector: Injector, app: Express): void;
+    listen(injector: Injector, server: Server): void;
 }
 export {};

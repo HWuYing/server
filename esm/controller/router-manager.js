@@ -31,8 +31,7 @@ let RouterManager = class RouterManager {
             const map = new Map();
             const { __methods__ = [] } = type;
             const router = Router(options);
-            for (const methodMetadata of __methods__) {
-                const { descriptor, method, annotationInstance: { url, middleware, metadataName } } = methodMetadata;
+            for (const { descriptor, method, annotationInstance: { url, middleware, metadataName } } of __methods__) {
                 if (this.checkRouterMethod(metadataName))
                     continue;
                 if (!map.has(descriptor)) {
@@ -45,7 +44,6 @@ let RouterManager = class RouterManager {
                 const params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
                 router[metadataName].call(router, ...params.concat(...middleware, map.get(descriptor)));
             }
-            map.clear();
             return router;
         });
     }

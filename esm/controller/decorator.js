@@ -1,6 +1,6 @@
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
-import { ControllerManager } from './manager';
+import { getFactoryControlModel } from './manager';
 function paramsTransform(annotation, data, ...[req, , next]) {
     const { __fmCtx__: ctx } = req;
     return ctx.getParamByMetadata(annotation, data, next);
@@ -10,7 +10,7 @@ const paramsProps = (key) => ({ key, transform: paramsTransform });
 const methodProps = (url, ...middleware) => ({ url, middleware });
 const controllerProps = (baseUrl, options = {}) => ({ baseUrl, options });
 export const Controller = makeDecorator(CONTROLLER, controllerProps, setInjectableDef);
-export const ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, ControllerManager.getFactoryControlModel);
+export const ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, getFactoryControlModel);
 export const Get = makeMethodDecorator(RequestMethod.get, methodProps);
 export const All = makeMethodDecorator(RequestMethod.all, methodProps);
 export const Use = makeMethodDecorator(RequestMethod.use, methodProps);

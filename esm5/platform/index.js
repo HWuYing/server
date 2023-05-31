@@ -11,11 +11,12 @@ var ExpressServerPlatform = /** @class */ (function () {
     }
     ExpressServerPlatform.prototype.bootstrapStart = function (additionalProviders, start) {
         return __awaiter(this, void 0, void 0, function () {
-            var app, _a, _b, providers, _start, injector;
+            var app, server, _a, _b, providers, _start, injector;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         app = express();
+                        server = createServer(app);
                         _a = this.parseParams(additionalProviders, start), _b = _a[0], providers = _b === void 0 ? [] : _b, _start = _a[1];
                         injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
                         return [4 /*yield*/, this.runStart(injector, undefined, _start)];
@@ -24,7 +25,7 @@ var ExpressServerPlatform = /** @class */ (function () {
                         return [4 /*yield*/, injector.get(ControllerManager).register()];
                     case 2:
                         _c.sent();
-                        this.listen(injector, app);
+                        this.listen(injector, server);
                         return [2 /*return*/];
                 }
             });
@@ -32,7 +33,7 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return Injector.create([providers], this.platformInjector);
+        return Injector.create(providers, this.platformInjector);
     };
     ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
         return __awaiter(this, void 0, void 0, function () {
@@ -50,10 +51,10 @@ var ExpressServerPlatform = /** @class */ (function () {
     ExpressServerPlatform.prototype.parseParams = function (providers, start) {
         return typeof providers === 'function' ? [[], providers] : [__spreadArray([], providers, true), start];
     };
-    ExpressServerPlatform.prototype.listen = function (injector, app) {
+    ExpressServerPlatform.prototype.listen = function (injector, server) {
         var _a = (injector.get(APPLICATION_METADATA) || {}).port, port = _a === void 0 ? this.port : _a;
         global.hotHttpHost = "http://localhost:".concat(port, "/");
-        global.hotHttpServer = createServer(app).listen(port, function () {
+        global.hotHttpServer = server.listen(port, function () {
             console.log("The server is running at ".concat(global.hotHttpHost));
         });
     };

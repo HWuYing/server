@@ -12,15 +12,16 @@ export class ExpressServerPlatform {
     bootstrapStart(additionalProviders, start) {
         return __awaiter(this, void 0, void 0, function* () {
             const app = express();
+            const server = createServer(app);
             const [providers = [], _start] = this.parseParams(additionalProviders, start);
             const injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
             yield this.runStart(injector, undefined, _start);
             yield injector.get(ControllerManager).register();
-            this.listen(injector, app);
+            this.listen(injector, server);
         });
     }
     beforeBootstrapStart(providers = []) {
-        return Injector.create([providers], this.platformInjector);
+        return Injector.create(providers, this.platformInjector);
     }
     runStart(injector, options, start) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,10 +32,10 @@ export class ExpressServerPlatform {
     parseParams(providers, start) {
         return typeof providers === 'function' ? [[], providers] : [[...providers], start];
     }
-    listen(injector, app) {
+    listen(injector, server) {
         const { port = this.port } = injector.get(APPLICATION_METADATA) || {};
         global.hotHttpHost = `http://localhost:${port}/`;
-        global.hotHttpServer = createServer(app).listen(port, () => {
+        global.hotHttpServer = server.listen(port, () => {
             console.log(`The server is running at ${global.hotHttpHost}`);
         });
     }

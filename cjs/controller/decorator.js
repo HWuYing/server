@@ -28,7 +28,7 @@ var controllerProps = function (baseUrl, options) {
     return ({ baseUrl: baseUrl, options: options });
 };
 exports.Controller = (0, di_1.makeDecorator)(constant_1.CONTROLLER, controllerProps, di_1.setInjectableDef);
-exports.ControllerModel = (0, di_1.makeDecorator)(constant_1.CONTROLLER_MODULE, moduleProps, manager_1.ControllerManager.getFactoryControlModel);
+exports.ControllerModel = (0, di_1.makeDecorator)(constant_1.CONTROLLER_MODULE, moduleProps, manager_1.getFactoryControlModel);
 exports.Get = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.get, methodProps);
 exports.All = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.all, methodProps);
 exports.Use = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.use, methodProps);
