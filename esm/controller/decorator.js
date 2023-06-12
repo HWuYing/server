@@ -1,9 +1,14 @@
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
 import { getFactoryControlModel } from './manager';
+function getCtx(req) {
+    return req.__fmCtx__;
+}
 function paramsTransform(annotation, data, ...[req, , next]) {
-    const { __fmCtx__: ctx } = req;
-    return ctx.getParamByMetadata(annotation, data, next);
+    return getCtx(req).getParamByMetadata(annotation, data, next);
+}
+function proxyMethodHook(hook) {
+    return (annotation, ...[req, , next]) => hook(annotation, getCtx(req), next);
 }
 const moduleProps = (options) => (Object.assign({}, options));
 const paramsProps = (key) => ({ key, transform: paramsTransform });
@@ -20,8 +25,8 @@ export const Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export const Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export const Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export const Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
-export const CustomerMethod = (hook) => {
-    return makeMethodDecorator(RequestMethod.requestCustom, (options) => (Object.assign({ hook }, options)));
+export const CustomMethod = (hook) => {
+    return makeMethodDecorator(RequestMethod.requestCustom, (options) => (Object.assign({ hook: proxyMethodHook(hook) }, options)));
 };
 export const Ip = makeParamDecorator(RouterParams.ip, paramsProps);
 export const Req = makeParamDecorator(RouterParams.req, paramsProps);

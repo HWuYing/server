@@ -1,4 +1,4 @@
 import './built-in/built-in.module';
 export { All, Controller, ControllerModel, Delete, Get, Middleware, Options, Param, Post, Put, Use } from './decorator';
-export { Body, CustomerMethod, CustomParams, Headers, Ip, Next, Params, Query, Req, Res } from './decorator';
+export { Body, CustomMethod, CustomParams, Headers, Ip, Next, Params, Query, Req, Res } from './decorator';
 export * from './manager';

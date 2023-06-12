@@ -1,18 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomParams = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.CustomerMethod = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = exports.ControllerModel = exports.Controller = void 0;
+exports.CustomParams = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.CustomMethod = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = exports.ControllerModel = exports.Controller = void 0;
 var tslib_1 = require("tslib");
 var di_1 = require("@fm/di");
 var constant_1 = require("./constant");
 var manager_1 = require("./manager");
+function getCtx(req) {
+    return req.__fmCtx__;
+}
 function paramsTransform(annotation, data) {
     var _a = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         _a[_i - 2] = arguments[_i];
     }
     var req = _a[0], next = _a[2];
-    var ctx = req.__fmCtx__;
-    return ctx.getParamByMetadata(annotation, data, next);
+    return getCtx(req).getParamByMetadata(annotation, data, next);
+}
+function proxyMethodHook(hook) {
+    return function (annotation) {
+        var _a = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            _a[_i - 1] = arguments[_i];
+        }
+        var req = _a[0], next = _a[2];
+        return hook(annotation, getCtx(req), next);
+    };
 }
 var moduleProps = function (options) { return (tslib_1.__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
@@ -38,10 +50,10 @@ exports.Param = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.param, me
 exports.Delete = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.delete, methodProps);
 exports.Options = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.options, methodProps);
 exports.Middleware = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.middleware, methodProps);
-var CustomerMethod = function (hook) {
-    return (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.requestCustom, function (options) { return (tslib_1.__assign({ hook: hook }, options)); });
+var CustomMethod = function (hook) {
+    return (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.requestCustom, function (options) { return (tslib_1.__assign({ hook: proxyMethodHook(hook) }, options)); });
 };
-exports.CustomerMethod = CustomerMethod;
+exports.CustomMethod = CustomMethod;
 exports.Ip = (0, di_1.makeParamDecorator)(constant_1.RouterParams.ip, paramsProps);
 exports.Req = (0, di_1.makeParamDecorator)(constant_1.RouterParams.req, paramsProps);
 exports.Res = (0, di_1.makeParamDecorator)(constant_1.RouterParams.res, paramsProps);

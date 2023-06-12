@@ -24,7 +24,7 @@ export declare const Param: (this: unknown, ...args: any[]) => any;
 export declare const Delete: (this: unknown, ...args: any[]) => any;
 export declare const Options: (this: unknown, ...args: any[]) => any;
 export declare const Middleware: (this: unknown, ...args: any[]) => any;
-export declare const CustomerMethod: (hook: MethodHookFunc) => (this: unknown, ...args: any[]) => any;
+export declare const CustomMethod: (hook: MethodHookFunc) => (this: unknown, ...args: any[]) => any;
 export declare const Ip: (this: unknown, ...args: any[]) => any;
 export declare const Req: (this: unknown, ...args: any[]) => any;
 export declare const Res: (this: unknown, ...args: any[]) => any;

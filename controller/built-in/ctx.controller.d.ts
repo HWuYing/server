@@ -1,6 +1,6 @@
 import { Injector } from '@fm/di';
-import { Router } from 'express';
+import { NextFunction, Request, Response } from 'express';
 export declare class Ctx {
     injector: Injector;
-    createCtx(router: Router): void;
+    createCtx(req: Request, res: Response, next: NextFunction): void;
 }

@@ -2,14 +2,26 @@ import { __assign } from "tslib";
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
 import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
 import { getFactoryControlModel } from './manager';
+function getCtx(req) {
+    return req.__fmCtx__;
+}
 function paramsTransform(annotation, data) {
     var _a = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         _a[_i - 2] = arguments[_i];
     }
     var req = _a[0], next = _a[2];
-    var ctx = req.__fmCtx__;
-    return ctx.getParamByMetadata(annotation, data, next);
+    return getCtx(req).getParamByMetadata(annotation, data, next);
+}
+function proxyMethodHook(hook) {
+    return function (annotation) {
+        var _a = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            _a[_i - 1] = arguments[_i];
+        }
+        var req = _a[0], next = _a[2];
+        return hook(annotation, getCtx(req), next);
+    };
 }
 var moduleProps = function (options) { return (__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
@@ -35,8 +47,8 @@ export var Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export var Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export var Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export var Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
-export var CustomerMethod = function (hook) {
-    return makeMethodDecorator(RequestMethod.requestCustom, function (options) { return (__assign({ hook: hook }, options)); });
+export var CustomMethod = function (hook) {
+    return makeMethodDecorator(RequestMethod.requestCustom, function (options) { return (__assign({ hook: proxyMethodHook(hook) }, options)); });
 };
 export var Ip = makeParamDecorator(RouterParams.ip, paramsProps);
 export var Req = makeParamDecorator(RouterParams.req, paramsProps);
