@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BELONGS_TO_MANY = exports.BELONGS_TO = exports.HAS_MANY = exports.HAS_ONE = exports.COLUMN = exports.ENTITY = exports.SYNC = void 0;
+exports.SYNC = 'Sync';
+exports.ENTITY = 'Entity';
+exports.COLUMN = 'Column';
+exports.HAS_ONE = 'hasOne';
+exports.HAS_MANY = 'hasMany';
+exports.BELONGS_TO = 'belongsTo';
+exports.BELONGS_TO_MANY = 'belongsToMany';

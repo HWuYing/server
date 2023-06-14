@@ -1,1 +1,0 @@
-export { createInjectableModel } from './sequelize';

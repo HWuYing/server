@@ -7,6 +7,7 @@ var di_1 = require("@fm/di");
 var express_1 = tslib_1.__importDefault(require("express"));
 var http_1 = require("http");
 var controller_1 = require("../controller");
+var db_manager_1 = require("../db/db-manager");
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(port, platformInjector) {
         this.port = port;
@@ -25,8 +26,11 @@ var ExpressServerPlatform = /** @class */ (function () {
                         return [4 /*yield*/, this.runStart(injector, undefined, _start)];
                     case 1:
                         _c.sent();
-                        return [4 /*yield*/, injector.get(controller_1.ControllerManager).register()];
+                        return [4 /*yield*/, injector.get(db_manager_1.DBManager).register()];
                     case 2:
+                        _c.sent();
+                        return [4 /*yield*/, injector.get(controller_1.ControllerManager).register()];
+                    case 3:
                         _c.sent();
                         this.listen(injector, server);
                         return [2 /*return*/];

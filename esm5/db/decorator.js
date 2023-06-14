@@ -1,0 +1,17 @@
+import { __assign } from "tslib";
+import { Inject, makeDecorator, makePropDecorator } from '@fm/di';
+import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, HAS_MANY, HAS_ONE, SYNC } from './constant';
+import { getFactoryEntity } from './db-manager';
+import { EntityManager } from './entity-manager';
+var associationsProps = function (type, options) { return (__assign({ type: type }, options)); };
+var clumnProps = function (options) { return (__assign({ allowNull: true }, options)); };
+export { forwardRef } from '@fm/di';
+export var Sync = makeDecorator(SYNC, function (options) { return (__assign({ force: true }, options)); });
+export var Entity = makeDecorator(ENTITY, function (tableName, options) { return (__assign({ tableName: tableName }, options)); }, getFactoryEntity);
+export var HasOne = makeDecorator(HAS_ONE, associationsProps);
+export var HasMany = makeDecorator(HAS_MANY, associationsProps);
+export var BelongsTo = makeDecorator(BELONGS_TO, associationsProps);
+export var BelongsToMany = makeDecorator(BELONGS_TO_MANY, associationsProps);
+export var PrimaryKey = makePropDecorator(COLUMN, function () { return clumnProps({ primaryKey: true, allowNull: false }); });
+export var Column = makePropDecorator(COLUMN, function (type, options) { return clumnProps(__assign({ type: type }, options)); });
+export var InjectEntity = function (entity) { return Inject(EntityManager, { transform: function (_, em) { return em.getModel(entity); } }); };

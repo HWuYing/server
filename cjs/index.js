@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dynamicServer = exports.Application = exports.DataError = exports.createInjectableModel = void 0;
+exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dynamicServer = exports.Application = exports.DataError = void 0;
 var tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./controller/decorator"), exports);
-var sequelize_1 = require("./decorator/sequelize");
-Object.defineProperty(exports, "createInjectableModel", { enumerable: true, get: function () { return sequelize_1.createInjectableModel; } });
+tslib_1.__exportStar(require("./db/decorator"), exports);
 var data_error_1 = require("./extension/data-error");
 Object.defineProperty(exports, "DataError", { enumerable: true, get: function () { return data_error_1.DataError; } });
 var runtime_1 = require("./platform/runtime");

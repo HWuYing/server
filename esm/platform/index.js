@@ -4,6 +4,7 @@ import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
 import { ControllerManager } from '../controller';
+import { DBManager } from '../db/db-manager';
 export class ExpressServerPlatform {
     constructor(port, platformInjector) {
         this.port = port;
@@ -16,6 +17,7 @@ export class ExpressServerPlatform {
             const [providers = [], _start] = this.parseParams(additionalProviders, start);
             const injector = this.beforeBootstrapStart([providers, { provide: express, useValue: app }]);
             yield this.runStart(injector, undefined, _start);
+            yield injector.get(DBManager).register();
             yield injector.get(ControllerManager).register();
             this.listen(injector, server);
         });

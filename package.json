@@ -30,17 +30,11 @@
 			"es2015": "./esm/controller/built-in/*.js",
 			"default": "./esm5/controller/built-in/*.js"
 		},
-		"./decorator": {
-			"node": "./cjs/decorator/index.js",
-			"require": "./cjs/decorator/index.js",
-			"es2015": "./esm/decorator/index.js",
-			"default": "./esm5/decorator/index.js"
-		},
-		"./decorator/*": {
-			"node": "./cjs/decorator/*.js",
-			"require": "./cjs/decorator/*.js",
-			"es2015": "./esm/decorator/*.js",
-			"default": "./esm5/decorator/*.js"
+		"./db/*": {
+			"node": "./cjs/db/*.js",
+			"require": "./cjs/db/*.js",
+			"es2015": "./esm/db/*.js",
+			"default": "./esm5/db/*.js"
 		},
 		"./extension": {
 			"node": "./cjs/extension/index.js",

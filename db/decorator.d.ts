@@ -1,0 +1,11 @@
+import { Type } from '@fm/di';
+export { forwardRef } from '@fm/di';
+export declare const Sync: (this: unknown, ...args: any[]) => (cls: Type<unknown>) => any;
+export declare const Entity: (this: unknown, ...args: any[]) => (cls: Type<any>) => any;
+export declare const HasOne: (this: unknown, ...args: any[]) => (cls: Type<unknown>) => any;
+export declare const HasMany: (this: unknown, ...args: any[]) => (cls: Type<unknown>) => any;
+export declare const BelongsTo: (this: unknown, ...args: any[]) => (cls: Type<unknown>) => any;
+export declare const BelongsToMany: (this: unknown, ...args: any[]) => (cls: Type<unknown>) => any;
+export declare const PrimaryKey: (this: unknown, ...args: any[]) => any;
+export declare const Column: (this: unknown, ...args: any[]) => any;
+export declare const InjectEntity: (entity: Type<any>) => any;

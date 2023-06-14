@@ -4,6 +4,7 @@ import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
 import { ControllerManager } from '../controller';
+import { DBManager } from '../db/db-manager';
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(port, platformInjector) {
         this.port = port;
@@ -22,8 +23,11 @@ var ExpressServerPlatform = /** @class */ (function () {
                         return [4 /*yield*/, this.runStart(injector, undefined, _start)];
                     case 1:
                         _c.sent();
-                        return [4 /*yield*/, injector.get(ControllerManager).register()];
+                        return [4 /*yield*/, injector.get(DBManager).register()];
                     case 2:
+                        _c.sent();
+                        return [4 /*yield*/, injector.get(ControllerManager).register()];
+                    case 3:
                         _c.sent();
                         this.listen(injector, server);
                         return [2 /*return*/];
