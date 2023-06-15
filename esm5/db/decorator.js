@@ -14,4 +14,4 @@ export var BelongsTo = makeDecorator(BELONGS_TO, associationsProps);
 export var BelongsToMany = makeDecorator(BELONGS_TO_MANY, associationsProps);
 export var PrimaryKey = makePropDecorator(COLUMN, function () { return clumnProps({ primaryKey: true, allowNull: false }); });
 export var Column = makePropDecorator(COLUMN, function (type, options) { return clumnProps(__assign({ type: type }, options)); });
-export var InjectEntity = function (entity) { return Inject(EntityManager, { transform: function (_, em) { return em.getModel(entity); } }); };
+export var InjectEntity = function (entity) { return Inject(EntityManager, { transform: function (_, m) { return m.getModel(entity); } }); };

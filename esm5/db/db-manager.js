@@ -3,6 +3,7 @@ import { __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 import { Inject, Injectable, setInjectableDef } from '@fm/di';
 import { Sequelize } from 'sequelize';
 import { Input, Prov } from '../platform/decorator.core';
+import { DATABASE } from './constant';
 import { EntityManager } from './entity-manager';
 var entityQueue = [];
 export function getFactoryEntity(type) {
@@ -68,7 +69,7 @@ var DBManager = /** @class */ (function () {
         __metadata("design:type", EntityManager)
     ], DBManager.prototype, "em", void 0);
     __decorate([
-        Input('db'),
+        Input(DATABASE),
         __metadata("design:type", Object)
     ], DBManager.prototype, "dbConfig", void 0);
     __decorate([

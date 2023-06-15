@@ -13,4 +13,4 @@ export const BelongsTo = makeDecorator(BELONGS_TO, associationsProps);
 export const BelongsToMany = makeDecorator(BELONGS_TO_MANY, associationsProps);
 export const PrimaryKey = makePropDecorator(COLUMN, () => clumnProps({ primaryKey: true, allowNull: false }));
 export const Column = makePropDecorator(COLUMN, (type, options) => clumnProps(Object.assign({ type }, options)));
-export const InjectEntity = (entity) => Inject(EntityManager, { transform: (_, em) => em.getModel(entity) });
+export const InjectEntity = (entity) => Inject(EntityManager, { transform: (_, m) => m.getModel(entity) });

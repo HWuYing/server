@@ -6,6 +6,7 @@ var tslib_1 = require("tslib");
 var di_1 = require("@fm/di");
 var sequelize_1 = require("sequelize");
 var decorator_core_1 = require("../platform/decorator.core");
+var constant_1 = require("./constant");
 var entity_manager_1 = require("./entity-manager");
 var entityQueue = [];
 function getFactoryEntity(type) {
@@ -72,7 +73,7 @@ var DBManager = /** @class */ (function () {
         tslib_1.__metadata("design:type", entity_manager_1.EntityManager)
     ], DBManager.prototype, "em", void 0);
     tslib_1.__decorate([
-        (0, decorator_core_1.Input)('db'),
+        (0, decorator_core_1.Input)(constant_1.DATABASE),
         tslib_1.__metadata("design:type", Object)
     ], DBManager.prototype, "dbConfig", void 0);
     tslib_1.__decorate([

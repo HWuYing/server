@@ -18,5 +18,5 @@ exports.BelongsTo = (0, di_1.makeDecorator)(constant_1.BELONGS_TO, associationsP
 exports.BelongsToMany = (0, di_1.makeDecorator)(constant_1.BELONGS_TO_MANY, associationsProps);
 exports.PrimaryKey = (0, di_1.makePropDecorator)(constant_1.COLUMN, function () { return clumnProps({ primaryKey: true, allowNull: false }); });
 exports.Column = (0, di_1.makePropDecorator)(constant_1.COLUMN, function (type, options) { return clumnProps(tslib_1.__assign({ type: type }, options)); });
-var InjectEntity = function (entity) { return (0, di_1.Inject)(entity_manager_1.EntityManager, { transform: function (_, em) { return em.getModel(entity); } }); };
+var InjectEntity = function (entity) { return (0, di_1.Inject)(entity_manager_1.EntityManager, { transform: function (_, m) { return m.getModel(entity); } }); };
 exports.InjectEntity = InjectEntity;
