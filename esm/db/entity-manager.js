@@ -47,7 +47,7 @@ let EntityManager = class EntityManager {
                 for (const key of keys)
                     yield this.createAssociation(key, entity);
                 if (syncMetadata)
-                    yield (model === null || model === void 0 ? void 0 : model.sync(syncMetadata));
+                    yield model.sync(syncMetadata);
             }
             return this.entityMapping.get(tableName);
         });

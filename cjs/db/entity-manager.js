@@ -74,7 +74,7 @@ var EntityManager = /** @class */ (function () {
                         return [3 /*break*/, 1];
                     case 4:
                         if (!syncMetadata) return [3 /*break*/, 6];
-                        return [4 /*yield*/, (model === null || model === void 0 ? void 0 : model.sync(syncMetadata))];
+                        return [4 /*yield*/, model.sync(syncMetadata)];
                     case 5:
                         _b.sent();
                         _b.label = 6;
