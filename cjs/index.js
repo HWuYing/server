@@ -12,3 +12,4 @@ Object.defineProperty(exports, "dynamicServer", { enumerable: true, get: functio
 Object.defineProperty(exports, "Input", { enumerable: true, get: function () { return runtime_1.Input; } });
 Object.defineProperty(exports, "PLATFORM_SCOPE", { enumerable: true, get: function () { return runtime_1.PLATFORM_SCOPE; } });
 Object.defineProperty(exports, "Prov", { enumerable: true, get: function () { return runtime_1.Prov; } });
+tslib_1.__exportStar(require("./token"), exports);

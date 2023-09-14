@@ -59,6 +59,18 @@
 			"require": "./cjs/platform/*.js",
 			"es2015": "./esm/platform/*.js",
 			"default": "./esm5/platform/*.js"
+		},
+		"./token": {
+			"node": "./cjs/token/index.js",
+			"require": "./cjs/token/index.js",
+			"es2015": "./esm/token/index.js",
+			"default": "./esm5/token/index.js"
+		},
+		"./token/*": {
+			"node": "./cjs/token/*.js",
+			"require": "./cjs/token/*.js",
+			"es2015": "./esm/token/*.js",
+			"default": "./esm5/token/*.js"
 		}
 	},
 	"dependencies": {},
