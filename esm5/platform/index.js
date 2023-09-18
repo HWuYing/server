@@ -1,6 +1,8 @@
 import { __awaiter, __generator, __spreadArray } from "tslib";
 import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
 import { Injector } from '@fm/di';
+import express from 'express';
+import { createServer } from 'http';
 import { ControllerManager } from '../controller';
 import { DBManager } from '../db/db-manager';
 import { HTTP_SERVER } from '../token';
@@ -34,7 +36,11 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return Injector.create(providers, this.platformInjector);
+        return Injector.create([
+            { provide: express, useFactory: function () { return express(); } },
+            { provide: HTTP_SERVER, useFactory: createServer, deps: [express] },
+            providers
+        ], this.platformInjector);
     };
     ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
         var _a;

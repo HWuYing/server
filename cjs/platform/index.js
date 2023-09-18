@@ -4,6 +4,8 @@ exports.ExpressServerPlatform = void 0;
 var tslib_1 = require("tslib");
 var token_1 = require("@fm/core/token");
 var di_1 = require("@fm/di");
+var express_1 = tslib_1.__importDefault(require("express"));
+var http_1 = require("http");
 var controller_1 = require("../controller");
 var db_manager_1 = require("../db/db-manager");
 var token_2 = require("../token");
@@ -37,7 +39,11 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
-        return di_1.Injector.create(providers, this.platformInjector);
+        return di_1.Injector.create([
+            { provide: express_1.default, useFactory: function () { return (0, express_1.default)(); } },
+            { provide: token_2.HTTP_SERVER, useFactory: http_1.createServer, deps: [express_1.default] },
+            providers
+        ], this.platformInjector);
     };
     ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
         var _a;
