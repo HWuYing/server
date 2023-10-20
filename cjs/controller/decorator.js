@@ -62,7 +62,7 @@ exports.Body = (0, di_1.makeParamDecorator)(constant_1.RouterParams.body, params
 exports.Query = (0, di_1.makeParamDecorator)(constant_1.RouterParams.query, paramsProps);
 exports.Params = (0, di_1.makeParamDecorator)(constant_1.RouterParams.params, paramsProps);
 exports.Headers = (0, di_1.makeParamDecorator)(constant_1.RouterParams.headers, paramsProps);
-function CustomParams(transform) {
+var CustomParams = function (transform) {
     return (0, di_1.makeParamDecorator)(constant_1.RouterParams.routerCustom, function (options) { return (tslib_1.__assign({ transform: transform }, options)); });
-}
+};
 exports.CustomParams = CustomParams;

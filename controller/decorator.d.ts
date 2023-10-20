@@ -33,5 +33,5 @@ export declare const Body: (this: unknown, ...args: any[]) => any;
 export declare const Query: (this: unknown, ...args: any[]) => any;
 export declare const Params: (this: unknown, ...args: any[]) => any;
 export declare const Headers: (this: unknown, ...args: any[]) => any;
-export declare function CustomParams(transform: hookFunc): (this: unknown, ...args: any[]) => any;
+export declare const CustomParams: (transform: hookFunc) => (this: unknown, ...args: any[]) => any;
 export {};

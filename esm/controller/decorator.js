@@ -36,6 +36,6 @@ export const Body = makeParamDecorator(RouterParams.body, paramsProps);
 export const Query = makeParamDecorator(RouterParams.query, paramsProps);
 export const Params = makeParamDecorator(RouterParams.params, paramsProps);
 export const Headers = makeParamDecorator(RouterParams.headers, paramsProps);
-export function CustomParams(transform) {
+export const CustomParams = (transform) => {
     return makeParamDecorator(RouterParams.routerCustom, (options) => (Object.assign({ transform }, options)));
-}
+};

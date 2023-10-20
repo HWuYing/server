@@ -58,6 +58,6 @@ export var Body = makeParamDecorator(RouterParams.body, paramsProps);
 export var Query = makeParamDecorator(RouterParams.query, paramsProps);
 export var Params = makeParamDecorator(RouterParams.params, paramsProps);
 export var Headers = makeParamDecorator(RouterParams.headers, paramsProps);
-export function CustomParams(transform) {
+export var CustomParams = function (transform) {
     return makeParamDecorator(RouterParams.routerCustom, function (options) { return (__assign({ transform: transform }, options)); });
-}
+};
