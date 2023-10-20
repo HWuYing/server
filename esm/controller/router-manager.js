@@ -24,7 +24,14 @@ let RouterManager = class RouterManager {
     createAgent(metadataName, agent) {
         if (metadataName === RequestMethod.middleware)
             return agent;
-        return (req, res, next) => __awaiter(this, void 0, void 0, function* () { return agent(req, res, next); });
+        return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield agent(req, res, next);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
     }
     createRouter(type, cls, options) {
         return __awaiter(this, void 0, void 0, function* () {
