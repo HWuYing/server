@@ -1,14 +1,10 @@
 import { __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, setInjectableDef } from '@fm/di';
+import { ApplicationPlugin, Input, Prov } from '@fm/core/platform/decorator';
+import { Inject, Injector } from '@fm/di';
 import { Sequelize } from 'sequelize';
-import { Input, Prov } from '../platform/decorator.core';
-import { DATABASE } from './constant';
+import { DATABASE, ENTITY_QUEUE } from './constant';
 import { EntityManager } from './entity-manager';
-var entityQueue = [];
-export function getFactoryEntity(type) {
-    entityQueue.push(setInjectableDef(type));
-}
 var DBManager = /** @class */ (function () {
     function DBManager() {
     }
@@ -20,38 +16,38 @@ var DBManager = /** @class */ (function () {
         return null;
     };
     DBManager.prototype.connection = function () {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.sequelize) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.sequelize.authenticate()];
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ((_a = this.sequelize) === null || _a === void 0 ? void 0 : _a.authenticate())];
                     case 1:
-                        _a.sent();
+                        _b.sent();
                         console.info('Connection has been established successfully.');
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
     };
     DBManager.prototype.register = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _i, entityQueue_1, entity;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.connection()];
+            var _i, _a, entity;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.sequelize) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.connection()];
                     case 1:
-                        _a.sent();
-                        _i = 0, entityQueue_1 = entityQueue;
-                        _a.label = 2;
+                        _b.sent();
+                        _i = 0, _a = this.injector.get(ENTITY_QUEUE) || [];
+                        _b.label = 2;
                     case 2:
-                        if (!(_i < entityQueue_1.length)) return [3 /*break*/, 5];
-                        entity = entityQueue_1[_i];
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        entity = _a[_i];
                         return [4 /*yield*/, this.em.createEntity(entity)];
                     case 3:
-                        _a.sent();
-                        _a.label = 4;
+                        _b.sent();
+                        _b.label = 4;
                     case 4:
                         _i++;
                         return [3 /*break*/, 2];
@@ -60,6 +56,10 @@ var DBManager = /** @class */ (function () {
             });
         });
     };
+    __decorate([
+        Inject(Injector),
+        __metadata("design:type", Injector)
+    ], DBManager.prototype, "injector", void 0);
     __decorate([
         Inject(Sequelize),
         __metadata("design:type", Sequelize)
@@ -79,7 +79,7 @@ var DBManager = /** @class */ (function () {
         __metadata("design:returntype", void 0)
     ], DBManager.prototype, "getSequelize", null);
     DBManager = __decorate([
-        Injectable()
+        ApplicationPlugin()
     ], DBManager);
     return DBManager;
 }());

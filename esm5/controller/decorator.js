@@ -1,7 +1,7 @@
 import { __assign } from "tslib";
+import { registerProvider } from '@fm/core/platform/decorator';
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
-import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
-import { getFactoryControlModel } from './manager';
+import { CONTROLLER, CONTROLLER_MODULE, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
 function getCtx(req) {
     return req.__fmCtx__;
 }
@@ -22,6 +22,9 @@ function proxyMethodHook(hook) {
         var req = _a[0], next = _a[2];
         return hook(annotation, getCtx(req), next);
     };
+}
+function getFactoryControlModel(type) {
+    registerProvider({ provide: MODULE_QUEUE, multi: true, useValue: setInjectableDef(type) });
 }
 var moduleProps = function (options) { return (__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };

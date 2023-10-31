@@ -1,9 +1,12 @@
-import { Inject, makeDecorator, makePropDecorator } from '@fm/di';
-import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, HAS_MANY, HAS_ONE, SYNC } from './constant';
-import { getFactoryEntity } from './db-manager';
+import { registerProvider } from '@fm/core/platform/decorator';
+import { Inject, makeDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
+import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC } from './constant';
 import { EntityManager } from './entity-manager';
 const associationsProps = (type, options) => (Object.assign({ type }, options));
 const columnProps = (options) => (Object.assign({ allowNull: true }, options));
+function getFactoryEntity(type) {
+    registerProvider({ provide: ENTITY_QUEUE, multi: true, useValue: setInjectableDef(type) });
+}
 export { forwardRef } from '@fm/di';
 export const Sync = makeDecorator(SYNC, (options) => (Object.assign({ force: true }, options)));
 export const Entity = makeDecorator(ENTITY, (tableName, options) => (Object.assign({ tableName }, options)), getFactoryEntity);

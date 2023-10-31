@@ -1,3 +1,4 @@
+import { InjectorToken } from "@fm/di";
 export const CONTROLLER_MODULE = 'ControllerModel';
 export const CONTROLLER = 'Controller';
 export var RouterParams;
@@ -25,3 +26,4 @@ export var RequestMethod;
     RequestMethod["middleware"] = "middleware";
     RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod || (RequestMethod = {}));
+export const MODULE_QUEUE = InjectorToken.get('MODULE_QUEUE');

@@ -3,8 +3,6 @@ import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
 import { Injector } from '@fm/di';
 import express from 'express';
 import { createServer } from 'http';
-import { ControllerManager } from '../controller';
-import { DBManager } from '../db/db-manager';
 import { HTTP_SERVER } from '../token';
 export class ExpressServerPlatform {
     constructor(port, platformInjector) {
@@ -16,8 +14,6 @@ export class ExpressServerPlatform {
             const [providers = [], _start] = this.parseParams(additionalProviders, start);
             const injector = this.beforeBootstrapStart(providers);
             yield this.runStart(injector, undefined, _start);
-            yield injector.get(DBManager).register();
-            yield injector.get(ControllerManager).register();
             this.listen(injector);
         });
     }
@@ -32,7 +28,7 @@ export class ExpressServerPlatform {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const application = yield injector.get(APPLICATION_TOKEN);
-            return (_a = (start || application.start)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options);
+            return (_a = (start || application.main)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options);
         });
     }
     parseParams(providers, start) {

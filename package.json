@@ -12,12 +12,6 @@
 			"es2015": "./esm/index.js",
 			"default": "./esm5/index.js"
 		},
-		"./controller": {
-			"node": "./cjs/controller/index.js",
-			"require": "./cjs/controller/index.js",
-			"es2015": "./esm/controller/index.js",
-			"default": "./esm5/controller/index.js"
-		},
 		"./controller/*": {
 			"node": "./cjs/controller/*.js",
 			"require": "./cjs/controller/*.js",
@@ -79,5 +73,7 @@
 	},
 	"author": "",
 	"license": "ISC",
-	"sideEffects": false
+	"sideEffects": [
+		"*.effects.js"
+	]
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestMethod = exports.RouterParams = exports.CONTROLLER = exports.CONTROLLER_MODULE = void 0;
+exports.MODULE_QUEUE = exports.RequestMethod = exports.RouterParams = exports.CONTROLLER = exports.CONTROLLER_MODULE = void 0;
+var di_1 = require("@fm/di");
 exports.CONTROLLER_MODULE = 'ControllerModel';
 exports.CONTROLLER = 'Controller';
 var RouterParams;
@@ -28,3 +29,4 @@ var RequestMethod;
     RequestMethod["middleware"] = "middleware";
     RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod = exports.RequestMethod || (exports.RequestMethod = {}));
+exports.MODULE_QUEUE = di_1.InjectorToken.get('MODULE_QUEUE');

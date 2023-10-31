@@ -1,5 +1,10 @@
+import '../controller/manager';
+import '../db/manager';
 import { Provider } from '@fm/di';
 import { ExpressServerPlatform } from './index';
 export { PLATFORM_SCOPE } from '@fm/core/platform/application';
-export declare const dynamicServer: (port: number, providers?: Provider[]) => ExpressServerPlatform;
-export { Application, Input, Prov } from './decorator.core';
+export declare const dynamicServer: (port: number | undefined, providers?: Provider[]) => ExpressServerPlatform;
+export { ApplicationPlugin, Input, Prov, registerProvider } from '@fm/core/platform/decorator';
+export declare const Application: <M extends import("@fm/core/platform/application").MetadataInfo>(metadata?: {
+    [key: string]: any;
+} | import("@fm/di").Type<M>) => <T = any>(cls: import("@fm/di").Type<T>) => import("@fm/di").Type<T>;

@@ -6,8 +6,6 @@ var token_1 = require("@fm/core/token");
 var di_1 = require("@fm/di");
 var express_1 = tslib_1.__importDefault(require("express"));
 var http_1 = require("http");
-var controller_1 = require("../controller");
-var db_manager_1 = require("../db/db-manager");
 var token_2 = require("../token");
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(port, platformInjector) {
@@ -24,12 +22,6 @@ var ExpressServerPlatform = /** @class */ (function () {
                         injector = this.beforeBootstrapStart(providers);
                         return [4 /*yield*/, this.runStart(injector, undefined, _start)];
                     case 1:
-                        _c.sent();
-                        return [4 /*yield*/, injector.get(db_manager_1.DBManager).register()];
-                    case 2:
-                        _c.sent();
-                        return [4 /*yield*/, injector.get(controller_1.ControllerManager).register()];
-                    case 3:
                         _c.sent();
                         this.listen(injector);
                         return [2 /*return*/];
@@ -54,7 +46,7 @@ var ExpressServerPlatform = /** @class */ (function () {
                     case 0: return [4 /*yield*/, injector.get(token_1.APPLICATION_TOKEN)];
                     case 1:
                         application = _b.sent();
-                        return [2 /*return*/, (_a = (start || application.start)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options)];
+                        return [2 /*return*/, (_a = (start || application.main)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options)];
                 }
             });
         });

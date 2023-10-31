@@ -1,3 +1,4 @@
+import { InjectorToken } from "@fm/di";
 export declare const CONTROLLER_MODULE = "ControllerModel";
 export declare const CONTROLLER = "Controller";
 export declare enum RouterParams {
@@ -23,3 +24,4 @@ export declare enum RequestMethod {
     middleware = "middleware",
     requestCustom = "requestCustom"
 }
+export declare const MODULE_QUEUE: InjectorToken;

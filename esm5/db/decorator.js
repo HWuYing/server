@@ -1,10 +1,13 @@
 import { __assign } from "tslib";
-import { Inject, makeDecorator, makePropDecorator } from '@fm/di';
-import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, HAS_MANY, HAS_ONE, SYNC } from './constant';
-import { getFactoryEntity } from './db-manager';
+import { registerProvider } from '@fm/core/platform/decorator';
+import { Inject, makeDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
+import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC } from './constant';
 import { EntityManager } from './entity-manager';
 var associationsProps = function (type, options) { return (__assign({ type: type }, options)); };
 var columnProps = function (options) { return (__assign({ allowNull: true }, options)); };
+function getFactoryEntity(type) {
+    registerProvider({ provide: ENTITY_QUEUE, multi: true, useValue: setInjectableDef(type) });
+}
 export { forwardRef } from '@fm/di';
 export var Sync = makeDecorator(SYNC, function (options) { return (__assign({ force: true }, options)); });
 export var Entity = makeDecorator(ENTITY, function (tableName, options) { return (__assign({ tableName: tableName }, options)); }, getFactoryEntity);

@@ -1,14 +1,10 @@
 import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, setInjectableDef } from '@fm/di';
+import { ApplicationPlugin, Input, Prov } from '@fm/core/platform/decorator';
+import { Inject, Injector } from '@fm/di';
 import { Sequelize } from 'sequelize';
-import { Input, Prov } from '../platform/decorator.core';
-import { DATABASE } from './constant';
+import { DATABASE, ENTITY_QUEUE } from './constant';
 import { EntityManager } from './entity-manager';
-const entityQueue = [];
-export function getFactoryEntity(type) {
-    entityQueue.push(setInjectableDef(type));
-}
 let DBManager = class DBManager {
     getSequelize() {
         if (this.dbConfig) {
@@ -18,21 +14,26 @@ let DBManager = class DBManager {
         return null;
     }
     connection() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.sequelize) {
-                yield this.sequelize.authenticate();
-                console.info('Connection has been established successfully.');
-            }
+            yield ((_a = this.sequelize) === null || _a === void 0 ? void 0 : _a.authenticate());
+            console.info('Connection has been established successfully.');
         });
     }
     register() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.connection();
-            for (const entity of entityQueue)
-                yield this.em.createEntity(entity);
+            if (this.sequelize) {
+                yield this.connection();
+                for (const entity of this.injector.get(ENTITY_QUEUE) || [])
+                    yield this.em.createEntity(entity);
+            }
         });
     }
 };
+__decorate([
+    Inject(Injector),
+    __metadata("design:type", Injector)
+], DBManager.prototype, "injector", void 0);
 __decorate([
     Inject(Sequelize),
     __metadata("design:type", Sequelize)
@@ -52,6 +53,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DBManager.prototype, "getSequelize", null);
 DBManager = __decorate([
-    Injectable()
+    ApplicationPlugin()
 ], DBManager);
 export { DBManager };

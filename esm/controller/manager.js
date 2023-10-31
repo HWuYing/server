@@ -1,18 +1,19 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, Injector, reflectCapabilities, setInjectableDef } from '@fm/di';
-import { CONTROLLER_MODULE } from './constant';
+import './built-in/built-in.module';
+import { ApplicationPlugin } from '@fm/core/platform/decorator';
+import { Inject, Injector, reflectCapabilities } from '@fm/di';
+import { CONTROLLER_MODULE, MODULE_QUEUE } from './constant';
 import { RouterManager } from './router-manager';
-const moduleQueue = [];
-export function getFactoryControlModel(type) {
-    moduleQueue.push(setInjectableDef(type));
-}
 let ControllerManager = class ControllerManager {
+    sortByOrder(arr) {
+        return arr.sort((item) => item.__order__ || 0);
+    }
     registerControllerModel(type) {
         return __awaiter(this, void 0, void 0, function* () {
             const { controller = [] } = reflectCapabilities.getAnnotation(type, CONTROLLER_MODULE);
             const module = this.injector.get(type);
-            for (const control of controller) {
+            for (const control of this.sortByOrder(controller)) {
                 yield this.routerManager.register(module, control);
             }
             return module;
@@ -20,8 +21,7 @@ let ControllerManager = class ControllerManager {
     }
     register() {
         return __awaiter(this, void 0, void 0, function* () {
-            const moduleList = moduleQueue.sort((module) => module.__order__ || 0);
-            for (const module of moduleList) {
+            for (const module of this.sortByOrder(this.injector.get(MODULE_QUEUE) || [])) {
                 yield this.registerControllerModel(module);
             }
             return this;
@@ -37,6 +37,6 @@ __decorate([
     __metadata("design:type", RouterManager)
 ], ControllerManager.prototype, "routerManager", void 0);
 ControllerManager = __decorate([
-    Injectable()
+    ApplicationPlugin()
 ], ControllerManager);
 export { ControllerManager };

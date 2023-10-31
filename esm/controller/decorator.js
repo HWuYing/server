@@ -1,6 +1,6 @@
+import { registerProvider } from '@fm/core/platform/decorator';
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@fm/di';
-import { CONTROLLER, CONTROLLER_MODULE, RequestMethod, RouterParams } from './constant';
-import { getFactoryControlModel } from './manager';
+import { CONTROLLER, CONTROLLER_MODULE, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
 function getCtx(req) {
     return req.__fmCtx__;
 }
@@ -9,6 +9,9 @@ function paramsTransform(annotation, data, ...[req, , next]) {
 }
 function proxyMethodHook(hook) {
     return (annotation, ...[req, , next]) => hook(annotation, getCtx(req), next);
+}
+function getFactoryControlModel(type) {
+    registerProvider({ provide: MODULE_QUEUE, multi: true, useValue: setInjectableDef(type) });
 }
 const moduleProps = (options) => (Object.assign({}, options));
 const paramsProps = (key) => ({ key, transform: paramsTransform });
