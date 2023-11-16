@@ -57,7 +57,7 @@ var ControllerManager = /** @class */ (function () {
                     case 3:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/, this];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

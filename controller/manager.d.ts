@@ -6,5 +6,5 @@ export declare class ControllerManager {
     routerManager: RouterManager;
     private sortByOrder;
     private registerControllerModel;
-    register(): Promise<this>;
+    register(): Promise<void>;
 }

@@ -24,7 +24,6 @@ let ControllerManager = class ControllerManager {
             for (const module of this.sortByOrder(this.injector.get(MODULE_QUEUE) || [])) {
                 yield this.registerControllerModel(module);
             }
-            return this;
         });
     }
 };
