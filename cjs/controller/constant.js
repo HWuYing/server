@@ -15,7 +15,7 @@ var RouterParams;
     RouterParams["params"] = "params";
     RouterParams["headers"] = "headers";
     RouterParams["routerCustom"] = "routerCustom";
-})(RouterParams = exports.RouterParams || (exports.RouterParams = {}));
+})(RouterParams || (exports.RouterParams = RouterParams = {}));
 var RequestMethod;
 (function (RequestMethod) {
     RequestMethod["post"] = "post";
@@ -28,5 +28,5 @@ var RequestMethod;
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
     RequestMethod["requestCustom"] = "requestCustom";
-})(RequestMethod = exports.RequestMethod || (exports.RequestMethod = {}));
+})(RequestMethod || (exports.RequestMethod = RequestMethod = {}));
 exports.MODULE_QUEUE = di_1.InjectorToken.get('MODULE_QUEUE');
