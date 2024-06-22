@@ -8,12 +8,11 @@ var EntityModel = /** @class */ (function (_super) {
     }
     EntityModel.getEntityDbMapping = function (entity) {
         var propsAnnotations = reflectCapabilities.properties(entity);
-        var dbMapping = {};
-        Object.keys(propsAnnotations).forEach(function (key) {
-            var _a = propsAnnotations[key].reduce(function (att, annotation) { return Object.assign(att, annotation); }, {}), _b = _a.name, name = _b === void 0 ? key : _b, options = __rest(_a, ["name"]);
-            dbMapping[name] = options;
-        });
-        return dbMapping;
+        return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
+            var _a;
+            var _b = propsAnnotations[key].reduce(function (att, annotation) { return Object.assign(att, annotation); }, {}), _c = _b.name, name = _c === void 0 ? key : _c, options = __rest(_b, ["name"]);
+            return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
+        }, {});
     };
     EntityModel.proxyInit = function (entity, options) {
         return (entity instanceof Model ? entity : Model).init.call(this, this.getEntityDbMapping(entity), options);

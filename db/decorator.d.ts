@@ -12,4 +12,4 @@ export declare const BelongsTo: (type: TokenKey | (() => TokenKey), options?: Be
 export declare const BelongsToMany: (type: TokenKey | (() => TokenKey), options: BelongsToManyOptions) => ClassDecorator;
 export declare const PrimaryKey: EmptyPropertyDecorator;
 export declare const Column: (name: string, options: ModelAttributes) => PropertyDecorator;
-export declare const InjectEntity: (entity: Type<any>) => (entity: Type<any>) => PropertyDecorator;
+export declare const InjectEntity: (entity: Type<any>) => PropertyDecorator;

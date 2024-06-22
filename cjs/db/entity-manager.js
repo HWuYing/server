@@ -37,7 +37,7 @@ var EntityManager = /** @class */ (function () {
         });
     };
     EntityManager.prototype.getModel = function (entity) {
-        var tableName = di_1.reflectCapabilities.getAnnotation(getEntity(entity), constant_1.ENTITY).tableName;
+        var tableName = di_1.reflectCapabilities.getAnnotation(getEntity(entity), constant_1.TABLE).tableName;
         return this.entityMapping.get(tableName);
     };
     EntityManager.prototype.createEntity = function (entity) {

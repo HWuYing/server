@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Application = exports.registerProvider = exports.Prov = exports.Input = exports.ApplicationPlugin = exports.dynamicServer = exports.PLATFORM_SCOPE = void 0;
-require("../controller/manager");
 require("../db/manager");
+require("../controller/manager");
 var platform_1 = require("@fm/core/platform");
 var application_1 = require("@fm/core/platform/application");
 var token_1 = require("@fm/core/token");

@@ -1,5 +1,5 @@
-import '../controller/manager';
 import '../db/manager';
+import '../controller/manager';
 import { Provider } from '@fm/di';
 import { ExpressServerPlatform } from './index';
 export { PLATFORM_SCOPE } from '@fm/core/platform/application';

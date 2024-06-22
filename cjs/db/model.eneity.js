@@ -11,12 +11,11 @@ var EntityModel = /** @class */ (function (_super) {
     }
     EntityModel.getEntityDbMapping = function (entity) {
         var propsAnnotations = di_1.reflectCapabilities.properties(entity);
-        var dbMapping = {};
-        Object.keys(propsAnnotations).forEach(function (key) {
-            var _a = propsAnnotations[key].reduce(function (att, annotation) { return Object.assign(att, annotation); }, {}), _b = _a.name, name = _b === void 0 ? key : _b, options = tslib_1.__rest(_a, ["name"]);
-            dbMapping[name] = options;
-        });
-        return dbMapping;
+        return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
+            var _a;
+            var _b = propsAnnotations[key].reduce(function (att, annotation) { return Object.assign(att, annotation); }, {}), _c = _b.name, name = _c === void 0 ? key : _c, options = tslib_1.__rest(_b, ["name"]);
+            return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
+        }, {});
     };
     EntityModel.proxyInit = function (entity, options) {
         return (entity instanceof sequelize_1.Model ? entity : sequelize_1.Model).init.call(this, this.getEntityDbMapping(entity), options);

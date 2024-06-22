@@ -2,7 +2,7 @@ import { __assign, __awaiter, __decorate, __generator, __metadata, __rest } from
 /* eslint-disable no-await-in-loop */
 import { Inject, Injectable, reflectCapabilities } from '@fm/di';
 import { Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, ENTITY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { BELONGS_TO, BELONGS_TO_MANY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
 import { EntityModel } from './model.eneity';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
@@ -34,7 +34,7 @@ var EntityManager = /** @class */ (function () {
         });
     };
     EntityManager.prototype.getModel = function (entity) {
-        var tableName = reflectCapabilities.getAnnotation(getEntity(entity), ENTITY).tableName;
+        var tableName = reflectCapabilities.getAnnotation(getEntity(entity), TABLE).tableName;
         return this.entityMapping.get(tableName);
     };
     EntityManager.prototype.createEntity = function (entity) {

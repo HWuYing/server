@@ -1,5 +1,5 @@
-import '../controller/manager';
 import '../db/manager';
+import '../controller/manager';
 import { createPlatformFactory } from '@fm/core/platform';
 import { ApplicationContext } from '@fm/core/platform/application';
 import { PLATFORM, PlatformOptions } from '@fm/core/token';
