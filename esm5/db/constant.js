@@ -1,5 +1,6 @@
 import { InjectorToken } from "@fm/di";
 export var SYNC = 'Sync';
+export var TABLE = 'Table';
 export var ENTITY = 'Entity';
 export var COLUMN = 'Column';
 export var DATABASE = 'database';

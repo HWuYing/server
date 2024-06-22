@@ -1,8 +1,9 @@
-import { __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
+import { __assign, __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
 import { Inject, Injectable, reflectCapabilities } from '@fm/di';
 import { Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, ENTITY, HAS_MANY, HAS_ONE, SYNC } from './constant';
+import { BELONGS_TO, BELONGS_TO_MANY, ENTITY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { EntityModel } from './model.eneity';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -10,15 +11,6 @@ var EntityManager = /** @class */ (function () {
     function EntityManager() {
         this.entityMapping = new Map();
     }
-    EntityManager.prototype.getEntityDbMapping = function (entity) {
-        var propsAnnotations = reflectCapabilities.properties(entity);
-        var dbMapping = {};
-        Object.keys(propsAnnotations).forEach(function (key) {
-            dbMapping[key] = {};
-            propsAnnotations[key].forEach(function (annotation) { return Object.assign(dbMapping[key], annotation); });
-        });
-        return dbMapping;
-    };
     EntityManager.prototype.createAssociation = function (metaKey, entity) {
         return __awaiter(this, void 0, void 0, function () {
             var metadata, type, options, model, associationsModel;
@@ -47,16 +39,16 @@ var EntityManager = /** @class */ (function () {
     };
     EntityManager.prototype.createEntity = function (entity) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, tableName, options, keys, syncMetadata, model, _i, keys_1, key;
+            var _a, tableName, options, keys, syncMetadata, Model_1, _i, keys_1, key;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = reflectCapabilities.getAnnotation(entity, ENTITY), tableName = _a.tableName, options = __rest(_a, ["tableName"]);
+                        _a = reflectCapabilities.getAnnotation(entity, TABLE), tableName = _a.tableName, options = __rest(_a, ["tableName"]);
                         if (!!this.entityMapping.has(tableName)) return [3 /*break*/, 6];
                         keys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
                         syncMetadata = reflectCapabilities.getAnnotation(entity, SYNC);
-                        model = this.sequelize.define(tableName, this.getEntityDbMapping(entity), options);
-                        this.entityMapping.set(tableName, model);
+                        Model_1 = EntityModel.proxyInit(entity, __assign({ modelName: tableName, sequelize: this.sequelize }, options));
+                        this.entityMapping.set(tableName, Model_1);
                         _i = 0, keys_1 = keys;
                         _b.label = 1;
                     case 1:
@@ -71,7 +63,7 @@ var EntityManager = /** @class */ (function () {
                         return [3 /*break*/, 1];
                     case 4:
                         if (!syncMetadata) return [3 /*break*/, 6];
-                        return [4 /*yield*/, model.sync(syncMetadata)];
+                        return [4 /*yield*/, Model_1.sync(syncMetadata)];
                     case 5:
                         _b.sent();
                         _b.label = 6;

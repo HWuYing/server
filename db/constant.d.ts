@@ -1,5 +1,6 @@
 import { InjectorToken } from "@fm/di";
 export declare const SYNC = "Sync";
+export declare const TABLE = "Table";
 export declare const ENTITY = "Entity";
 export declare const COLUMN = "Column";
 export declare const DATABASE = "database";

@@ -2,22 +2,14 @@ import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
 import { Inject, Injectable, reflectCapabilities } from '@fm/di';
 import { Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, ENTITY, HAS_MANY, HAS_ONE, SYNC } from './constant';
+import { BELONGS_TO, BELONGS_TO_MANY, ENTITY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { EntityModel } from './model.eneity';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
 let EntityManager = class EntityManager {
     constructor() {
         this.entityMapping = new Map();
-    }
-    getEntityDbMapping(entity) {
-        const propsAnnotations = reflectCapabilities.properties(entity);
-        const dbMapping = {};
-        Object.keys(propsAnnotations).forEach((key) => {
-            dbMapping[key] = {};
-            propsAnnotations[key].forEach((annotation) => Object.assign(dbMapping[key], annotation));
-        });
-        return dbMapping;
     }
     createAssociation(metaKey, entity) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -38,16 +30,16 @@ let EntityManager = class EntityManager {
     }
     createEntity(entity) {
         return __awaiter(this, void 0, void 0, function* () {
-            const _a = reflectCapabilities.getAnnotation(entity, ENTITY), { tableName } = _a, options = __rest(_a, ["tableName"]);
+            const _a = reflectCapabilities.getAnnotation(entity, TABLE), { tableName } = _a, options = __rest(_a, ["tableName"]);
             if (!this.entityMapping.has(tableName)) {
                 const keys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
                 const syncMetadata = reflectCapabilities.getAnnotation(entity, SYNC);
-                const model = this.sequelize.define(tableName, this.getEntityDbMapping(entity), options);
-                this.entityMapping.set(tableName, model);
+                const Model = EntityModel.proxyInit(entity, Object.assign({ modelName: tableName, sequelize: this.sequelize }, options));
+                this.entityMapping.set(tableName, Model);
                 for (const key of keys)
                     yield this.createAssociation(key, entity);
                 if (syncMetadata)
-                    yield model.sync(syncMetadata);
+                    yield Model.sync(syncMetadata);
             }
             return this.entityMapping.get(tableName);
         });
