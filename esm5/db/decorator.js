@@ -1,4 +1,5 @@
 import { __assign } from "tslib";
+/* eslint-disable max-len */
 import { registerProvider } from '@fm/core/platform/decorator';
 import { Inject, makeDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
 import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
@@ -19,4 +20,3 @@ export var BelongsToMany = makeDecorator(BELONGS_TO_MANY, associationsProps);
 export var PrimaryKey = makePropDecorator(COLUMN, function () { return columnProps({ primaryKey: true, allowNull: false }); });
 export var Column = makePropDecorator(COLUMN, function (name, options) { return columnProps(__assign({ name: name }, options)); });
 export var InjectEntity = function (entity) { return Inject(EntityManager, { transform: function (_, m) { return m.getModel(entity); } }); };
-;

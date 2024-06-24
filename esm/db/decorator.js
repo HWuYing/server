@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { registerProvider } from '@fm/core/platform/decorator';
 import { Inject, makeDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
 import { BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
@@ -18,4 +19,3 @@ export const BelongsToMany = makeDecorator(BELONGS_TO_MANY, associationsProps);
 export const PrimaryKey = makePropDecorator(COLUMN, () => columnProps({ primaryKey: true, allowNull: false }));
 export const Column = makePropDecorator(COLUMN, (name, options) => columnProps(Object.assign({ name }, options)));
 export const InjectEntity = (entity) => Inject(EntityManager, { transform: (_, m) => m.getModel(entity) });
-;

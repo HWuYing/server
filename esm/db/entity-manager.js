@@ -3,7 +3,7 @@ import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 import { Inject, Injectable, reflectCapabilities } from '@fm/di';
 import { Sequelize } from 'sequelize';
 import { BELONGS_TO, BELONGS_TO_MANY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
-import { EntityModel } from './model.eneity';
+import { EntityModel } from './model.entity';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }

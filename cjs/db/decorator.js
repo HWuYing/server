@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InjectEntity = exports.Column = exports.PrimaryKey = exports.BelongsToMany = exports.BelongsTo = exports.HasMany = exports.HasOne = exports.Table = exports.Sync = exports.Entity = exports.forwardRef = void 0;
 var tslib_1 = require("tslib");
+/* eslint-disable max-len */
 var decorator_1 = require("@fm/core/platform/decorator");
 var di_1 = require("@fm/di");
 var constant_1 = require("./constant");
@@ -24,4 +25,3 @@ exports.PrimaryKey = (0, di_1.makePropDecorator)(constant_1.COLUMN, function () 
 exports.Column = (0, di_1.makePropDecorator)(constant_1.COLUMN, function (name, options) { return columnProps(tslib_1.__assign({ name: name }, options)); });
 var InjectEntity = function (entity) { return (0, di_1.Inject)(entity_manager_1.EntityManager, { transform: function (_, m) { return m.getModel(entity); } }); };
 exports.InjectEntity = InjectEntity;
-;

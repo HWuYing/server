@@ -6,7 +6,7 @@ var tslib_1 = require("tslib");
 var di_1 = require("@fm/di");
 var sequelize_1 = require("sequelize");
 var constant_1 = require("./constant");
-var model_eneity_1 = require("./model.eneity");
+var model_entity_1 = require("./model.entity");
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -50,7 +50,7 @@ var EntityManager = /** @class */ (function () {
                         if (!!this.entityMapping.has(tableName)) return [3 /*break*/, 6];
                         keys = [constant_1.HAS_ONE, constant_1.HAS_MANY, constant_1.BELONGS_TO, constant_1.BELONGS_TO_MANY];
                         syncMetadata = di_1.reflectCapabilities.getAnnotation(entity, constant_1.SYNC);
-                        Model_1 = model_eneity_1.EntityModel.proxyInit(entity, tslib_1.__assign({ modelName: tableName, sequelize: this.sequelize }, options));
+                        Model_1 = model_entity_1.EntityModel.proxyInit(entity, tslib_1.__assign({ modelName: tableName, sequelize: this.sequelize }, options));
                         this.entityMapping.set(tableName, Model_1);
                         _i = 0, keys_1 = keys;
                         _b.label = 1;
