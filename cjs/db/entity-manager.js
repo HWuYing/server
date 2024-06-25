@@ -4,9 +4,9 @@ exports.EntityManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
 var di_1 = require("@fm/di");
+var lodash_1 = require("lodash");
 var sequelize_1 = require("sequelize");
 var constant_1 = require("./constant");
-var model_entity_1 = require("./model.entity");
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -14,9 +14,17 @@ var EntityManager = /** @class */ (function () {
     function EntityManager() {
         this.entityMapping = new Map();
     }
+    EntityManager.prototype.getEntityDbMapping = function (entity) {
+        var propsAnnotations = di_1.reflectCapabilities.properties(entity);
+        return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
+            var _a;
+            var _b = propsAnnotations[key].reduce(function (att, annotation) { return Object.assign(att, annotation); }, {}), _c = _b.name, name = _c === void 0 ? key : _c, options = tslib_1.__rest(_b, ["name"]);
+            return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
+        }, {});
+    };
     EntityManager.prototype.createAssociation = function (metaKey, entity) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var metadata, type, options, model, associationsModel;
+            var metadata, type, options, Model, AssociationsModel;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -24,12 +32,12 @@ var EntityManager = /** @class */ (function () {
                         if (!metadata)
                             return [2 /*return*/];
                         type = metadata.type, options = tslib_1.__rest(metadata, ["type"]);
-                        model = this.getModel(entity);
+                        Model = this.getModel(entity);
                         return [4 /*yield*/, this.createEntity(getEntity(type))];
                     case 1:
-                        associationsModel = _a.sent();
-                        if (associationsModel) {
-                            model[metaKey].call(model, associationsModel, options);
+                        AssociationsModel = _a.sent();
+                        if (AssociationsModel) {
+                            (0, lodash_1.get)(Model, metaKey).call(Model, AssociationsModel, options);
                         }
                         return [2 /*return*/];
                 }
@@ -50,7 +58,7 @@ var EntityManager = /** @class */ (function () {
                         if (!!this.entityMapping.has(tableName)) return [3 /*break*/, 6];
                         keys = [constant_1.HAS_ONE, constant_1.HAS_MANY, constant_1.BELONGS_TO, constant_1.BELONGS_TO_MANY];
                         syncMetadata = di_1.reflectCapabilities.getAnnotation(entity, constant_1.SYNC);
-                        Model_1 = model_entity_1.EntityModel.proxyInit(entity, tslib_1.__assign({ modelName: tableName, sequelize: this.sequelize }, options));
+                        Model_1 = this.sequelize.define(tableName, this.getEntityDbMapping(entity), options);
                         this.entityMapping.set(tableName, Model_1);
                         _i = 0, keys_1 = keys;
                         _b.label = 1;

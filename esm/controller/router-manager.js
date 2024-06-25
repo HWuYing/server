@@ -1,6 +1,7 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
 import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '@fm/di';
+import { get } from 'lodash';
 import express, { Router } from 'express';
 import { CONTROLLER, RequestMethod } from './constant';
 function type(typeName) {
@@ -34,22 +35,22 @@ let RouterManager = class RouterManager {
         });
     }
     createRouter(type, cls, options) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const map = new Map();
-            const { __methods__ = [] } = type;
             const router = Router(options);
-            for (const { descriptor, method, annotationInstance: { url, middleware, metadataName } } of __methods__) {
+            for (const { descriptor, method, annotationInstance: { url, middleware, metadataName } } of (_a = type.__methods__) !== null && _a !== void 0 ? _a : []) {
                 if (this.checkRouterMethod(metadataName))
                     continue;
-                if (!map.has(descriptor)) {
-                    map.set(descriptor, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
+                if (!map.has(method)) {
+                    map.set(method, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
                 }
                 if (metadataName === RequestMethod.middleware) {
-                    yield map.get(descriptor)(router);
+                    yield map.get(method)(router);
                     continue;
                 }
                 const params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
-                router[metadataName].call(router, ...params.concat(...middleware, map.get(descriptor)));
+                get(router, metadataName).call(router, ...params.concat(...middleware, map.get(method)));
             }
             return router;
         });

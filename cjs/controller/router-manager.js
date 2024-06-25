@@ -4,6 +4,7 @@ exports.RouterManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
 var di_1 = require("@fm/di");
+var lodash_1 = require("lodash");
 var express_1 = tslib_1.__importStar(require("express"));
 var constant_1 = require("./constant");
 function type(typeName) {
@@ -68,34 +69,34 @@ var RouterManager = /** @class */ (function () {
         }); };
     };
     RouterManager.prototype.createRouter = function (type, cls, options) {
+        var _a;
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var map, _a, __methods__, router, _i, __methods__1, _b, descriptor, method, _c, url, middleware, metadataName, params;
-            var _d;
-            return tslib_1.__generator(this, function (_e) {
-                switch (_e.label) {
+            var map, router, _i, _b, _c, descriptor, method, _d, url, middleware, metadataName, params;
+            var _e;
+            return tslib_1.__generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         map = new Map();
-                        _a = type.__methods__, __methods__ = _a === void 0 ? [] : _a;
                         router = (0, express_1.Router)(options);
-                        _i = 0, __methods__1 = __methods__;
-                        _e.label = 1;
+                        _i = 0, _b = (_a = type.__methods__) !== null && _a !== void 0 ? _a : [];
+                        _f.label = 1;
                     case 1:
-                        if (!(_i < __methods__1.length)) return [3 /*break*/, 5];
-                        _b = __methods__1[_i], descriptor = _b.descriptor, method = _b.method, _c = _b.annotationInstance, url = _c.url, middleware = _c.middleware, metadataName = _c.metadataName;
+                        if (!(_i < _b.length)) return [3 /*break*/, 5];
+                        _c = _b[_i], descriptor = _c.descriptor, method = _c.method, _d = _c.annotationInstance, url = _d.url, middleware = _d.middleware, metadataName = _d.metadataName;
                         if (this.checkRouterMethod(metadataName))
                             return [3 /*break*/, 4];
-                        if (!map.has(descriptor)) {
-                            map.set(descriptor, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
+                        if (!map.has(method)) {
+                            map.set(method, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
                         }
                         if (!(metadataName === constant_1.RequestMethod.middleware)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, map.get(descriptor)(router)];
+                        return [4 /*yield*/, map.get(method)(router)];
                     case 2:
-                        _e.sent();
+                        _f.sent();
                         return [3 /*break*/, 4];
                     case 3:
                         params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
-                        (_d = router[metadataName]).call.apply(_d, tslib_1.__spreadArray([router], params.concat.apply(params, tslib_1.__spreadArray(tslib_1.__spreadArray([], middleware, false), [map.get(descriptor)], false)), false));
-                        _e.label = 4;
+                        (_e = (0, lodash_1.get)(router, metadataName)).call.apply(_e, tslib_1.__spreadArray([router], params.concat.apply(params, tslib_1.__spreadArray(tslib_1.__spreadArray([], middleware, false), [map.get(method)], false)), false));
+                        _f.label = 4;
                     case 4:
                         _i++;
                         return [3 /*break*/, 1];
