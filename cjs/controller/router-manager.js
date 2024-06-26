@@ -4,8 +4,8 @@ exports.RouterManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
 var di_1 = require("@fm/di");
-var lodash_1 = require("lodash");
 var express_1 = tslib_1.__importStar(require("express"));
+var lodash_1 = require("lodash");
 var constant_1 = require("./constant");
 function type(typeName) {
     return function (obj) { return Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName; };

@@ -24,8 +24,7 @@ let DBManager = class DBManager {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.sequelize) {
                 yield this.connection();
-                for (const entity of this.injector.get(ENTITY_QUEUE) || [])
-                    yield this.em.createEntity(entity);
+                yield this.em.initEntitys(this.injector.get(ENTITY_QUEUE) || []);
             }
         });
     }

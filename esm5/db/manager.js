@@ -31,27 +31,18 @@ var DBManager = /** @class */ (function () {
     };
     DBManager.prototype.register = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _i, _a, entity;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        if (!this.sequelize) return [3 /*break*/, 5];
+                        if (!this.sequelize) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.connection()];
                     case 1:
-                        _b.sent();
-                        _i = 0, _a = this.injector.get(ENTITY_QUEUE) || [];
-                        _b.label = 2;
+                        _a.sent();
+                        return [4 /*yield*/, this.em.initEntitys(this.injector.get(ENTITY_QUEUE) || [])];
                     case 2:
-                        if (!(_i < _a.length)) return [3 /*break*/, 5];
-                        entity = _a[_i];
-                        return [4 /*yield*/, this.em.createEntity(entity)];
-                    case 3:
-                        _b.sent();
-                        _b.label = 4;
-                    case 4:
-                        _i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [2 /*return*/];
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });

@@ -1,8 +1,8 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
 import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '@fm/di';
-import { get } from 'lodash';
 import express, { Router } from 'express';
+import { get } from 'lodash';
 import { CONTROLLER, RequestMethod } from './constant';
 function type(typeName) {
     return (obj) => Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName;
