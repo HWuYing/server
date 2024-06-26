@@ -12,7 +12,7 @@ function getEntity(entity) {
 }
 var EntityManager = /** @class */ (function () {
     function EntityManager() {
-        this.throughEntices = [];
+        this.treeEntity = new Map();
         this.assignKeys = [constant_1.HAS_ONE, constant_1.HAS_MANY, constant_1.BELONGS_TO, constant_1.BELONGS_TO_MANY];
         this.entityMapping = new Map();
     }
@@ -29,6 +29,22 @@ var EntityManager = /** @class */ (function () {
             return propMetadata;
         }, {});
     };
+    EntityManager.prototype.addTree = function (entity, entices) {
+        var _a;
+        if (!this.treeEntity.has(entity)) {
+            this.treeEntity.set(entity, tslib_1.__spreadArray([], entices, true));
+        }
+        else {
+            var list_1 = this.treeEntity.get(entity);
+            entices.forEach(function (entice) { return !list_1.includes(entice) && list_1.push(entice); });
+        }
+        for (var _i = 0, entices_1 = entices; _i < entices_1.length; _i++) {
+            var entice = entices_1[_i];
+            if ((_a = this.treeEntity.get(entice)) === null || _a === void 0 ? void 0 : _a.includes(entity)) {
+                throw new Error('Entity Circular dependency detected');
+            }
+        }
+    };
     EntityManager.prototype.getEntityDbMapping = function (entity) {
         var propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
@@ -37,26 +53,31 @@ var EntityManager = /** @class */ (function () {
             return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
         }, {});
     };
-    EntityManager.prototype.createAssociationThrough = function (options) {
+    EntityManager.prototype.createAssociationThrough = function (options, entity) {
         var _a;
         var through = ((_a = options.through) === null || _a === void 0 ? void 0 : _a.model) || options.through;
-        if (typeof through !== 'string') {
-            var throughModel = this.createEntity(getEntity(through));
+        if (through && typeof through !== 'string') {
+            var throughEntity = getEntity(through);
+            var throughModel = this.createEntity(throughEntity);
+            this.addTree(throughEntity, [entity, getEntity(options.type)]);
             options.through.model ? options.through.model = throughModel : options.through = throughModel;
         }
         return options;
     };
     EntityManager.prototype.createAssociation = function (entity) {
+        var relyList = [];
         var propsAnnotations = this.properties(entity, false);
         for (var _i = 0, _a = Object.keys(propsAnnotations); _i < _a.length; _i++) {
             var key = _a[_i];
-            var _b = this.createAssociationThrough(propsAnnotations[key]), type = _b.type, relations = _b.relations, options = tslib_1.__rest(_b, ["type", "relations"]);
+            var _b = this.createAssociationThrough(propsAnnotations[key], entity), type = _b.type, relations = _b.relations, options = tslib_1.__rest(_b, ["type", "relations"]);
             var ModelType = this.getModel(entity);
             var AssociationsModel = this.createEntity(getEntity(type));
-            if (AssociationsModel) {
+            if (constant_1.BELONGS_TO === relations)
+                relyList.push(getEntity(type));
+            if (AssociationsModel)
                 (0, lodash_1.get)(ModelType, relations).call(ModelType, AssociationsModel, options);
-            }
         }
+        this.addTree(entity, relyList);
     };
     EntityManager.prototype.createEntity = function (entity) {
         var _a = di_1.reflectCapabilities.getAnnotation(entity, constant_1.TABLE), tableName = _a.tableName, options = tslib_1.__rest(_a, ["tableName"]);
@@ -93,45 +114,38 @@ var EntityManager = /** @class */ (function () {
     };
     EntityManager.prototype.initEntices = function (entices) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var _i, entices_1, entity, _a, entices_2, entity, _b, _c, _d, entity;
-            return tslib_1.__generator(this, function (_e) {
-                switch (_e.label) {
+            var execList, _i, entices_2, entity, _a, execList_1, entity;
+            var _this = this;
+            return tslib_1.__generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        for (_i = 0, entices_1 = entices; _i < entices_1.length; _i++) {
-                            entity = entices_1[_i];
+                        execList = [];
+                        for (_i = 0, entices_2 = entices; _i < entices_2.length; _i++) {
+                            entity = entices_2[_i];
                             this.createEntity(entity);
                         }
-                        _a = 0, entices_2 = entices;
-                        _e.label = 1;
+                        while (this.treeEntity.size > 0) {
+                            this.treeEntity.forEach(function (entices, entity) {
+                                if (!entices.length) {
+                                    execList.push(entity);
+                                    _this.treeEntity.forEach(function (value) { return value.splice(value.indexOf(entity), 1); });
+                                    _this.treeEntity.delete(entity);
+                                }
+                            });
+                        }
+                        _a = 0, execList_1 = execList;
+                        _b.label = 1;
                     case 1:
-                        if (!(_a < entices_2.length)) return [3 /*break*/, 5];
-                        entity = entices_2[_a];
-                        _b = !this.throughEntices.includes(entity);
-                        if (!_b) return [3 /*break*/, 3];
+                        if (!(_a < execList_1.length)) return [3 /*break*/, 4];
+                        entity = execList_1[_a];
                         return [4 /*yield*/, this.syncEntity(entity)];
                     case 2:
-                        _b = (_e.sent());
-                        _e.label = 3;
+                        _b.sent();
+                        _b.label = 3;
                     case 3:
-                        _b;
-                        _e.label = 4;
-                    case 4:
                         _a++;
                         return [3 /*break*/, 1];
-                    case 5:
-                        _c = 0, _d = this.throughEntices;
-                        _e.label = 6;
-                    case 6:
-                        if (!(_c < _d.length)) return [3 /*break*/, 9];
-                        entity = _d[_c];
-                        return [4 /*yield*/, this.syncEntity(entity)];
-                    case 7:
-                        _e.sent();
-                        _e.label = 8;
-                    case 8:
-                        _c++;
-                        return [3 /*break*/, 6];
-                    case 9: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

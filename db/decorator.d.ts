@@ -3,7 +3,7 @@ import { BelongsToManyOptions, BelongsToOptions, HasManyOptions, HasOneOptions, 
 type EntityType = TokenKey | (() => TokenKey);
 type EmptyClassDecorator = () => ClassDecorator;
 type EmptyPropertyDecorator = () => PropertyDecorator;
-type ColumnPorpertyDecorator<M, N> = () => (type: M, options: N) => PropertyDecorator;
+type ColumnPorpertyDecorator<M, N> = (type: M, options?: N) => PropertyDecorator;
 type AssociationsDecorator<T> = ColumnPorpertyDecorator<EntityType, T>;
 export { forwardRef } from '@fm/di';
 export declare const Entity: EmptyClassDecorator;
@@ -12,7 +12,7 @@ export declare const Table: (tableName: string, options?: ModelOptions) => Class
 export declare const HasOne: AssociationsDecorator<HasOneOptions>;
 export declare const HasMany: AssociationsDecorator<HasManyOptions>;
 export declare const BelongsTo: AssociationsDecorator<BelongsToOptions>;
-export declare const BelongsToMany: AssociationsDecorator<BelongsToManyOptions>;
+export declare const BelongsToMany: (type: EntityType, options: BelongsToManyOptions) => PropertyDecorator;
 export declare const PrimaryKey: EmptyPropertyDecorator;
 export declare const Column: (name: string, options: ModelAttributes) => PropertyDecorator;
 export declare const InjectEntity: (entity: Type<any>) => PropertyDecorator;
