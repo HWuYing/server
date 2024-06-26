@@ -41,7 +41,7 @@ var DBManager = /** @class */ (function () {
                         return [4 /*yield*/, this.connection()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.em.initEntitys(this.injector.get(constant_1.ENTITY_QUEUE) || [])];
+                        return [4 /*yield*/, this.em.initEntices(this.injector.get(constant_1.ENTITY_QUEUE) || [])];
                     case 2:
                         _a.sent();
                         _a.label = 3;

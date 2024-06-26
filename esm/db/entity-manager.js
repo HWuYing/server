@@ -9,7 +9,7 @@ function getEntity(entity) {
 }
 let EntityManager = class EntityManager {
     constructor() {
-        this.throughEntitys = [];
+        this.throughEntices = [];
         this.assignKeys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
         this.entityMapping = new Map();
     }
@@ -74,14 +74,14 @@ let EntityManager = class EntityManager {
         const { tableName } = reflectCapabilities.getAnnotation(getEntity(entity), TABLE);
         return this.entityMapping.get(tableName);
     }
-    initEntitys(entitys) {
+    initEntices(entices) {
         return __awaiter(this, void 0, void 0, function* () {
-            for (const entity of entitys)
+            for (const entity of entices)
                 this.createEntity(entity);
-            for (const entity of entitys) {
-                !this.throughEntitys.includes(entity) && (yield this.syncEntity(entity));
+            for (const entity of entices) {
+                !this.throughEntices.includes(entity) && (yield this.syncEntity(entity));
             }
-            for (const entity of this.throughEntitys)
+            for (const entity of this.throughEntices)
                 yield this.syncEntity(entity);
         });
     }

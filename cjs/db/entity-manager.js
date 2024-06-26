@@ -12,7 +12,7 @@ function getEntity(entity) {
 }
 var EntityManager = /** @class */ (function () {
     function EntityManager() {
-        this.throughEntitys = [];
+        this.throughEntices = [];
         this.assignKeys = [constant_1.HAS_ONE, constant_1.HAS_MANY, constant_1.BELONGS_TO, constant_1.BELONGS_TO_MANY];
         this.entityMapping = new Map();
     }
@@ -91,22 +91,22 @@ var EntityManager = /** @class */ (function () {
         var tableName = di_1.reflectCapabilities.getAnnotation(getEntity(entity), constant_1.TABLE).tableName;
         return this.entityMapping.get(tableName);
     };
-    EntityManager.prototype.initEntitys = function (entitys) {
+    EntityManager.prototype.initEntices = function (entices) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var _i, entitys_1, entity, _a, entitys_2, entity, _b, _c, _d, entity;
+            var _i, entices_1, entity, _a, entices_2, entity, _b, _c, _d, entity;
             return tslib_1.__generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
-                        for (_i = 0, entitys_1 = entitys; _i < entitys_1.length; _i++) {
-                            entity = entitys_1[_i];
+                        for (_i = 0, entices_1 = entices; _i < entices_1.length; _i++) {
+                            entity = entices_1[_i];
                             this.createEntity(entity);
                         }
-                        _a = 0, entitys_2 = entitys;
+                        _a = 0, entices_2 = entices;
                         _e.label = 1;
                     case 1:
-                        if (!(_a < entitys_2.length)) return [3 /*break*/, 5];
-                        entity = entitys_2[_a];
-                        _b = !this.throughEntitys.includes(entity);
+                        if (!(_a < entices_2.length)) return [3 /*break*/, 5];
+                        entity = entices_2[_a];
+                        _b = !this.throughEntices.includes(entity);
                         if (!_b) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.syncEntity(entity)];
                     case 2:
@@ -119,7 +119,7 @@ var EntityManager = /** @class */ (function () {
                         _a++;
                         return [3 /*break*/, 1];
                     case 5:
-                        _c = 0, _d = this.throughEntitys;
+                        _c = 0, _d = this.throughEntices;
                         _e.label = 6;
                     case 6:
                         if (!(_c < _d.length)) return [3 /*break*/, 9];

@@ -3,7 +3,7 @@ import { Model, ModelAttributes, ModelStatic } from 'sequelize';
 type EntityType = Type<any> | (() => Type<any>);
 export declare class EntityManager {
     private seq;
-    protected throughEntitys: Type<any>[];
+    protected throughEntices: Type<any>[];
     protected assignKeys: string[];
     private entityMapping;
     protected properties(entity: Type<any>, isMapping?: boolean): any;
@@ -13,6 +13,6 @@ export declare class EntityManager {
     protected createEntity(entity: Type<any>): ModelStatic<Model<any, any>>;
     protected syncEntity(entity: Type<any>): Promise<void>;
     getModel(entity: EntityType): ModelStatic<Model<any, any>>;
-    initEntitys(entitys: Type<any>[]): Promise<void>;
+    initEntices(entices: Type<any>[]): Promise<void>;
 }
 export {};
