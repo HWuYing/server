@@ -1,17 +1,23 @@
-import { __assign, __awaiter, __decorate, __generator, __metadata, __rest, __spreadArray } from "tslib";
+import { __assign, __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, reflectCapabilities } from '@fm/di';
+import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { BELONGS_TO, BELONGS_TO_MANY, ATTRIBUTE_MAPPING, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { AttributeMapping } from './attribute.mapping';
+import { ApplicationContext } from '@fm/core/platform/application';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
 var EntityManager = /** @class */ (function () {
-    function EntityManager() {
+    function EntityManager(ctx, injector) {
+        this.ctx = ctx;
+        this.injector = injector;
         this.treeEntity = new Map();
         this.assignKeys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
         this.entityMapping = new Map();
+        if (!this.injector.get(ATTRIBUTE_MAPPING))
+            this.ctx.addProvider({ provide: ATTRIBUTE_MAPPING, useClass: AttributeMapping });
     }
     EntityManager.prototype.properties = function (entity, isMapping) {
         var _this = this;
@@ -27,26 +33,22 @@ var EntityManager = /** @class */ (function () {
         }, {});
     };
     EntityManager.prototype.addTree = function (entity, entices) {
-        var _a;
+        var _this = this;
+        entices = entices.filter(function (entice) { var _a; return !((_a = _this.treeEntity.get(entice)) === null || _a === void 0 ? void 0 : _a.includes(entity)) && entice !== entity; });
         if (!this.treeEntity.has(entity)) {
-            this.treeEntity.set(entity, __spreadArray([], entices, true));
+            this.treeEntity.set(entity, entices);
         }
         else {
             var list_1 = this.treeEntity.get(entity);
             entices.forEach(function (entice) { return !list_1.includes(entice) && list_1.push(entice); });
         }
-        for (var _i = 0, entices_1 = entices; _i < entices_1.length; _i++) {
-            var entice = entices_1[_i];
-            if ((_a = this.treeEntity.get(entice)) === null || _a === void 0 ? void 0 : _a.includes(entity)) {
-                throw new Error('Entity Circular dependency detected');
-            }
-        }
     };
     EntityManager.prototype.getEntityDbMapping = function (entity) {
+        var _this = this;
         var propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
             var _a;
-            var _b = propsAnnotations[key], _c = _b.name, name = _c === void 0 ? key : _c, options = __rest(_b, ["name"]);
+            var _b = _this.dbMapping.attribute(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = __rest(_b, ["name"]);
             return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
         }, {});
     };
@@ -111,24 +113,32 @@ var EntityManager = /** @class */ (function () {
     };
     EntityManager.prototype.initEntices = function (entices) {
         return __awaiter(this, void 0, void 0, function () {
-            var execList, _i, entices_2, entity, _a, execList_1, entity;
+            var execList, _i, entices_1, entity, _loop_1, this_1, _a, execList_1, entity;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         execList = [];
-                        for (_i = 0, entices_2 = entices; _i < entices_2.length; _i++) {
-                            entity = entices_2[_i];
+                        for (_i = 0, entices_1 = entices; _i < entices_1.length; _i++) {
+                            entity = entices_1[_i];
                             this.createEntity(entity);
                         }
-                        while (this.treeEntity.size > 0) {
-                            this.treeEntity.forEach(function (entices, entity) {
+                        _loop_1 = function () {
+                            var count = 0;
+                            this_1.treeEntity.forEach(function (entices, entity) {
                                 if (!entices.length) {
                                     execList.push(entity);
                                     _this.treeEntity.forEach(function (value) { return value.splice(value.indexOf(entity), 1); });
                                     _this.treeEntity.delete(entity);
+                                    count++;
                                 }
                             });
+                            if (count === 0)
+                                throw new Error('Circular dependency detected');
+                        };
+                        this_1 = this;
+                        while (this.treeEntity.size > 0) {
+                            _loop_1();
                         }
                         _a = 0, execList_1 = execList;
                         _b.label = 1;
@@ -148,11 +158,16 @@ var EntityManager = /** @class */ (function () {
         });
     };
     __decorate([
+        Inject(ATTRIBUTE_MAPPING),
+        __metadata("design:type", AttributeMapping)
+    ], EntityManager.prototype, "dbMapping", void 0);
+    __decorate([
         Inject(Sequelize),
         __metadata("design:type", Sequelize)
     ], EntityManager.prototype, "seq", void 0);
     EntityManager = __decorate([
-        Injectable()
+        Injectable(),
+        __metadata("design:paramtypes", [ApplicationContext, Injector])
     ], EntityManager);
     return EntityManager;
 }());

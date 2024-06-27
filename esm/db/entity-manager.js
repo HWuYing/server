@@ -1,17 +1,23 @@
 import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, reflectCapabilities } from '@fm/di';
+import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { BELONGS_TO, BELONGS_TO_MANY, ATTRIBUTE_MAPPING, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { AttributeMapping } from './attribute.mapping';
+import { ApplicationContext } from '@fm/core/platform/application';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
 let EntityManager = class EntityManager {
-    constructor() {
+    constructor(ctx, injector) {
+        this.ctx = ctx;
+        this.injector = injector;
         this.treeEntity = new Map();
         this.assignKeys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
         this.entityMapping = new Map();
+        if (!this.injector.get(ATTRIBUTE_MAPPING))
+            this.ctx.addProvider({ provide: ATTRIBUTE_MAPPING, useClass: AttributeMapping });
     }
     properties(entity, isMapping = false) {
         const properties = reflectCapabilities.properties(entity);
@@ -25,24 +31,19 @@ let EntityManager = class EntityManager {
         }, {});
     }
     addTree(entity, entices) {
-        var _a;
+        entices = entices.filter((entice) => { var _a; return !((_a = this.treeEntity.get(entice)) === null || _a === void 0 ? void 0 : _a.includes(entity)) && entice !== entity; });
         if (!this.treeEntity.has(entity)) {
-            this.treeEntity.set(entity, [...entices]);
+            this.treeEntity.set(entity, entices);
         }
         else {
             const list = this.treeEntity.get(entity);
             entices.forEach((entice) => !list.includes(entice) && list.push(entice));
         }
-        for (const entice of entices) {
-            if ((_a = this.treeEntity.get(entice)) === null || _a === void 0 ? void 0 : _a.includes(entity)) {
-                throw new Error('Entity Circular dependency detected');
-            }
-        }
     }
     getEntityDbMapping(entity) {
         const propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight((mapping, key) => {
-            const _a = propsAnnotations[key], { name = key } = _a, options = __rest(_a, ["name"]);
+            const _a = this.dbMapping.attribute(propsAnnotations[key]), { name = key } = _a, options = __rest(_a, ["name"]);
             return Object.assign(mapping, { [name]: options });
         }, {});
     }
@@ -100,13 +101,17 @@ let EntityManager = class EntityManager {
             for (const entity of entices)
                 this.createEntity(entity);
             while (this.treeEntity.size > 0) {
+                let count = 0;
                 this.treeEntity.forEach((entices, entity) => {
                     if (!entices.length) {
                         execList.push(entity);
                         this.treeEntity.forEach((value) => value.splice(value.indexOf(entity), 1));
                         this.treeEntity.delete(entity);
+                        count++;
                     }
                 });
+                if (count === 0)
+                    throw new Error('Circular dependency detected');
             }
             for (const entity of execList)
                 yield this.syncEntity(entity);
@@ -114,10 +119,15 @@ let EntityManager = class EntityManager {
     }
 };
 __decorate([
+    Inject(ATTRIBUTE_MAPPING),
+    __metadata("design:type", AttributeMapping)
+], EntityManager.prototype, "dbMapping", void 0);
+__decorate([
     Inject(Sequelize),
     __metadata("design:type", Sequelize)
 ], EntityManager.prototype, "seq", void 0);
 EntityManager = __decorate([
-    Injectable()
+    Injectable(),
+    __metadata("design:paramtypes", [ApplicationContext, Injector])
 ], EntityManager);
 export { EntityManager };

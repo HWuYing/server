@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.dynamicServer = exports.ApplicationPlugin = exports.Application = exports.ExpressServerPlatform = exports.DataError = void 0;
 var tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./controller/decorator"), exports);
-tslib_1.__exportStar(require("./db/decorator"), exports);
+tslib_1.__exportStar(require("./db"), exports);
 var data_error_1 = require("./extension/data-error");
 Object.defineProperty(exports, "DataError", { enumerable: true, get: function () { return data_error_1.DataError; } });
 var platform_1 = require("./platform");

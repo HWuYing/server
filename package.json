@@ -24,6 +24,12 @@
 			"es2015": "./esm/controller/built-in/*.js",
 			"default": "./esm5/controller/built-in/*.js"
 		},
+		"./db": {
+			"node": "./cjs/db/index.js",
+			"require": "./cjs/db/index.js",
+			"es2015": "./esm/db/index.js",
+			"default": "./esm5/db/index.js"
+		},
 		"./db/*": {
 			"node": "./cjs/db/*.js",
 			"require": "./cjs/db/*.js",
