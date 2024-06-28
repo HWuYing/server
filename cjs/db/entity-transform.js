@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AttributeMapping = void 0;
+exports.EntityTransform = exports.ENTITY_TRANSFORM = void 0;
 var tslib_1 = require("tslib");
 var di_1 = require("@fm/di");
-var AttributeMapping = /** @class */ (function () {
-    function AttributeMapping() {
+exports.ENTITY_TRANSFORM = di_1.InjectorToken.get('ENTITY_TRANSFORM');
+var EntityTransform = /** @class */ (function () {
+    function EntityTransform() {
     }
-    AttributeMapping.prototype.attribute = function (options) {
+    EntityTransform.prototype.transform = function (options) {
         return this.convert(options);
     };
-    AttributeMapping.prototype.convert = function (options) {
+    EntityTransform.prototype.convert = function (options) {
         var name = options.name, convert = options.convert;
         if (convert) {
             var convertType_1 = this.injector.get(convert);
@@ -27,10 +28,10 @@ var AttributeMapping = /** @class */ (function () {
     tslib_1.__decorate([
         (0, di_1.Inject)(di_1.Injector),
         tslib_1.__metadata("design:type", di_1.Injector)
-    ], AttributeMapping.prototype, "injector", void 0);
-    AttributeMapping = tslib_1.__decorate([
+    ], EntityTransform.prototype, "injector", void 0);
+    EntityTransform = tslib_1.__decorate([
         (0, di_1.Injectable)()
-    ], AttributeMapping);
-    return AttributeMapping;
+    ], EntityTransform);
+    return EntityTransform;
 }());
-exports.AttributeMapping = AttributeMapping;
+exports.EntityTransform = EntityTransform;

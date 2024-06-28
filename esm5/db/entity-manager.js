@@ -1,11 +1,11 @@
 import { __assign, __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
+import { ApplicationContext } from '@fm/core/platform/application';
 import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, ATTRIBUTE_MAPPING, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
-import { AttributeMapping } from './attribute.mapping';
-import { ApplicationContext } from '@fm/core/platform/application';
+import { ASSOCIATION, BELONGS_TO, SYNC, TABLE } from './constant';
+import { ENTITY_TRANSFORM, EntityTransform } from './entity-transform';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -14,19 +14,17 @@ var EntityManager = /** @class */ (function () {
         this.ctx = ctx;
         this.injector = injector;
         this.treeEntity = new Map();
-        this.assignKeys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
         this.entityMapping = new Map();
-        if (!this.injector.get(ATTRIBUTE_MAPPING))
-            this.ctx.addProvider({ provide: ATTRIBUTE_MAPPING, useClass: AttributeMapping });
+        if (!this.injector.get(ENTITY_TRANSFORM))
+            this.ctx.addProvider({ provide: ENTITY_TRANSFORM, useClass: EntityTransform });
     }
     EntityManager.prototype.properties = function (entity, isMapping) {
-        var _this = this;
         if (isMapping === void 0) { isMapping = false; }
         var properties = reflectCapabilities.properties(entity);
         return Object.keys(properties).reduce(function (propMetadata, key) {
             properties[key].forEach(function (_a) {
                 var metadataName = _a.metadataName, options = __rest(_a, ["metadataName"]);
-                if (_this.assignKeys.includes(metadataName) !== isMapping)
+                if (metadataName === ASSOCIATION !== isMapping)
                     propMetadata[key] = Object.assign(propMetadata[key] || {}, options);
             });
             return propMetadata;
@@ -48,7 +46,7 @@ var EntityManager = /** @class */ (function () {
         var propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
             var _a;
-            var _b = _this.dbMapping.attribute(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = __rest(_b, ["name"]);
+            var _b = _this.entityTransform.transform(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = __rest(_b, ["name"]);
             return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
         }, {});
     };
@@ -158,9 +156,9 @@ var EntityManager = /** @class */ (function () {
         });
     };
     __decorate([
-        Inject(ATTRIBUTE_MAPPING),
-        __metadata("design:type", AttributeMapping)
-    ], EntityManager.prototype, "dbMapping", void 0);
+        Inject(ENTITY_TRANSFORM),
+        __metadata("design:type", EntityTransform)
+    ], EntityManager.prototype, "entityTransform", void 0);
     __decorate([
         Inject(Sequelize),
         __metadata("design:type", Sequelize)

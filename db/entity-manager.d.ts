@@ -1,15 +1,14 @@
+import { ApplicationContext } from '@fm/core/platform/application';
 import { Injector, Type } from '@fm/di';
 import { Model, ModelAttributes, ModelStatic } from 'sequelize';
-import { AttributeMapping } from './attribute.mapping';
-import { ApplicationContext } from '@fm/core/platform/application';
+import { EntityTransform } from './entity-transform';
 type EntityType = Type<any> | (() => Type<any>);
 export declare class EntityManager {
     protected ctx: ApplicationContext;
     protected injector: Injector;
-    dbMapping: AttributeMapping;
+    entityTransform: EntityTransform;
     private seq;
     protected treeEntity: Map<any, any[]>;
-    protected assignKeys: string[];
     private entityMapping;
     constructor(ctx: ApplicationContext, injector: Injector);
     protected properties(entity: Type<any>, isMapping?: boolean): any;

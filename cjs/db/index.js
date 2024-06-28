@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AttributeConverter = exports.ATTRIBUTE_MAPPING = exports.AttributeMapping = void 0;
+exports.EntityTransform = exports.ENTITY_TRANSFORM = exports.AttributeConverter = void 0;
 var tslib_1 = require("tslib");
-tslib_1.__exportStar(require("./decorator"), exports);
-var attribute_mapping_1 = require("./attribute.mapping");
-Object.defineProperty(exports, "AttributeMapping", { enumerable: true, get: function () { return attribute_mapping_1.AttributeMapping; } });
-var constant_1 = require("./constant");
-Object.defineProperty(exports, "ATTRIBUTE_MAPPING", { enumerable: true, get: function () { return constant_1.ATTRIBUTE_MAPPING; } });
 var attribute_convert_1 = require("./attribute.convert");
 Object.defineProperty(exports, "AttributeConverter", { enumerable: true, get: function () { return attribute_convert_1.AttributeConverter; } });
+tslib_1.__exportStar(require("./decorator"), exports);
+var entity_transform_1 = require("./entity-transform");
+Object.defineProperty(exports, "ENTITY_TRANSFORM", { enumerable: true, get: function () { return entity_transform_1.ENTITY_TRANSFORM; } });
+Object.defineProperty(exports, "EntityTransform", { enumerable: true, get: function () { return entity_transform_1.EntityTransform; } });

@@ -1,11 +1,11 @@
 import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
+import { ApplicationContext } from '@fm/core/platform/application';
 import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';
-import { BELONGS_TO, BELONGS_TO_MANY, ATTRIBUTE_MAPPING, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
-import { AttributeMapping } from './attribute.mapping';
-import { ApplicationContext } from '@fm/core/platform/application';
+import { ASSOCIATION, BELONGS_TO, SYNC, TABLE } from './constant';
+import { ENTITY_TRANSFORM, EntityTransform } from './entity-transform';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -14,17 +14,16 @@ let EntityManager = class EntityManager {
         this.ctx = ctx;
         this.injector = injector;
         this.treeEntity = new Map();
-        this.assignKeys = [HAS_ONE, HAS_MANY, BELONGS_TO, BELONGS_TO_MANY];
         this.entityMapping = new Map();
-        if (!this.injector.get(ATTRIBUTE_MAPPING))
-            this.ctx.addProvider({ provide: ATTRIBUTE_MAPPING, useClass: AttributeMapping });
+        if (!this.injector.get(ENTITY_TRANSFORM))
+            this.ctx.addProvider({ provide: ENTITY_TRANSFORM, useClass: EntityTransform });
     }
     properties(entity, isMapping = false) {
         const properties = reflectCapabilities.properties(entity);
         return Object.keys(properties).reduce((propMetadata, key) => {
             properties[key].forEach((_a) => {
                 var { metadataName } = _a, options = __rest(_a, ["metadataName"]);
-                if (this.assignKeys.includes(metadataName) !== isMapping)
+                if (metadataName === ASSOCIATION !== isMapping)
                     propMetadata[key] = Object.assign(propMetadata[key] || {}, options);
             });
             return propMetadata;
@@ -43,7 +42,7 @@ let EntityManager = class EntityManager {
     getEntityDbMapping(entity) {
         const propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight((mapping, key) => {
-            const _a = this.dbMapping.attribute(propsAnnotations[key]), { name = key } = _a, options = __rest(_a, ["name"]);
+            const _a = this.entityTransform.transform(propsAnnotations[key]), { name = key } = _a, options = __rest(_a, ["name"]);
             return Object.assign(mapping, { [name]: options });
         }, {});
     }
@@ -119,9 +118,9 @@ let EntityManager = class EntityManager {
     }
 };
 __decorate([
-    Inject(ATTRIBUTE_MAPPING),
-    __metadata("design:type", AttributeMapping)
-], EntityManager.prototype, "dbMapping", void 0);
+    Inject(ENTITY_TRANSFORM),
+    __metadata("design:type", EntityTransform)
+], EntityManager.prototype, "entityTransform", void 0);
 __decorate([
     Inject(Sequelize),
     __metadata("design:type", Sequelize)

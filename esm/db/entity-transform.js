@@ -1,7 +1,8 @@
 import { __decorate, __metadata } from "tslib";
-import { Inject, Injectable, Injector } from '@fm/di';
-let AttributeMapping = class AttributeMapping {
-    attribute(options) {
+import { Inject, Injectable, Injector, InjectorToken } from '@fm/di';
+export const ENTITY_TRANSFORM = InjectorToken.get('ENTITY_TRANSFORM');
+let EntityTransform = class EntityTransform {
+    transform(options) {
         return this.convert(options);
     }
     convert(options) {
@@ -23,8 +24,8 @@ let AttributeMapping = class AttributeMapping {
 __decorate([
     Inject(Injector),
     __metadata("design:type", Injector)
-], AttributeMapping.prototype, "injector", void 0);
-AttributeMapping = __decorate([
+], EntityTransform.prototype, "injector", void 0);
+EntityTransform = __decorate([
     Injectable()
-], AttributeMapping);
-export { AttributeMapping };
+], EntityTransform);
+export { EntityTransform };

@@ -1,9 +1,9 @@
 import { TokenKey, Type } from '@fm/di';
 import { BelongsToManyOptions, BelongsToOptions, HasManyOptions, HasOneOptions, ModelAttributes, ModelOptions, SyncOptions } from 'sequelize';
+type EntityType = TokenKey | (() => TokenKey);
 type Through = {
     model: EntityType;
 } | EntityType;
-type EntityType = TokenKey | (() => TokenKey);
 type EmptyClassDecorator = () => ClassDecorator;
 type EmptyPropertyDecorator = () => PropertyDecorator;
 type ColumnPropertyDecorator<M, N> = (type: M, options?: N) => PropertyDecorator;

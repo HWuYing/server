@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntityManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
+var application_1 = require("@fm/core/platform/application");
 var di_1 = require("@fm/di");
 var lodash_1 = require("lodash");
 var sequelize_1 = require("sequelize");
 var constant_1 = require("./constant");
-var attribute_mapping_1 = require("./attribute.mapping");
-var application_1 = require("@fm/core/platform/application");
+var entity_transform_1 = require("./entity-transform");
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }
@@ -17,19 +17,17 @@ var EntityManager = /** @class */ (function () {
         this.ctx = ctx;
         this.injector = injector;
         this.treeEntity = new Map();
-        this.assignKeys = [constant_1.HAS_ONE, constant_1.HAS_MANY, constant_1.BELONGS_TO, constant_1.BELONGS_TO_MANY];
         this.entityMapping = new Map();
-        if (!this.injector.get(constant_1.ATTRIBUTE_MAPPING))
-            this.ctx.addProvider({ provide: constant_1.ATTRIBUTE_MAPPING, useClass: attribute_mapping_1.AttributeMapping });
+        if (!this.injector.get(entity_transform_1.ENTITY_TRANSFORM))
+            this.ctx.addProvider({ provide: entity_transform_1.ENTITY_TRANSFORM, useClass: entity_transform_1.EntityTransform });
     }
     EntityManager.prototype.properties = function (entity, isMapping) {
-        var _this = this;
         if (isMapping === void 0) { isMapping = false; }
         var properties = di_1.reflectCapabilities.properties(entity);
         return Object.keys(properties).reduce(function (propMetadata, key) {
             properties[key].forEach(function (_a) {
                 var metadataName = _a.metadataName, options = tslib_1.__rest(_a, ["metadataName"]);
-                if (_this.assignKeys.includes(metadataName) !== isMapping)
+                if (metadataName === constant_1.ASSOCIATION !== isMapping)
                     propMetadata[key] = Object.assign(propMetadata[key] || {}, options);
             });
             return propMetadata;
@@ -51,7 +49,7 @@ var EntityManager = /** @class */ (function () {
         var propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
             var _a;
-            var _b = _this.dbMapping.attribute(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = tslib_1.__rest(_b, ["name"]);
+            var _b = _this.entityTransform.transform(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = tslib_1.__rest(_b, ["name"]);
             return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
         }, {});
     };
@@ -161,9 +159,9 @@ var EntityManager = /** @class */ (function () {
         });
     };
     tslib_1.__decorate([
-        (0, di_1.Inject)(constant_1.ATTRIBUTE_MAPPING),
-        tslib_1.__metadata("design:type", attribute_mapping_1.AttributeMapping)
-    ], EntityManager.prototype, "dbMapping", void 0);
+        (0, di_1.Inject)(entity_transform_1.ENTITY_TRANSFORM),
+        tslib_1.__metadata("design:type", entity_transform_1.EntityTransform)
+    ], EntityManager.prototype, "entityTransform", void 0);
     tslib_1.__decorate([
         (0, di_1.Inject)(sequelize_1.Sequelize),
         tslib_1.__metadata("design:type", sequelize_1.Sequelize)

@@ -1,12 +1,13 @@
 import { __decorate, __metadata } from "tslib";
-import { Inject, Injectable, Injector } from '@fm/di';
-var AttributeMapping = /** @class */ (function () {
-    function AttributeMapping() {
+import { Inject, Injectable, Injector, InjectorToken } from '@fm/di';
+export var ENTITY_TRANSFORM = InjectorToken.get('ENTITY_TRANSFORM');
+var EntityTransform = /** @class */ (function () {
+    function EntityTransform() {
     }
-    AttributeMapping.prototype.attribute = function (options) {
+    EntityTransform.prototype.transform = function (options) {
         return this.convert(options);
     };
-    AttributeMapping.prototype.convert = function (options) {
+    EntityTransform.prototype.convert = function (options) {
         var name = options.name, convert = options.convert;
         if (convert) {
             var convertType_1 = this.injector.get(convert);
@@ -24,10 +25,10 @@ var AttributeMapping = /** @class */ (function () {
     __decorate([
         Inject(Injector),
         __metadata("design:type", Injector)
-    ], AttributeMapping.prototype, "injector", void 0);
-    AttributeMapping = __decorate([
+    ], EntityTransform.prototype, "injector", void 0);
+    EntityTransform = __decorate([
         Injectable()
-    ], AttributeMapping);
-    return AttributeMapping;
+    ], EntityTransform);
+    return EntityTransform;
 }());
-export { AttributeMapping };
+export { EntityTransform };
