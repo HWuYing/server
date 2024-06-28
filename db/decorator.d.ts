@@ -1,5 +1,5 @@
 import { TokenKey, Type } from '@fm/di';
-import { BelongsToManyOptions, BelongsToOptions, HasManyOptions, HasOneOptions, InitOptions, ModelAttributes, SyncOptions } from 'sequelize';
+import { BelongsToManyOptions, BelongsToOptions, HasManyOptions, HasOneOptions, ModelOptions, ModelAttributes, SyncOptions } from 'sequelize';
 type EntityType = TokenKey | (() => TokenKey);
 type Through = {
     model: EntityType;
@@ -10,7 +10,7 @@ type BelongsToManyType = (type: EntityType, options: BelongsToManyOptions | {
 export { forwardRef } from '@fm/di';
 export declare const Entity: () => import("../../di/decorators").ClassDecorator;
 export declare const Sync: (options?: SyncOptions) => import("../../di/decorators").ClassDecorator;
-export declare const Table: (tableName: string, options?: InitOptions<import("sequelize").Model<any, any>>) => import("../../di/decorators").ClassDecorator;
+export declare const Table: (tableName: string, options?: ModelOptions<import("sequelize").Model<any, any>>) => import("../../di/decorators").ClassDecorator;
 export declare const HasOne: (type: EntityType, options?: HasOneOptions) => PropertyDecorator;
 export declare const HasMany: (type: EntityType, options?: HasManyOptions) => PropertyDecorator;
 export declare const BelongsTo: (type: EntityType, options?: BelongsToOptions) => PropertyDecorator;

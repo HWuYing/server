@@ -75,7 +75,7 @@ let EntityManager = class EntityManager {
         const _a = reflectCapabilities.getAnnotation(entity, TABLE), { tableName } = _a, options = __rest(_a, ["tableName"]);
         if (!this.entityMapping.has(tableName)) {
             const mapping = this.getEntityDbMapping(entity);
-            const tableOptions = Object.assign({ tableName }, options);
+            const tableOptions = Object.assign({ tableName, sequelize: this.seq }, options);
             const modelType = entity instanceof Model ? entity.init(mapping, tableOptions) : this.seq.define(tableName, mapping, tableOptions);
             this.entityMapping.set(tableName, modelType);
             this.createAssociation(entity);

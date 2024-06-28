@@ -83,7 +83,7 @@ var EntityManager = /** @class */ (function () {
         var _a = di_1.reflectCapabilities.getAnnotation(entity, constant_1.TABLE), tableName = _a.tableName, options = tslib_1.__rest(_a, ["tableName"]);
         if (!this.entityMapping.has(tableName)) {
             var mapping = this.getEntityDbMapping(entity);
-            var tableOptions = tslib_1.__assign({ tableName: tableName }, options);
+            var tableOptions = tslib_1.__assign({ tableName: tableName, sequelize: this.seq }, options);
             var modelType = entity instanceof sequelize_1.Model ? entity.init(mapping, tableOptions) : this.seq.define(tableName, mapping, tableOptions);
             this.entityMapping.set(tableName, modelType);
             this.createAssociation(entity);
