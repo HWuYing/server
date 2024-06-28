@@ -15,19 +15,21 @@ function getFactoryControlModel(type) {
 }
 const moduleProps = (options) => (Object.assign({}, options));
 const paramsProps = (key) => ({ key, transform: paramsTransform });
+const middlewareProps = (...middleware) => ({ middleware });
 const methodProps = (url, ...middleware) => ({ url, middleware });
+const useProps = (url, ...middleware) => ({ url, middleware });
 const controllerProps = (baseUrl, options = {}) => ({ baseUrl, options });
 export const Controller = makeDecorator(CONTROLLER, controllerProps, setInjectableDef);
 export const ControllerModel = makeDecorator(CONTROLLER_MODULE, moduleProps, getFactoryControlModel);
 export const Get = makeMethodDecorator(RequestMethod.get, methodProps);
 export const All = makeMethodDecorator(RequestMethod.all, methodProps);
-export const Use = makeMethodDecorator(RequestMethod.use, methodProps);
+export const Use = makeMethodDecorator(RequestMethod.use, useProps);
 export const Put = makeMethodDecorator(RequestMethod.put, methodProps);
 export const Post = makeMethodDecorator(RequestMethod.post, methodProps);
 export const Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export const Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export const Options = makeMethodDecorator(RequestMethod.options, methodProps);
-export const Middleware = makeMethodDecorator(RequestMethod.middleware, methodProps);
+export const Middleware = makeMethodDecorator(RequestMethod.middleware, middlewareProps);
 export const CustomMethod = (hook) => {
     return makeMethodDecorator(RequestMethod.requestCustom, (options) => (Object.assign({ hook: proxyMethodHook(hook) }, options)));
 };

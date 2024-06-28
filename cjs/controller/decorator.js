@@ -31,7 +31,21 @@ function getFactoryControlModel(type) {
 }
 var moduleProps = function (options) { return (tslib_1.__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
+var middlewareProps = function () {
+    var middleware = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        middleware[_i] = arguments[_i];
+    }
+    return ({ middleware: middleware });
+};
 var methodProps = function (url) {
+    var middleware = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        middleware[_i - 1] = arguments[_i];
+    }
+    return ({ url: url, middleware: middleware });
+};
+var useProps = function (url) {
     var middleware = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         middleware[_i - 1] = arguments[_i];
@@ -46,13 +60,13 @@ exports.Controller = (0, di_1.makeDecorator)(constant_1.CONTROLLER, controllerPr
 exports.ControllerModel = (0, di_1.makeDecorator)(constant_1.CONTROLLER_MODULE, moduleProps, getFactoryControlModel);
 exports.Get = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.get, methodProps);
 exports.All = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.all, methodProps);
-exports.Use = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.use, methodProps);
+exports.Use = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.use, useProps);
 exports.Put = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.put, methodProps);
 exports.Post = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.post, methodProps);
 exports.Param = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.param, methodProps);
 exports.Delete = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.delete, methodProps);
 exports.Options = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.options, methodProps);
-exports.Middleware = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.middleware, methodProps);
+exports.Middleware = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.middleware, middlewareProps);
 var CustomMethod = function (hook) {
     return (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.requestCustom, function (options) { return (tslib_1.__assign({ hook: proxyMethodHook(hook) }, options)); });
 };
