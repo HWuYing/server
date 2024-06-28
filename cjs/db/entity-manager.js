@@ -49,8 +49,8 @@ var EntityManager = /** @class */ (function () {
         var propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight(function (mapping, key) {
             var _a;
-            var _b = _this.entityTransform.transform(propsAnnotations[key]), _c = _b.name, name = _c === void 0 ? key : _c, options = tslib_1.__rest(_b, ["name"]);
-            return Object.assign(mapping, (_a = {}, _a[name] = options, _a));
+            var _b = propsAnnotations[key], _c = _b.name, name = _c === void 0 ? key : _c, _d = _b.field, field = _d === void 0 ? name : _d, options = tslib_1.__rest(_b, ["name", "field"]);
+            return Object.assign(mapping, (_a = {}, _a[name] = _this.entityTransform.transform(tslib_1.__assign({ name: name, field: field }, options)), _a));
         }, {});
     };
     EntityManager.prototype.createAssociationThrough = function (options, entity) {

@@ -42,8 +42,8 @@ let EntityManager = class EntityManager {
     getEntityDbMapping(entity) {
         const propsAnnotations = this.properties(entity, true);
         return Object.keys(propsAnnotations).reduceRight((mapping, key) => {
-            const _a = this.entityTransform.transform(propsAnnotations[key]), { name = key } = _a, options = __rest(_a, ["name"]);
-            return Object.assign(mapping, { [name]: options });
+            const _a = propsAnnotations[key], { name = key, field = name } = _a, options = __rest(_a, ["name", "field"]);
+            return Object.assign(mapping, { [name]: this.entityTransform.transform(Object.assign({ name, field }, options)) });
         }, {});
     }
     createAssociationThrough(options, entity) {

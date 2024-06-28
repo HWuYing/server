@@ -17,6 +17,6 @@ export const HasMany = makePropDecorator(ASSOCIATION, associationsProps(HAS_MANY
 export const BelongsTo = makePropDecorator(ASSOCIATION, associationsProps(BELONGS_TO));
 export const BelongsToMany = makePropDecorator(ASSOCIATION, associationsProps(BELONGS_TO_MANY));
 export const PrimaryKey = makePropDecorator(COLUMN, () => columnProps({ primaryKey: true, allowNull: false }));
-export const Column = makePropDecorator(COLUMN, (name, options) => columnProps(Object.assign({ name }, options)));
+export const Column = makePropDecorator(COLUMN, (field, options) => columnProps(Object.assign({ field }, options)));
 export const Convert = makePropDecorator(COLUMN, (type) => ({ convert: type }));
 export const InjectEntity = (entity) => Inject(EntityManager, { transform: (_, m) => m.getModel(entity) });

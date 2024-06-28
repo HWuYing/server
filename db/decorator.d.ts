@@ -19,6 +19,6 @@ export declare const BelongsToMany: (type: EntityType, options: BelongsToManyOpt
     through: Through;
 }) => PropertyDecorator;
 export declare const PrimaryKey: EmptyPropertyDecorator;
-export declare const Column: (name: string, options: ModelAttributes) => PropertyDecorator;
+export declare const Column: (field: string, options: ModelAttributes) => PropertyDecorator;
 export declare const Convert: (type: Type<any>) => PropertyDecorator;
 export declare const InjectEntity: (entity: Type<any>) => PropertyDecorator;

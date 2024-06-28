@@ -18,6 +18,6 @@ export var HasMany = makePropDecorator(ASSOCIATION, associationsProps(HAS_MANY))
 export var BelongsTo = makePropDecorator(ASSOCIATION, associationsProps(BELONGS_TO));
 export var BelongsToMany = makePropDecorator(ASSOCIATION, associationsProps(BELONGS_TO_MANY));
 export var PrimaryKey = makePropDecorator(COLUMN, function () { return columnProps({ primaryKey: true, allowNull: false }); });
-export var Column = makePropDecorator(COLUMN, function (name, options) { return columnProps(__assign({ name: name }, options)); });
+export var Column = makePropDecorator(COLUMN, function (field, options) { return columnProps(__assign({ field: field }, options)); });
 export var Convert = makePropDecorator(COLUMN, function (type) { return ({ convert: type }); });
 export var InjectEntity = function (entity) { return Inject(EntityManager, { transform: function (_, m) { return m.getModel(entity); } }); };
