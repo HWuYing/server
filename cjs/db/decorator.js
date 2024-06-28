@@ -14,7 +14,7 @@ function getFactoryEntity(type) {
 }
 var di_2 = require("@fm/di");
 Object.defineProperty(exports, "forwardRef", { enumerable: true, get: function () { return di_2.forwardRef; } });
-exports.Entity = (0, di_1.makeDecorator)(constant_1.ENTITY, function () { return ({}); }, getFactoryEntity);
+exports.Entity = (0, di_1.makeDecorator)(constant_1.ENTITY, undefined, getFactoryEntity);
 exports.Sync = (0, di_1.makeDecorator)(constant_1.SYNC, function (options) { return (tslib_1.__assign({ force: true }, options)); });
 exports.Table = (0, di_1.makeDecorator)(constant_1.TABLE, function (tableName, options) { return (tslib_1.__assign({ tableName: tableName }, options)); });
 exports.HasOne = (0, di_1.makePropDecorator)(constant_1.ASSOCIATION, associationsProps(constant_1.HAS_ONE));

@@ -9,7 +9,7 @@ function getFactoryEntity(type) {
     registerProvider({ provide: ENTITY_QUEUE, multi: true, useValue: setInjectableDef(type) });
 }
 export { forwardRef } from '@fm/di';
-export const Entity = makeDecorator(ENTITY, () => ({}), getFactoryEntity);
+export const Entity = makeDecorator(ENTITY, undefined, getFactoryEntity);
 export const Sync = makeDecorator(SYNC, (options) => (Object.assign({ force: true }, options)));
 export const Table = makeDecorator(TABLE, (tableName, options) => (Object.assign({ tableName }, options)));
 export const HasOne = makePropDecorator(ASSOCIATION, associationsProps(HAS_ONE));

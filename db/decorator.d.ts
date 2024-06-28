@@ -8,9 +8,9 @@ type BelongsToManyType = (type: EntityType, options: BelongsToManyOptions | {
     through: Through;
 }) => PropertyDecorator;
 export { forwardRef } from '@fm/di';
-export declare const Entity: () => <TFunction extends (new (...args: any[]) => any) & Type<any>>(target: TFunction) => TFunction;
-export declare const Sync: (options?: SyncOptions) => <TFunction extends (new (...args: any[]) => any) & Type<any>>(target: TFunction) => TFunction;
-export declare const Table: (tableName: string, options?: InitOptions<import("sequelize").Model<any, any>>) => <TFunction extends (new (...args: any[]) => any) & Type<any>>(target: TFunction) => TFunction;
+export declare const Entity: () => import("../../di/decorators").ClassDecorator;
+export declare const Sync: (options?: SyncOptions) => import("../../di/decorators").ClassDecorator;
+export declare const Table: (tableName: string, options?: InitOptions<import("sequelize").Model<any, any>>) => import("../../di/decorators").ClassDecorator;
 export declare const HasOne: (type: EntityType, options?: HasOneOptions) => PropertyDecorator;
 export declare const HasMany: (type: EntityType, options?: HasManyOptions) => PropertyDecorator;
 export declare const BelongsTo: (type: EntityType, options?: BelongsToOptions) => PropertyDecorator;
