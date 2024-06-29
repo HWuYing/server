@@ -62,7 +62,7 @@ export var Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export var Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export var Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export var Middleware = makeMethodDecorator(RequestMethod.middleware, middlewareProps);
-export var CustomMethod = function (hook) {
+export var makeRouteMethodDecorator = function (hook) {
     return makeMethodDecorator(RequestMethod.requestCustom, function (options) { return (__assign({ hook: proxyMethodHook(hook) }, options)); });
 };
 export var Ip = makeParamDecorator(RouterParams.ip, paramsProps);
@@ -73,6 +73,6 @@ export var Body = makeParamDecorator(RouterParams.body, paramsProps);
 export var Query = makeParamDecorator(RouterParams.query, paramsProps);
 export var Params = makeParamDecorator(RouterParams.params, paramsProps);
 export var Headers = makeParamDecorator(RouterParams.headers, paramsProps);
-export var CustomParams = function (transform) {
+export var makeRouteParamsDecorator = function (transform) {
     return makeParamDecorator(RouterParams.routerCustom, function (options) { return (__assign({ transform: transform }, options)); });
 };

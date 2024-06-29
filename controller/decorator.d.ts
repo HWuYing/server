@@ -17,7 +17,7 @@ export declare const Param: (url: string | string[], ...middleware: RequestHandl
 export declare const Delete: (url: string | string[], ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
 export declare const Options: (url: string | string[], ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
 export declare const Middleware: (...args: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const CustomMethod: <T>(hook: MethodHookFunc) => (options?: T) => MethodDecorator;
+export declare const makeRouteMethodDecorator: <T>(hook: MethodHookFunc) => (options?: T) => MethodDecorator;
 export declare const Ip: () => import("@fm/di").TargetDecorator;
 export declare const Req: () => import("@fm/di").TargetDecorator;
 export declare const Res: () => import("@fm/di").TargetDecorator;
@@ -26,5 +26,5 @@ export declare const Body: (key?: string) => import("@fm/di").TargetDecorator;
 export declare const Query: (key?: string) => import("@fm/di").TargetDecorator;
 export declare const Params: (key?: string) => import("@fm/di").TargetDecorator;
 export declare const Headers: (key?: string) => import("@fm/di").TargetDecorator;
-export declare const CustomParams: <T>(transform: hookFunc) => (options?: T) => import("@fm/di").TargetDecorator;
+export declare const makeRouteParamsDecorator: <T>(transform: hookFunc) => (options?: T) => import("@fm/di").TargetDecorator;
 export {};

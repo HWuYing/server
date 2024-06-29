@@ -28,7 +28,7 @@ export const Param = makeMethodDecorator(RequestMethod.param, methodProps);
 export const Delete = makeMethodDecorator(RequestMethod.delete, methodProps);
 export const Options = makeMethodDecorator(RequestMethod.options, methodProps);
 export const Middleware = makeMethodDecorator(RequestMethod.middleware, middlewareProps);
-export const CustomMethod = (hook) => {
+export const makeRouteMethodDecorator = (hook) => {
     return makeMethodDecorator(RequestMethod.requestCustom, (options) => (Object.assign({ hook: proxyMethodHook(hook) }, options)));
 };
 export const Ip = makeParamDecorator(RouterParams.ip, paramsProps);
@@ -39,6 +39,6 @@ export const Body = makeParamDecorator(RouterParams.body, paramsProps);
 export const Query = makeParamDecorator(RouterParams.query, paramsProps);
 export const Params = makeParamDecorator(RouterParams.params, paramsProps);
 export const Headers = makeParamDecorator(RouterParams.headers, paramsProps);
-export const CustomParams = (transform) => {
+export const makeRouteParamsDecorator = (transform) => {
     return makeParamDecorator(RouterParams.routerCustom, (options) => (Object.assign({ transform }, options)));
 };

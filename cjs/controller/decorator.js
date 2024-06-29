@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomParams = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.CustomMethod = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = exports.ControllerModel = exports.Controller = void 0;
+exports.makeRouteParamsDecorator = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.makeRouteMethodDecorator = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = exports.ControllerModel = exports.Controller = void 0;
 var tslib_1 = require("tslib");
 var decorator_1 = require("@fm/core/platform/decorator");
 var di_1 = require("@fm/di");
@@ -65,10 +65,10 @@ exports.Param = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.param, me
 exports.Delete = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.delete, methodProps);
 exports.Options = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.options, methodProps);
 exports.Middleware = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.middleware, middlewareProps);
-var CustomMethod = function (hook) {
+var makeRouteMethodDecorator = function (hook) {
     return (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.requestCustom, function (options) { return (tslib_1.__assign({ hook: proxyMethodHook(hook) }, options)); });
 };
-exports.CustomMethod = CustomMethod;
+exports.makeRouteMethodDecorator = makeRouteMethodDecorator;
 exports.Ip = (0, di_1.makeParamDecorator)(constant_1.RouterParams.ip, paramsProps);
 exports.Req = (0, di_1.makeParamDecorator)(constant_1.RouterParams.req, paramsProps);
 exports.Res = (0, di_1.makeParamDecorator)(constant_1.RouterParams.res, paramsProps);
@@ -77,7 +77,7 @@ exports.Body = (0, di_1.makeParamDecorator)(constant_1.RouterParams.body, params
 exports.Query = (0, di_1.makeParamDecorator)(constant_1.RouterParams.query, paramsProps);
 exports.Params = (0, di_1.makeParamDecorator)(constant_1.RouterParams.params, paramsProps);
 exports.Headers = (0, di_1.makeParamDecorator)(constant_1.RouterParams.headers, paramsProps);
-var CustomParams = function (transform) {
+var makeRouteParamsDecorator = function (transform) {
     return (0, di_1.makeParamDecorator)(constant_1.RouterParams.routerCustom, function (options) { return (tslib_1.__assign({ transform: transform }, options)); });
 };
-exports.CustomParams = CustomParams;
+exports.makeRouteParamsDecorator = makeRouteParamsDecorator;
