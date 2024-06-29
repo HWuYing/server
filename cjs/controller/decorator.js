@@ -5,6 +5,7 @@ var tslib_1 = require("tslib");
 var decorator_1 = require("@fm/core/platform/decorator");
 var di_1 = require("@fm/di");
 var constant_1 = require("./constant");
+var registerControlModel = (0, decorator_1.createRegisterLoader)(constant_1.MODULE_QUEUE);
 function getCtx(req) {
     return req.__fmCtx__;
 }
@@ -25,9 +26,6 @@ function proxyMethodHook(hook) {
         var req = _a[0], next = _a[2];
         return hook(annotation, getCtx(req), next);
     };
-}
-function getFactoryControlModel(type) {
-    (0, decorator_1.registerProvider)({ provide: constant_1.MODULE_QUEUE, multi: true, useValue: (0, di_1.setInjectableDef)(type) });
 }
 var moduleProps = function (options) { return (tslib_1.__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
@@ -57,7 +55,7 @@ var controllerProps = function (baseUrl, options) {
     return ({ baseUrl: baseUrl, options: options });
 };
 exports.Controller = (0, di_1.makeDecorator)(constant_1.CONTROLLER, controllerProps, di_1.setInjectableDef);
-exports.ControllerModel = (0, di_1.makeDecorator)(constant_1.CONTROLLER_MODULE, moduleProps, getFactoryControlModel);
+exports.ControllerModel = (0, di_1.makeDecorator)(constant_1.CONTROLLER_MODULE, moduleProps, function (type) { return registerControlModel((0, di_1.setInjectableDef)(type)); });
 exports.Get = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.get, methodProps);
 exports.All = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.all, methodProps);
 exports.Use = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.use, useProps);

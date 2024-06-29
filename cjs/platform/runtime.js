@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Application = exports.registerProvider = exports.Prov = exports.Input = exports.ApplicationPlugin = exports.dynamicServer = exports.PLATFORM_SCOPE = void 0;
+exports.Application = exports.runtimeInjector = exports.registerProvider = exports.Prov = exports.Input = exports.createRegisterLoader = exports.ApplicationPlugin = exports.dynamicServer = exports.PLATFORM_SCOPE = void 0;
 require("../db/manager");
 require("../controller/manager");
 var platform_1 = require("@fm/core/platform");
@@ -24,7 +24,9 @@ exports.dynamicServer = dynamicServer;
 applicationContext.registerStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });
 var decorator_1 = require("@fm/core/platform/decorator");
 Object.defineProperty(exports, "ApplicationPlugin", { enumerable: true, get: function () { return decorator_1.ApplicationPlugin; } });
+Object.defineProperty(exports, "createRegisterLoader", { enumerable: true, get: function () { return decorator_1.createRegisterLoader; } });
 Object.defineProperty(exports, "Input", { enumerable: true, get: function () { return decorator_1.Input; } });
 Object.defineProperty(exports, "Prov", { enumerable: true, get: function () { return decorator_1.Prov; } });
 Object.defineProperty(exports, "registerProvider", { enumerable: true, get: function () { return decorator_1.registerProvider; } });
+Object.defineProperty(exports, "runtimeInjector", { enumerable: true, get: function () { return decorator_1.runtimeInjector; } });
 exports.Application = applicationContext.makeApplicationDecorator();

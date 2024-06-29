@@ -17,5 +17,5 @@ export var dynamicServer = function (port, providers) {
     return createPlatform(applicationContext, providers, { provide: PlatformOptions, useValue: port });
 };
 applicationContext.registerStart(function () { return createPlatform(applicationContext).bootstrapStart(applicationContext.providers); });
-export { ApplicationPlugin, Input, Prov, registerProvider } from '@fm/core/platform/decorator';
+export { ApplicationPlugin, createRegisterLoader, Input, Prov, registerProvider, runtimeInjector } from '@fm/core/platform/decorator';
 export var Application = applicationContext.makeApplicationDecorator();

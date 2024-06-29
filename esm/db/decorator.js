@@ -1,16 +1,24 @@
+import { __awaiter } from "tslib";
 /* eslint-disable max-len */
-import { registerProvider } from '@fm/core/platform/decorator';
-import { Inject, makeDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
-import { ASSOCIATION, BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC, TABLE } from './constant';
+import { createRegisterLoader, runtimeInjector } from '@fm/core/platform/decorator';
+import { Inject, makeDecorator, makeMethodDecorator, makePropDecorator, setInjectableDef } from '@fm/di';
+import { Sequelize } from 'sequelize';
+import { ASSOCIATION, BELONGS_TO, BELONGS_TO_MANY, COLUMN, ENTITY, ENTITY_QUEUE, HAS_MANY, HAS_ONE, SYNC, TABLE, TRANSACTION } from './constant';
 import { EntityManager } from './entity-manager';
+let sequelize;
+runtimeInjector((injector) => sequelize = injector.get(Sequelize));
+const registerEntity = createRegisterLoader(ENTITY_QUEUE);
 const columnProps = (options) => (Object.assign({ allowNull: true }, options));
 const associationsProps = (relations) => (type, options) => (Object.assign({ type, relations }, options));
-function getFactoryEntity(type) {
-    registerProvider({ provide: ENTITY_QUEUE, multi: true, useValue: setInjectableDef(type) });
+function transaction(_cls, _method, descriptor, options = {}) {
+    const fn = descriptor.value;
+    descriptor.value = function (...args) {
+        return sequelize.transaction(options, () => __awaiter(this, void 0, void 0, function* () { return fn.apply(this, args); }));
+    };
 }
 export { forwardRef } from '@fm/di';
-export const Entity = makeDecorator(ENTITY, undefined, getFactoryEntity);
 export const Sync = makeDecorator(SYNC, (options) => (Object.assign({ force: true }, options)));
+export const Entity = makeDecorator(ENTITY, undefined, (type) => registerEntity(setInjectableDef(type)));
 export const Table = makeDecorator(TABLE, (tableName, options) => (Object.assign({ tableName }, options)));
 export const HasOne = makePropDecorator(ASSOCIATION, associationsProps(HAS_ONE));
 export const HasMany = makePropDecorator(ASSOCIATION, associationsProps(HAS_MANY));
@@ -19,4 +27,5 @@ export const BelongsToMany = makePropDecorator(ASSOCIATION, associationsProps(BE
 export const PrimaryKey = makePropDecorator(COLUMN, () => columnProps({ primaryKey: true, allowNull: false }));
 export const Column = makePropDecorator(COLUMN, (field, options) => columnProps(Object.assign({ field }, options)));
 export const Convert = makePropDecorator(COLUMN, (type) => ({ convert: type }));
+export const Transaction = makeMethodDecorator(TRANSACTION, (options) => (Object.assign({}, options)), transaction);
 export const InjectEntity = (entity) => Inject(EntityManager, { transform: (_, m) => m.getModel(entity) });
