@@ -1,8 +1,8 @@
 import { ApplicationContext } from '@fm/core/platform/application';
-import { Injector, Type } from '@fm/di';
+import { Injector, Type, TypeClass } from '@fm/di';
 import { Model, ModelAttributes, ModelStatic } from 'sequelize';
 import { EntityTransform } from './entity-transform';
-type EntityType = Type<any> | (() => Type<any>);
+export type EntityType = Type | (() => Type);
 export declare class EntityManager {
     protected ctx: ApplicationContext;
     protected injector: Injector;
@@ -11,14 +11,13 @@ export declare class EntityManager {
     protected treeEntity: Map<any, any[]>;
     private entityMapping;
     constructor(ctx: ApplicationContext, injector: Injector);
-    protected properties(entity: Type<any>, isMapping?: boolean): any;
-    protected addTree(entity: Type<any>, entices: Type<any>[]): void;
-    protected getEntityDbMapping(entity: Type<any>): ModelAttributes;
-    protected createAssociationThrough(options: any, entity: Type<any>): any;
-    protected createAssociation(entity: Type<any>): void;
-    protected createEntity(entity: Type<any>): ModelStatic<Model<any, any>>;
-    protected syncEntity(entity: Type<any>): Promise<void>;
+    protected properties(entity: Type, isMapping?: boolean): any;
+    protected addTree(entity: Type, entices: Type[]): void;
+    protected getEntityDbMapping(entity: Type): ModelAttributes;
+    protected createAssociationThrough(options: any, entity: Type): any;
+    protected createAssociation(entity: Type): void;
+    protected createEntity(entity: TypeClass): ModelStatic<Model<any, any>>;
+    protected syncEntity(entity: Type): Promise<void>;
     getModel(entity: EntityType): ModelStatic<Model<any, any>>;
-    initEntices(entices: Type<any>[]): Promise<void>;
+    initEntices(entices: Type[]): Promise<void>;
 }
-export {};

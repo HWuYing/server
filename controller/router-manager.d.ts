@@ -13,5 +13,5 @@ export declare class RouterManager {
     private methodParams;
     private createAgent;
     private createRouter;
-    register(_module: any, controller: Type<any>): Promise<any>;
+    register(_module: any, controller: Type): Promise<any>;
 }
