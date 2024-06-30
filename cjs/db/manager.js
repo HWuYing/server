@@ -19,8 +19,8 @@ var DBManager = /** @class */ (function () {
         return null;
     };
     DBManager.prototype.connection = function () {
-        var _a;
         return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var _a;
             return tslib_1.__generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, ((_a = this.sequelize) === null || _a === void 0 ? void 0 : _a.authenticate())];

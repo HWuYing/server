@@ -14,8 +14,8 @@ let DBManager = class DBManager {
         return null;
     }
     connection() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             yield ((_a = this.sequelize) === null || _a === void 0 ? void 0 : _a.authenticate());
             console.info('Connection has been established successfully.');
         });

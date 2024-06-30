@@ -69,20 +69,20 @@ var RouterManager = /** @class */ (function () {
         }); };
     };
     RouterManager.prototype.createRouter = function (type, cls, options) {
-        var _a;
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var map, router, _i, _b, _c, descriptor, method, _d, url, middleware, metadataName, params;
+            var map, router, _i, _a, _b, descriptor, method, _c, url, middleware, metadataName, params;
+            var _d;
             var _e;
             return tslib_1.__generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:
                         map = new Map();
                         router = (0, express_1.Router)(options);
-                        _i = 0, _b = (_a = type.__methods__) !== null && _a !== void 0 ? _a : [];
+                        _i = 0, _a = (_e = type.__methods__) !== null && _e !== void 0 ? _e : [];
                         _f.label = 1;
                     case 1:
-                        if (!(_i < _b.length)) return [3 /*break*/, 5];
-                        _c = _b[_i], descriptor = _c.descriptor, method = _c.method, _d = _c.annotationInstance, url = _d.url, middleware = _d.middleware, metadataName = _d.metadataName;
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        _b = _a[_i], descriptor = _b.descriptor, method = _b.method, _c = _b.annotationInstance, url = _c.url, middleware = _c.middleware, metadataName = _c.metadataName;
                         if (this.checkRouterMethod(metadataName))
                             return [3 /*break*/, 4];
                         if (!map.has(method)) {
@@ -95,7 +95,7 @@ var RouterManager = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
-                        (_e = (0, lodash_1.get)(router, metadataName)).call.apply(_e, tslib_1.__spreadArray([router], params.concat.apply(params, tslib_1.__spreadArray(tslib_1.__spreadArray([], middleware, false), [map.get(method)], false)), false));
+                        (_d = (0, lodash_1.get)(router, metadataName)).call.apply(_d, tslib_1.__spreadArray([router], params.concat.apply(params, tslib_1.__spreadArray(tslib_1.__spreadArray([], middleware, false), [map.get(method)], false)), false));
                         _f.label = 4;
                     case 4:
                         _i++;

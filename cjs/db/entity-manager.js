@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntityManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
-var application_1 = require("@fm/core/platform/application");
+var platform_1 = require("@fm/core/platform");
 var di_1 = require("@fm/di");
 var lodash_1 = require("lodash");
 var sequelize_1 = require("sequelize");
@@ -168,7 +168,7 @@ var EntityManager = /** @class */ (function () {
     ], EntityManager.prototype, "seq", void 0);
     EntityManager = tslib_1.__decorate([
         (0, di_1.Injectable)(),
-        tslib_1.__metadata("design:paramtypes", [application_1.ApplicationContext, di_1.Injector])
+        tslib_1.__metadata("design:paramtypes", [platform_1.ApplicationContext, di_1.Injector])
     ], EntityManager);
     return EntityManager;
 }());

@@ -1,6 +1,6 @@
 import { __awaiter, __decorate, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { ApplicationContext } from '@fm/core/platform/application';
+import { ApplicationContext } from '@fm/core/platform';
 import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';

@@ -1,4 +1,4 @@
-import { __awaiter, __generator, __spreadArray } from "tslib";
+import { __awaiter, __generator } from "tslib";
 import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
 import { Injector } from '@fm/di';
 import express from 'express';
@@ -9,17 +9,17 @@ var ExpressServerPlatform = /** @class */ (function () {
         this.port = port;
         this.platformInjector = platformInjector;
     }
-    ExpressServerPlatform.prototype.bootstrapStart = function (additionalProviders, start) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, providers, _start, injector;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+    ExpressServerPlatform.prototype.bootstrapStart = function () {
+        return __awaiter(this, arguments, void 0, function (providers) {
+            var injector;
+            if (providers === void 0) { providers = []; }
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _a = this.parseParams(additionalProviders, start), _b = _a[0], providers = _b === void 0 ? [] : _b, _start = _a[1];
                         injector = this.beforeBootstrapStart(providers);
-                        return [4 /*yield*/, this.runStart(injector, undefined, _start)];
+                        return [4 /*yield*/, this.runStart(injector)];
                     case 1:
-                        _c.sent();
+                        _a.sent();
                         this.listen(injector);
                         return [2 /*return*/];
                 }
@@ -34,22 +34,19 @@ var ExpressServerPlatform = /** @class */ (function () {
             providers
         ], this.platformInjector);
     };
-    ExpressServerPlatform.prototype.runStart = function (injector, options, start) {
-        var _a;
+    ExpressServerPlatform.prototype.runStart = function (injector) {
         return __awaiter(this, void 0, void 0, function () {
             var application;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, injector.get(APPLICATION_TOKEN)];
                     case 1:
                         application = _b.sent();
-                        return [2 /*return*/, (_a = (start || application.main)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options)];
+                        return [2 /*return*/, (_a = application.main) === null || _a === void 0 ? void 0 : _a.call(application, injector)];
                 }
             });
         });
-    };
-    ExpressServerPlatform.prototype.parseParams = function (providers, start) {
-        return typeof providers === 'function' ? [[], providers] : [__spreadArray([], providers, true), start];
     };
     ExpressServerPlatform.prototype.listen = function (injector) {
         var server = injector.get(HTTP_SERVER);

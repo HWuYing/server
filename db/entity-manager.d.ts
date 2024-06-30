@@ -1,4 +1,4 @@
-import { ApplicationContext } from '@fm/core/platform/application';
+import { ApplicationContext } from '@fm/core/platform';
 import { Injector, Type, TypeClass } from '@fm/di';
 import { Model, ModelAttributes, ModelStatic } from 'sequelize';
 import { EntityTransform } from './entity-transform';

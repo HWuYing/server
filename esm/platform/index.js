@@ -9,11 +9,10 @@ export class ExpressServerPlatform {
         this.port = port;
         this.platformInjector = platformInjector;
     }
-    bootstrapStart(additionalProviders, start) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const [providers = [], _start] = this.parseParams(additionalProviders, start);
+    bootstrapStart() {
+        return __awaiter(this, arguments, void 0, function* (providers = []) {
             const injector = this.beforeBootstrapStart(providers);
-            yield this.runStart(injector, undefined, _start);
+            yield this.runStart(injector);
             this.listen(injector);
         });
     }
@@ -24,15 +23,12 @@ export class ExpressServerPlatform {
             providers
         ], this.platformInjector);
     }
-    runStart(injector, options, start) {
-        var _a;
+    runStart(injector) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const application = yield injector.get(APPLICATION_TOKEN);
-            return (_a = (start || application.main)) === null || _a === void 0 ? void 0 : _a.call(application, injector, options);
+            return (_a = application.main) === null || _a === void 0 ? void 0 : _a.call(application, injector);
         });
-    }
-    parseParams(providers, start) {
-        return typeof providers === 'function' ? [[], providers] : [[...providers], start];
     }
     listen(injector) {
         const server = injector.get(HTTP_SERVER);

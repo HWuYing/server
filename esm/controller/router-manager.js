@@ -35,8 +35,8 @@ let RouterManager = class RouterManager {
         });
     }
     createRouter(type, cls, options) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const map = new Map();
             const router = Router(options);
             for (const { descriptor, method, annotationInstance: { url, middleware, metadataName } } of (_a = type.__methods__) !== null && _a !== void 0 ? _a : []) {

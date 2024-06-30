@@ -1,10 +1,7 @@
 import '../db/manager';
 import '../controller/manager';
-import { Provider } from '@fm/di';
-import { ExpressServerPlatform } from './index';
-export { PLATFORM_SCOPE } from '@fm/core/platform/application';
-export declare const dynamicServer: (port: number | undefined, providers?: Provider[]) => ExpressServerPlatform;
-export { ApplicationPlugin, createRegisterLoader, Input, Prov, registerProvider, runtimeInjector } from '@fm/core/platform/decorator';
-export declare const Application: (metadata?: {
+export { PLATFORM_SCOPE } from '@fm/core/platform';
+export { ApplicationPlugin, createRegisterLoader, Input, Prov, Register, runtimeInjector } from '@fm/core/platform/decorator';
+export declare const Application: (metadata?: import("../../di").Type<import("../../core/platform/decorator").MetadataInfo> | {
     [key: string]: any;
-} | import("@fm/di").Type<import("@fm/core/platform/application").MetadataInfo>) => ClassDecorator;
+}) => ClassDecorator;
