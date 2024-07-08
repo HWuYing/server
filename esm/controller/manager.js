@@ -1,8 +1,10 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
 import './built-in/built-in.module';
-import { ApplicationPlugin } from '@fm/core/platform/decorator';
-import { Inject, Injector, reflectCapabilities } from '@fm/di';
+import { ApplicationPlugin, Register } from '@hwy-fm/core/platform/decorator';
+import { Inject, Injector, reflectCapabilities } from '@hwy-fm/di';
+import express from 'express';
+import { SERVER_HANDLER } from '../token';
 import { CONTROLLER_MODULE, MODULE_QUEUE } from './constant';
 import { RouterManager } from './router-manager';
 let ControllerManager = class ControllerManager {
@@ -16,7 +18,6 @@ let ControllerManager = class ControllerManager {
             for (const control of this.sortByOrder(controller)) {
                 yield this.routerManager.register(module, control);
             }
-            return module;
         });
     }
     register() {
@@ -27,6 +28,7 @@ let ControllerManager = class ControllerManager {
         });
     }
 };
+ControllerManager.__order__ = Infinity;
 __decorate([
     Inject(Injector),
     __metadata("design:type", Injector)
@@ -36,6 +38,10 @@ __decorate([
     __metadata("design:type", RouterManager)
 ], ControllerManager.prototype, "routerManager", void 0);
 ControllerManager = __decorate([
+    Register([
+        { provide: express, useFactory: () => express() },
+        { provide: SERVER_HANDLER, useExisting: express }
+    ]),
     ApplicationPlugin()
 ], ControllerManager);
 export { ControllerManager };

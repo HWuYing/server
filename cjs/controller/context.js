@@ -22,7 +22,7 @@ var Context = /** @class */ (function () {
             case constant_1.RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case constant_1.RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
             case constant_1.RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
-            case constant_1.RouterParams.routerCustom: return metadata === null || metadata === void 0 ? void 0 : metadata.transform(metadata, data, this, next);
+            case constant_1.RouterParams.headers: return this.getObjectByKey(this.req.headers, metadata);
         }
         return data;
     };

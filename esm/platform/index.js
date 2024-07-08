@@ -1,12 +1,10 @@
 import { __awaiter } from "tslib";
-import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
-import { Injector } from '@fm/di';
-import express from 'express';
+import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@hwy-fm/core/token';
+import { Injector } from '@hwy-fm/di';
 import { createServer } from 'http';
-import { HTTP_SERVER } from '../token';
+import { FORMAT_HOST_LISTEN, HTTP_SERVER, SERVER_HANDLER } from '../token';
 export class ExpressServerPlatform {
-    constructor(port, platformInjector) {
-        this.port = port;
+    constructor(platformInjector) {
         this.platformInjector = platformInjector;
     }
     bootstrapStart() {
@@ -18,8 +16,9 @@ export class ExpressServerPlatform {
     }
     beforeBootstrapStart(providers = []) {
         return Injector.create([
-            { provide: express, useFactory: () => express() },
-            { provide: HTTP_SERVER, useFactory: createServer, deps: [express] },
+            { provide: FORMAT_HOST_LISTEN, useValue: (port) => `http://localhost:${port}/` },
+            { provide: SERVER_HANDLER, useValue: (_, res) => res.end() },
+            { provide: HTTP_SERVER, useFactory: createServer, deps: [SERVER_HANDLER] },
             providers
         ], this.platformInjector);
     }
@@ -32,9 +31,9 @@ export class ExpressServerPlatform {
     }
     listen(injector) {
         const server = injector.get(HTTP_SERVER);
-        const { port = this.port } = injector.get(APPLICATION_METADATA) || {};
-        global.hotHttpHost = `http://localhost:${port}/`;
-        global.hotHttpServer = server.listen(port, () => {
+        const { port } = injector.get(APPLICATION_METADATA) || {};
+        global.hotHttpHost = injector.get(FORMAT_HOST_LISTEN)(port);
+        global.hotHttpServer = server && server.listen(port, () => {
             console.log(`The server is running at ${global.hotHttpHost}`);
         });
     }

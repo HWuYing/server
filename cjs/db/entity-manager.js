@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntityManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
-var platform_1 = require("@fm/core/platform");
-var di_1 = require("@fm/di");
+var platform_1 = require("@hwy-fm/core/platform");
+var di_1 = require("@hwy-fm/di");
 var lodash_1 = require("lodash");
 var sequelize_1 = require("sequelize");
 var constant_1 = require("./constant");
@@ -18,8 +18,8 @@ var EntityManager = /** @class */ (function () {
         this.injector = injector;
         this.treeEntity = new Map();
         this.entityMapping = new Map();
-        if (!this.injector.get(entity_transform_1.ENTITY_TRANSFORM))
-            this.ctx.addProvider({ provide: entity_transform_1.ENTITY_TRANSFORM, useClass: entity_transform_1.EntityTransform });
+        if (!this.injector.get(constant_1.ENTITY_TRANSFORM))
+            this.ctx.addProvider({ provide: constant_1.ENTITY_TRANSFORM, useClass: entity_transform_1.EntityTransform });
     }
     EntityManager.prototype.properties = function (entity, isMapping) {
         if (isMapping === void 0) { isMapping = false; }
@@ -159,7 +159,7 @@ var EntityManager = /** @class */ (function () {
         });
     };
     tslib_1.__decorate([
-        (0, di_1.Inject)(entity_transform_1.ENTITY_TRANSFORM),
+        (0, di_1.Inject)(constant_1.ENTITY_TRANSFORM),
         tslib_1.__metadata("design:type", entity_transform_1.EntityTransform)
     ], EntityManager.prototype, "entityTransform", void 0);
     tslib_1.__decorate([

@@ -1,3 +1,5 @@
+import './manager';
 export { AttributeConverter } from './attribute.convert';
+export { ENTITY_TRANSFORM } from './constant';
 export * from './decorator';
-export { ENTITY_TRANSFORM, EntityTransform } from './entity-transform';
+export { EntityTransform } from './entity-transform';

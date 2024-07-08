@@ -1,9 +1,9 @@
 import { __awaiter, __decorate, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '@fm/di';
+import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '@hwy-fm/di';
 import express, { Router } from 'express';
-import { get } from 'lodash';
-import { CONTROLLER, RequestMethod } from './constant';
+import { flatMapDeep, get } from 'lodash';
+import { CONTROLLER, ExtraMethod, RequestMethod } from './constant';
 function type(typeName) {
     return (obj) => Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName;
 }
@@ -12,15 +12,7 @@ const typeObject = type('object');
 const replaceUrl = (url) => `/${url}`.replace(/[\\/]+/g, '/');
 let RouterManager = class RouterManager {
     checkRouterMethod(metadataName) {
-        return metadataName !== RequestMethod[metadataName] || metadataName === RequestMethod.requestCustom;
-    }
-    methodParams(type, method, cls, descriptor) {
-        const agent = (...args) => descriptor.value.apply(cls, args);
-        const annotations = reflectCapabilities.getParamAnnotations(type, method);
-        const methodAnnotations = reflectCapabilities.getMethodAnnotations(type, method)
-            .filter(({ annotationInstance: { metadataName } }) => this.checkRouterMethod(metadataName));
-        const _agent = this.mp.createAgent(annotations, methodAnnotations, agent);
-        return (...args) => __awaiter(this, void 0, void 0, function* () { return new Promise(resolve => _agent(resolve, ...args)); });
+        return metadataName !== RequestMethod[metadataName];
     }
     createAgent(metadataName, agent) {
         if (metadataName === RequestMethod.middleware)
@@ -34,23 +26,41 @@ let RouterManager = class RouterManager {
             }
         });
     }
+    getEmbeddedMiddleware(type, method, name = ExtraMethod.embeddedMiddleware) {
+        const embeddedMiddleware = [];
+        reflectCapabilities.getMethodAnnotations(type, method).forEach(({ annotationInstance: { metadataName, embedded, args } }) => {
+            var _a;
+            let middleware;
+            if (metadataName !== name || !embedded)
+                return;
+            if ((_a = embedded.prototype) === null || _a === void 0 ? void 0 : _a.middleware)
+                middleware = this.injector.get(embedded).middleware(...args);
+            else if (typeof embedded === 'function' && metadataName === ExtraMethod.embeddedMiddleware) {
+                middleware = embedded(...args);
+            }
+            embeddedMiddleware.push(middleware || embedded);
+        });
+        return embeddedMiddleware;
+    }
     createRouter(type, cls, options) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             const map = new Map();
             const router = Router(options);
-            for (const { descriptor, method, annotationInstance: { url, middleware, metadataName } } of (_a = type.__methods__) !== null && _a !== void 0 ? _a : []) {
+            const suffix = 'embedded';
+            for (const { method, annotationInstance: { url, middleware, metadataName } } of (_a = type.__methods__) !== null && _a !== void 0 ? _a : []) {
                 if (this.checkRouterMethod(metadataName))
                     continue;
                 if (!map.has(method)) {
-                    map.set(method, this.createAgent(metadataName, this.methodParams(type, method, cls, descriptor)));
+                    map.set(method, this.createAgent(metadataName, this.mp.proxyMethod(cls, method)));
+                    map.set(`${method}${suffix}`, flatMapDeep(this.getEmbeddedMiddleware(type, method)));
                 }
                 if (metadataName === RequestMethod.middleware) {
                     yield map.get(method)(router);
                     continue;
                 }
                 const params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
-                get(router, metadataName).call(router, ...params.concat(...middleware, map.get(method)));
+                get(router, metadataName).apply(router, [...params, ...map.get(`${method}${suffix}`), ...middleware, map.get(method)]);
             }
             return router;
         });

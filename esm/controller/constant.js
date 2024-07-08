@@ -1,4 +1,4 @@
-import { InjectorToken } from '@fm/di';
+import { InjectorToken } from '@hwy-fm/di';
 export const CONTROLLER_MODULE = 'ControllerModel';
 export const CONTROLLER = 'Controller';
 export var RouterParams;
@@ -11,7 +11,6 @@ export var RouterParams;
     RouterParams["query"] = "query";
     RouterParams["params"] = "params";
     RouterParams["headers"] = "headers";
-    RouterParams["routerCustom"] = "routerCustom";
 })(RouterParams || (RouterParams = {}));
 export var RequestMethod;
 (function (RequestMethod) {
@@ -24,6 +23,9 @@ export var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
-    RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod || (RequestMethod = {}));
+export var ExtraMethod;
+(function (ExtraMethod) {
+    ExtraMethod["embeddedMiddleware"] = "embeddedMiddleware";
+})(ExtraMethod || (ExtraMethod = {}));
 export const MODULE_QUEUE = InjectorToken.get('MODULE_QUEUE');

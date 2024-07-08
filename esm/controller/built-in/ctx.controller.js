@@ -1,8 +1,7 @@
 import { __decorate, __metadata } from "tslib";
-import { Inject, Injector } from '@fm/di';
-import { Use } from '@fm/server';
+import { Inject, Injector } from '@hwy-fm/di';
 import { Context } from '../context';
-import { Controller } from '../decorator';
+import { Controller, Use } from '../decorator';
 let Ctx = class Ctx {
     createCtx(req, res, next) {
         Object.defineProperty(req, '__fmCtx__', { value: new Context(this.injector, req, res) });

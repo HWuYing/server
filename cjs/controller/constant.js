@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MODULE_QUEUE = exports.RequestMethod = exports.RouterParams = exports.CONTROLLER = exports.CONTROLLER_MODULE = void 0;
-var di_1 = require("@fm/di");
+exports.MODULE_QUEUE = exports.ExtraMethod = exports.RequestMethod = exports.RouterParams = exports.CONTROLLER = exports.CONTROLLER_MODULE = void 0;
+var di_1 = require("@hwy-fm/di");
 exports.CONTROLLER_MODULE = 'ControllerModel';
 exports.CONTROLLER = 'Controller';
 var RouterParams;
@@ -14,7 +14,6 @@ var RouterParams;
     RouterParams["query"] = "query";
     RouterParams["params"] = "params";
     RouterParams["headers"] = "headers";
-    RouterParams["routerCustom"] = "routerCustom";
 })(RouterParams || (exports.RouterParams = RouterParams = {}));
 var RequestMethod;
 (function (RequestMethod) {
@@ -27,6 +26,9 @@ var RequestMethod;
     RequestMethod["param"] = "param";
     RequestMethod["use"] = "use";
     RequestMethod["middleware"] = "middleware";
-    RequestMethod["requestCustom"] = "requestCustom";
 })(RequestMethod || (exports.RequestMethod = RequestMethod = {}));
+var ExtraMethod;
+(function (ExtraMethod) {
+    ExtraMethod["embeddedMiddleware"] = "embeddedMiddleware";
+})(ExtraMethod || (exports.ExtraMethod = ExtraMethod = {}));
 exports.MODULE_QUEUE = di_1.InjectorToken.get('MODULE_QUEUE');

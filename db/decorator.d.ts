@@ -1,4 +1,4 @@
-import { Type } from '@fm/di';
+import { Type } from '@hwy-fm/di';
 import { BelongsToManyOptions, BelongsToOptions, HasManyOptions, HasOneOptions, ModelAttributes, ModelOptions, SyncOptions, TransactionOptions } from 'sequelize';
 import { EntityType } from './entity-manager';
 type Through = {
@@ -7,7 +7,7 @@ type Through = {
 type BelongsToManyType = (type: EntityType, options: BelongsToManyOptions | {
     through: Through;
 }) => PropertyDecorator;
-export { forwardRef } from '@fm/di';
+export { forwardRef } from '@hwy-fm/di';
 export declare const Sync: (options?: SyncOptions) => ClassDecorator;
 export declare const Entity: () => ClassDecorator;
 export declare const Table: (tableName: string, options?: ModelOptions<import("sequelize").Model<any, any>>) => ClassDecorator;

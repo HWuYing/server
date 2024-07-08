@@ -1,8 +1,7 @@
 import { __decorate, __metadata } from "tslib";
-import { Inject, Injector } from '@fm/di';
-import { Use } from '@fm/server';
+import { Inject, Injector } from '@hwy-fm/di';
 import { Context } from '../context';
-import { Controller } from '../decorator';
+import { Controller, Use } from '../decorator';
 var Ctx = /** @class */ (function () {
     function Ctx() {
     }

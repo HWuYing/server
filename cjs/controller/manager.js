@@ -4,8 +4,10 @@ exports.ControllerManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
 require("./built-in/built-in.module");
-var decorator_1 = require("@fm/core/platform/decorator");
-var di_1 = require("@fm/di");
+var decorator_1 = require("@hwy-fm/core/platform/decorator");
+var di_1 = require("@hwy-fm/di");
+var express_1 = tslib_1.__importDefault(require("express"));
+var token_1 = require("../token");
 var constant_1 = require("./constant");
 var router_manager_1 = require("./router-manager");
 var ControllerManager = /** @class */ (function () {
@@ -34,7 +36,7 @@ var ControllerManager = /** @class */ (function () {
                     case 3:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/, module];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -62,6 +64,7 @@ var ControllerManager = /** @class */ (function () {
             });
         });
     };
+    ControllerManager.__order__ = Infinity;
     tslib_1.__decorate([
         (0, di_1.Inject)(di_1.Injector),
         tslib_1.__metadata("design:type", di_1.Injector)
@@ -71,6 +74,10 @@ var ControllerManager = /** @class */ (function () {
         tslib_1.__metadata("design:type", router_manager_1.RouterManager)
     ], ControllerManager.prototype, "routerManager", void 0);
     ControllerManager = tslib_1.__decorate([
+        (0, decorator_1.Register)([
+            { provide: express_1.default, useFactory: function () { return (0, express_1.default)(); } },
+            { provide: token_1.SERVER_HANDLER, useExisting: express_1.default }
+        ]),
         (0, decorator_1.ApplicationPlugin)()
     ], ControllerManager);
     return ControllerManager;

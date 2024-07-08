@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EntityTransform = exports.ENTITY_TRANSFORM = void 0;
+exports.EntityTransform = void 0;
 var tslib_1 = require("tslib");
-var di_1 = require("@fm/di");
-exports.ENTITY_TRANSFORM = di_1.InjectorToken.get('ENTITY_TRANSFORM');
+var di_1 = require("@hwy-fm/di");
 var EntityTransform = /** @class */ (function () {
     function EntityTransform() {
     }

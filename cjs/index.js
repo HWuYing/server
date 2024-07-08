@@ -1,11 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runtimeInjector = exports.Register = exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.createRegisterLoader = exports.ApplicationPlugin = exports.Application = exports.ExpressServerPlatform = exports.DataError = void 0;
+exports.runtimeInjector = exports.Register = exports.Prov = exports.PLATFORM_SCOPE = exports.Input = exports.createRegisterLoader = exports.ApplicationPlugin = exports.Application = exports.ExpressServerPlatform = void 0;
 var tslib_1 = require("tslib");
-tslib_1.__exportStar(require("./controller/decorator"), exports);
-tslib_1.__exportStar(require("./db"), exports);
-var data_error_1 = require("./extension/data-error");
-Object.defineProperty(exports, "DataError", { enumerable: true, get: function () { return data_error_1.DataError; } });
 var platform_1 = require("./platform");
 Object.defineProperty(exports, "ExpressServerPlatform", { enumerable: true, get: function () { return platform_1.ExpressServerPlatform; } });
 var runtime_1 = require("./platform/runtime");
@@ -18,4 +14,4 @@ Object.defineProperty(exports, "Prov", { enumerable: true, get: function () { re
 Object.defineProperty(exports, "Register", { enumerable: true, get: function () { return runtime_1.Register; } });
 Object.defineProperty(exports, "runtimeInjector", { enumerable: true, get: function () { return runtime_1.runtimeInjector; } });
 tslib_1.__exportStar(require("./token"), exports);
-tslib_1.__exportStar(require("@fm/core/token"), exports);
+tslib_1.__exportStar(require("@hwy-fm/core/token"), exports);

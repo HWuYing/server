@@ -2,14 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExpressServerPlatform = void 0;
 var tslib_1 = require("tslib");
-var token_1 = require("@fm/core/token");
-var di_1 = require("@fm/di");
-var express_1 = tslib_1.__importDefault(require("express"));
+var token_1 = require("@hwy-fm/core/token");
+var di_1 = require("@hwy-fm/di");
 var http_1 = require("http");
 var token_2 = require("../token");
 var ExpressServerPlatform = /** @class */ (function () {
-    function ExpressServerPlatform(port, platformInjector) {
-        this.port = port;
+    function ExpressServerPlatform(platformInjector) {
         this.platformInjector = platformInjector;
     }
     ExpressServerPlatform.prototype.bootstrapStart = function () {
@@ -32,8 +30,9 @@ var ExpressServerPlatform = /** @class */ (function () {
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
         return di_1.Injector.create([
-            { provide: express_1.default, useFactory: function () { return (0, express_1.default)(); } },
-            { provide: token_2.HTTP_SERVER, useFactory: http_1.createServer, deps: [express_1.default] },
+            { provide: token_2.FORMAT_HOST_LISTEN, useValue: function (port) { return "http://localhost:".concat(port, "/"); } },
+            { provide: token_2.SERVER_HANDLER, useValue: function (_, res) { return res.end(); } },
+            { provide: token_2.HTTP_SERVER, useFactory: http_1.createServer, deps: [token_2.SERVER_HANDLER] },
             providers
         ], this.platformInjector);
     };
@@ -53,9 +52,9 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.listen = function (injector) {
         var server = injector.get(token_2.HTTP_SERVER);
-        var _a = (injector.get(token_1.APPLICATION_METADATA) || {}).port, port = _a === void 0 ? this.port : _a;
-        global.hotHttpHost = "http://localhost:".concat(port, "/");
-        global.hotHttpServer = server.listen(port, function () {
+        var port = (injector.get(token_1.APPLICATION_METADATA) || {}).port;
+        global.hotHttpHost = injector.get(token_2.FORMAT_HOST_LISTEN)(port);
+        global.hotHttpServer = server && server.listen(port, function () {
             console.log("The server is running at ".concat(global.hotHttpHost));
         });
     };

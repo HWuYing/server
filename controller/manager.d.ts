@@ -1,7 +1,8 @@
 import './built-in/built-in.module';
-import { Injector } from '@fm/di';
+import { Injector } from '@hwy-fm/di';
 import { RouterManager } from './router-manager';
 export declare class ControllerManager {
+    static __order__: number;
     injector: Injector;
     routerManager: RouterManager;
     private sortByOrder;

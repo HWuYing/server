@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ctx = void 0;
 var tslib_1 = require("tslib");
-var di_1 = require("@fm/di");
-var server_1 = require("@fm/server");
+var di_1 = require("@hwy-fm/di");
 var context_1 = require("../context");
 var decorator_1 = require("../decorator");
 var Ctx = /** @class */ (function () {
@@ -18,7 +17,7 @@ var Ctx = /** @class */ (function () {
         tslib_1.__metadata("design:type", di_1.Injector)
     ], Ctx.prototype, "injector", void 0);
     tslib_1.__decorate([
-        (0, server_1.Use)(),
+        (0, decorator_1.Use)(),
         tslib_1.__metadata("design:type", Function),
         tslib_1.__metadata("design:paramtypes", [Object, Object, Function]),
         tslib_1.__metadata("design:returntype", void 0)

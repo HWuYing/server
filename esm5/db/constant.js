@@ -1,4 +1,4 @@
-import { InjectorToken } from '@fm/di';
+import { InjectorToken } from '@hwy-fm/di';
 export var SYNC = 'Sync';
 export var TABLE = 'Table';
 export var ENTITY = 'Entity';
@@ -11,3 +11,4 @@ export var BELONGS_TO = 'belongsTo';
 export var BELONGS_TO_MANY = 'belongsToMany';
 export var TRANSACTION = 'Transaction';
 export var ENTITY_QUEUE = InjectorToken.get('ENTITY_QUEUE');
+export var ENTITY_TRANSFORM = InjectorToken.get('ENTITY_TRANSFORM');

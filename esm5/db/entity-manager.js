@@ -1,11 +1,11 @@
 import { __assign, __awaiter, __decorate, __generator, __metadata, __rest } from "tslib";
 /* eslint-disable no-await-in-loop */
-import { ApplicationContext } from '@fm/core/platform';
-import { Inject, Injectable, Injector, reflectCapabilities } from '@fm/di';
+import { ApplicationContext } from '@hwy-fm/core/platform';
+import { Inject, Injectable, Injector, reflectCapabilities } from '@hwy-fm/di';
 import { get } from 'lodash';
 import { Model, Sequelize } from 'sequelize';
-import { ASSOCIATION, BELONGS_TO, SYNC, TABLE } from './constant';
-import { ENTITY_TRANSFORM, EntityTransform } from './entity-transform';
+import { ASSOCIATION, BELONGS_TO, ENTITY_TRANSFORM, SYNC, TABLE } from './constant';
+import { EntityTransform } from './entity-transform';
 function getEntity(entity) {
     return entity.__DI_FLAG__ === '__forward__ref__' && typeof entity === 'function' ? entity() : entity;
 }

@@ -1,8 +1,7 @@
-import { Injector, Provider } from '@fm/di';
+import { Injector, Provider } from '@hwy-fm/di';
 export declare class ExpressServerPlatform {
-    private port;
     private platformInjector;
-    constructor(port: number, platformInjector: Injector);
+    constructor(platformInjector: Injector);
     bootstrapStart(providers?: Provider[]): Promise<void>;
     private beforeBootstrapStart;
     private runStart;

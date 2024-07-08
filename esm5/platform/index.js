@@ -1,12 +1,10 @@
 import { __awaiter, __generator } from "tslib";
-import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@fm/core/token';
-import { Injector } from '@fm/di';
-import express from 'express';
+import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@hwy-fm/core/token';
+import { Injector } from '@hwy-fm/di';
 import { createServer } from 'http';
-import { HTTP_SERVER } from '../token';
+import { FORMAT_HOST_LISTEN, HTTP_SERVER, SERVER_HANDLER } from '../token';
 var ExpressServerPlatform = /** @class */ (function () {
-    function ExpressServerPlatform(port, platformInjector) {
-        this.port = port;
+    function ExpressServerPlatform(platformInjector) {
         this.platformInjector = platformInjector;
     }
     ExpressServerPlatform.prototype.bootstrapStart = function () {
@@ -29,8 +27,9 @@ var ExpressServerPlatform = /** @class */ (function () {
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
         return Injector.create([
-            { provide: express, useFactory: function () { return express(); } },
-            { provide: HTTP_SERVER, useFactory: createServer, deps: [express] },
+            { provide: FORMAT_HOST_LISTEN, useValue: function (port) { return "http://localhost:".concat(port, "/"); } },
+            { provide: SERVER_HANDLER, useValue: function (_, res) { return res.end(); } },
+            { provide: HTTP_SERVER, useFactory: createServer, deps: [SERVER_HANDLER] },
             providers
         ], this.platformInjector);
     };
@@ -50,9 +49,9 @@ var ExpressServerPlatform = /** @class */ (function () {
     };
     ExpressServerPlatform.prototype.listen = function (injector) {
         var server = injector.get(HTTP_SERVER);
-        var _a = (injector.get(APPLICATION_METADATA) || {}).port, port = _a === void 0 ? this.port : _a;
-        global.hotHttpHost = "http://localhost:".concat(port, "/");
-        global.hotHttpServer = server.listen(port, function () {
+        var port = (injector.get(APPLICATION_METADATA) || {}).port;
+        global.hotHttpHost = injector.get(FORMAT_HOST_LISTEN)(port);
+        global.hotHttpServer = server && server.listen(port, function () {
             console.log("The server is running at ".concat(global.hotHttpHost));
         });
     };

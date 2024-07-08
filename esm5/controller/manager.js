@@ -1,8 +1,10 @@
 import { __awaiter, __decorate, __generator, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
 import './built-in/built-in.module';
-import { ApplicationPlugin } from '@fm/core/platform/decorator';
-import { Inject, Injector, reflectCapabilities } from '@fm/di';
+import { ApplicationPlugin, Register } from '@hwy-fm/core/platform/decorator';
+import { Inject, Injector, reflectCapabilities } from '@hwy-fm/di';
+import express from 'express';
+import { SERVER_HANDLER } from '../token';
 import { CONTROLLER_MODULE, MODULE_QUEUE } from './constant';
 import { RouterManager } from './router-manager';
 var ControllerManager = /** @class */ (function () {
@@ -31,7 +33,7 @@ var ControllerManager = /** @class */ (function () {
                     case 3:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/, module];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -59,6 +61,7 @@ var ControllerManager = /** @class */ (function () {
             });
         });
     };
+    ControllerManager.__order__ = Infinity;
     __decorate([
         Inject(Injector),
         __metadata("design:type", Injector)
@@ -68,6 +71,10 @@ var ControllerManager = /** @class */ (function () {
         __metadata("design:type", RouterManager)
     ], ControllerManager.prototype, "routerManager", void 0);
     ControllerManager = __decorate([
+        Register([
+            { provide: express, useFactory: function () { return express(); } },
+            { provide: SERVER_HANDLER, useExisting: express }
+        ]),
         ApplicationPlugin()
     ], ControllerManager);
     return ControllerManager;
