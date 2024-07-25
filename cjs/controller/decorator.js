@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ControllerModel = exports.Controller = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.createEmbeddedMiddleware = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = void 0;
+exports.ControllerModel = exports.Controller = exports.Headers = exports.Params = exports.Query = exports.Body = exports.Next = exports.Res = exports.Req = exports.Ip = exports.createEmbeddedMiddleware = exports.Middleware = exports.Options = exports.Delete = exports.Param = exports.Post = exports.Put = exports.Use = exports.All = exports.Get = exports.embedded = void 0;
 var tslib_1 = require("tslib");
 var decorator_1 = require("@hwy-fm/core/platform/decorator");
 var di_1 = require("@hwy-fm/di");
 var constant_1 = require("./constant");
+var injector;
 var registerControlModel = (0, decorator_1.createRegisterLoader)(constant_1.MODULE_QUEUE);
-function getCtx(req) {
-    return req.__fmCtx__;
-}
+(0, decorator_1.runtimeInjector)(function (i) { return injector = i; });
 function paramsTransform(annotation, data) {
     var _a = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         _a[_i - 2] = arguments[_i];
     }
-    var req = _a[0], next = _a[2];
-    return getCtx(req).getParamByMetadata(annotation, data, next);
+    var next = _a[2];
+    return injector.get(constant_1.CTX_STORAGE).getStore().getParamByMetadata(annotation, data, next);
 }
 var moduleProps = function (options) { return (tslib_1.__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
@@ -37,6 +36,8 @@ var controllerProps = function (baseUrl, options) {
     if (options === void 0) { options = {}; }
     return ({ baseUrl: baseUrl, options: options });
 };
+var embedded_1 = require("./embedded");
+Object.defineProperty(exports, "embedded", { enumerable: true, get: function () { return embedded_1.embedded; } });
 exports.Get = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.get, methodProps);
 exports.All = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.all, methodProps);
 exports.Use = (0, di_1.makeMethodDecorator)(constant_1.RequestMethod.use, useProps);

@@ -12,17 +12,18 @@ export declare enum RouterParams {
     headers = "headers"
 }
 export declare enum RequestMethod {
-    post = "post",
+    use = "use",
     get = "get",
-    delete = "delete",
     put = "put",
     all = "all",
-    options = "options",
+    post = "post",
     param = "param",
-    use = "use",
+    delete = "delete",
+    options = "options",
     middleware = "middleware"
 }
 export declare enum ExtraMethod {
     embeddedMiddleware = "embeddedMiddleware"
 }
+export declare const CTX_STORAGE: InjectorToken;
 export declare const MODULE_QUEUE: InjectorToken;

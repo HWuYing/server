@@ -1,24 +1,26 @@
 import { Type } from '@hwy-fm/di';
 import type { RequestHandler, RouterOptions } from 'express';
+import type { Embedded } from './embedded';
 import type { FactoryEmbedded, MiddlewareType } from './router-manager';
-type urlType = string | string[];
+type urlType<T extends any[]> = string | string[] | Embedded<T>;
 type ModelOptions = {
     controller: Type[];
 };
 type ControllerOptions = {
     options?: RouterOptions;
 };
+export { embedded } from './embedded';
 export type { MiddlewareType } from './router-manager';
-export declare const Get: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const All: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Use: (url?: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Put: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Post: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Param: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Delete: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
-export declare const Options: (url: urlType, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Get: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const All: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Use: <T extends any[]>(url?: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> | urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Put: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Post: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Param: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Delete: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
+export declare const Options: <T extends any[]>(url: urlType<T>, ...middleware: RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>[]) => MethodDecorator;
 export declare const Middleware: () => MethodDecorator;
-export declare const createEmbeddedMiddleware: <T extends any[] = []>(embedded: FactoryEmbedded<T> | Type<MiddlewareType<T>>) => (...args: T) => MethodDecorator;
+export declare const createEmbeddedMiddleware: <T extends any[]>(embedded: FactoryEmbedded<T> | Type<MiddlewareType<T>>) => (...args: T) => MethodDecorator;
 export declare const Ip: () => import("../../di").TargetDecorator;
 export declare const Req: () => import("../../di").TargetDecorator;
 export declare const Res: () => import("../../di").TargetDecorator;

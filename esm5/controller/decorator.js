@@ -1,18 +1,17 @@
 import { __assign } from "tslib";
-import { createRegisterLoader } from '@hwy-fm/core/platform/decorator';
+import { createRegisterLoader, runtimeInjector } from '@hwy-fm/core/platform/decorator';
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@hwy-fm/di';
-import { CONTROLLER, CONTROLLER_MODULE, ExtraMethod, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
+import { CONTROLLER, CONTROLLER_MODULE, CTX_STORAGE, ExtraMethod, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
+var injector;
 var registerControlModel = createRegisterLoader(MODULE_QUEUE);
-function getCtx(req) {
-    return req.__fmCtx__;
-}
+runtimeInjector(function (i) { return injector = i; });
 function paramsTransform(annotation, data) {
     var _a = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         _a[_i - 2] = arguments[_i];
     }
-    var req = _a[0], next = _a[2];
-    return getCtx(req).getParamByMetadata(annotation, data, next);
+    var next = _a[2];
+    return injector.get(CTX_STORAGE).getStore().getParamByMetadata(annotation, data, next);
 }
 var moduleProps = function (options) { return (__assign({}, options)); };
 var paramsProps = function (key) { return ({ key: key, transform: paramsTransform }); };
@@ -34,6 +33,7 @@ var controllerProps = function (baseUrl, options) {
     if (options === void 0) { options = {}; }
     return ({ baseUrl: baseUrl, options: options });
 };
+export { embedded } from './embedded';
 export var Get = makeMethodDecorator(RequestMethod.get, methodProps);
 export var All = makeMethodDecorator(RequestMethod.all, methodProps);
 export var Use = makeMethodDecorator(RequestMethod.use, useProps);

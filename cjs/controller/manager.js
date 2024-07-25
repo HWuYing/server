@@ -3,16 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ControllerManager = void 0;
 var tslib_1 = require("tslib");
 /* eslint-disable no-await-in-loop */
-require("./built-in/built-in.module");
 var decorator_1 = require("@hwy-fm/core/platform/decorator");
 var di_1 = require("@hwy-fm/di");
+var async_hooks_1 = require("async_hooks");
 var express_1 = tslib_1.__importDefault(require("express"));
 var token_1 = require("../token");
 var constant_1 = require("./constant");
+var context_1 = require("./context");
 var router_manager_1 = require("./router-manager");
 var ControllerManager = /** @class */ (function () {
     function ControllerManager() {
     }
+    ControllerManager.prototype.serverHandler = function (storage, app) {
+        var _this = this;
+        return function (req, res) { return storage.run(new context_1.Context(_this.injector, req, res), function () { return app(req, res); }); };
+    };
     ControllerManager.prototype.sortByOrder = function (arr) {
         return arr.sort(function (item) { return item.__order__ || 0; });
     };
@@ -73,10 +78,16 @@ var ControllerManager = /** @class */ (function () {
         (0, di_1.Inject)(router_manager_1.RouterManager),
         tslib_1.__metadata("design:type", router_manager_1.RouterManager)
     ], ControllerManager.prototype, "routerManager", void 0);
+    tslib_1.__decorate([
+        (0, decorator_1.Prov)(token_1.SERVER_HANDLER, { deps: [constant_1.CTX_STORAGE, express_1.default] }),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [async_hooks_1.AsyncLocalStorage, Function]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], ControllerManager.prototype, "serverHandler", null);
     ControllerManager = tslib_1.__decorate([
         (0, decorator_1.Register)([
             { provide: express_1.default, useFactory: function () { return (0, express_1.default)(); } },
-            { provide: token_1.SERVER_HANDLER, useExisting: express_1.default }
+            { provide: constant_1.CTX_STORAGE, useValue: new async_hooks_1.AsyncLocalStorage() }
         ]),
         (0, decorator_1.ApplicationPlugin)()
     ], ControllerManager);

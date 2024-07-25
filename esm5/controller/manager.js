@@ -1,15 +1,20 @@
 import { __awaiter, __decorate, __generator, __metadata } from "tslib";
 /* eslint-disable no-await-in-loop */
-import './built-in/built-in.module';
-import { ApplicationPlugin, Register } from '@hwy-fm/core/platform/decorator';
+import { ApplicationPlugin, Prov, Register } from '@hwy-fm/core/platform/decorator';
 import { Inject, Injector, reflectCapabilities } from '@hwy-fm/di';
+import { AsyncLocalStorage } from 'async_hooks';
 import express from 'express';
 import { SERVER_HANDLER } from '../token';
-import { CONTROLLER_MODULE, MODULE_QUEUE } from './constant';
+import { CONTROLLER_MODULE, CTX_STORAGE, MODULE_QUEUE } from './constant';
+import { Context } from './context';
 import { RouterManager } from './router-manager';
 var ControllerManager = /** @class */ (function () {
     function ControllerManager() {
     }
+    ControllerManager.prototype.serverHandler = function (storage, app) {
+        var _this = this;
+        return function (req, res) { return storage.run(new Context(_this.injector, req, res), function () { return app(req, res); }); };
+    };
     ControllerManager.prototype.sortByOrder = function (arr) {
         return arr.sort(function (item) { return item.__order__ || 0; });
     };
@@ -70,10 +75,16 @@ var ControllerManager = /** @class */ (function () {
         Inject(RouterManager),
         __metadata("design:type", RouterManager)
     ], ControllerManager.prototype, "routerManager", void 0);
+    __decorate([
+        Prov(SERVER_HANDLER, { deps: [CTX_STORAGE, express] }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [AsyncLocalStorage, Function]),
+        __metadata("design:returntype", void 0)
+    ], ControllerManager.prototype, "serverHandler", null);
     ControllerManager = __decorate([
         Register([
             { provide: express, useFactory: function () { return express(); } },
-            { provide: SERVER_HANDLER, useExisting: express }
+            { provide: CTX_STORAGE, useValue: new AsyncLocalStorage() }
         ]),
         ApplicationPlugin()
     ], ControllerManager);

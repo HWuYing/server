@@ -4,6 +4,7 @@ import { Inject, Injectable, Injector, MethodProxy, reflectCapabilities } from '
 import express, { Router } from 'express';
 import { flatMapDeep, get } from 'lodash';
 import { CONTROLLER, ExtraMethod, RequestMethod } from './constant';
+import { Embedded } from './embedded';
 function type(typeName) {
     return (obj) => Object.prototype.toString.call(obj).replace(/\[Object ([^\]]*)\]/ig, '$1').toLowerCase() === typeName;
 }
@@ -26,41 +27,48 @@ let RouterManager = class RouterManager {
             }
         });
     }
+    transformEmbedded(embedded, args = []) {
+        var _a;
+        if ((_a = embedded.prototype) === null || _a === void 0 ? void 0 : _a.middleware) {
+            return this.injector.get(embedded).middleware(...args);
+        }
+        return typeof embedded === 'function' ? embedded(...args) : embedded;
+    }
     getEmbeddedMiddleware(type, method, name = ExtraMethod.embeddedMiddleware) {
         const embeddedMiddleware = [];
         reflectCapabilities.getMethodAnnotations(type, method).forEach(({ annotationInstance: { metadataName, embedded, args } }) => {
-            var _a;
-            let middleware;
             if (metadataName !== name || !embedded)
                 return;
-            if ((_a = embedded.prototype) === null || _a === void 0 ? void 0 : _a.middleware)
-                middleware = this.injector.get(embedded).middleware(...args);
-            else if (typeof embedded === 'function' && metadataName === ExtraMethod.embeddedMiddleware) {
-                middleware = embedded(...args);
-            }
-            embeddedMiddleware.push(middleware || embedded);
+            embeddedMiddleware.push(this.transformEmbedded(embedded, args) || embedded);
         });
         return embeddedMiddleware;
+    }
+    transformUrl(url) {
+        let middleware = url;
+        if (!middleware)
+            return [];
+        if (middleware instanceof Embedded)
+            middleware = this.transformEmbedded(middleware.embedded, middleware.args);
+        return middleware ? [typeString(middleware) ? replaceUrl(middleware) : middleware] : [];
     }
     createRouter(type, cls, options) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             const map = new Map();
             const router = Router(options);
-            const suffix = 'embedded';
             for (const { method, annotationInstance: { url, middleware, metadataName } } of (_a = type.__methods__) !== null && _a !== void 0 ? _a : []) {
+                const hashKey = `${method}embedded`;
                 if (this.checkRouterMethod(metadataName))
                     continue;
                 if (!map.has(method)) {
                     map.set(method, this.createAgent(metadataName, this.mp.proxyMethod(cls, method)));
-                    map.set(`${method}${suffix}`, flatMapDeep(this.getEmbeddedMiddleware(type, method)));
+                    map.set(hashKey, flatMapDeep(this.getEmbeddedMiddleware(type, method)));
                 }
                 if (metadataName === RequestMethod.middleware) {
                     yield map.get(method)(router);
                     continue;
                 }
-                const params = url ? [typeString(url) ? replaceUrl(url) : url] : [];
-                get(router, metadataName).apply(router, [...params, ...map.get(`${method}${suffix}`), ...middleware, map.get(method)]);
+                get(router, metadataName).apply(router, [...this.transformUrl(url), ...map.get(hashKey), ...middleware, map.get(method)]);
             }
             return router;
         });

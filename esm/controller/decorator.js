@@ -1,18 +1,18 @@
-import { createRegisterLoader } from '@hwy-fm/core/platform/decorator';
+import { createRegisterLoader, runtimeInjector } from '@hwy-fm/core/platform/decorator';
 import { makeDecorator, makeMethodDecorator, makeParamDecorator, setInjectableDef } from '@hwy-fm/di';
-import { CONTROLLER, CONTROLLER_MODULE, ExtraMethod, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
+import { CONTROLLER, CONTROLLER_MODULE, CTX_STORAGE, ExtraMethod, MODULE_QUEUE, RequestMethod, RouterParams } from './constant';
+let injector;
 const registerControlModel = createRegisterLoader(MODULE_QUEUE);
-function getCtx(req) {
-    return req.__fmCtx__;
-}
-function paramsTransform(annotation, data, ...[req, , next]) {
-    return getCtx(req).getParamByMetadata(annotation, data, next);
+runtimeInjector((i) => injector = i);
+function paramsTransform(annotation, data, ...[, , next]) {
+    return injector.get(CTX_STORAGE).getStore().getParamByMetadata(annotation, data, next);
 }
 const moduleProps = (options) => (Object.assign({}, options));
 const paramsProps = (key) => ({ key, transform: paramsTransform });
 const useProps = (url, ...middleware) => ({ url, middleware });
 const methodProps = (url, ...middleware) => ({ url, middleware });
 const controllerProps = (baseUrl, options = {}) => ({ baseUrl, options });
+export { embedded } from './embedded';
 export const Get = makeMethodDecorator(RequestMethod.get, methodProps);
 export const All = makeMethodDecorator(RequestMethod.all, methodProps);
 export const Use = makeMethodDecorator(RequestMethod.use, useProps);

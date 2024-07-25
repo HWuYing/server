@@ -2,7 +2,7 @@ import { __awaiter, __generator } from "tslib";
 import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@hwy-fm/core/token';
 import { Injector } from '@hwy-fm/di';
 import { createServer } from 'http';
-import { FORMAT_HOST_LISTEN, HTTP_SERVER, SERVER_HANDLER } from '../token';
+import { HTTP_SERVER, SERVER_HANDLER } from '../token';
 var ExpressServerPlatform = /** @class */ (function () {
     function ExpressServerPlatform(platformInjector) {
         this.platformInjector = platformInjector;
@@ -27,7 +27,6 @@ var ExpressServerPlatform = /** @class */ (function () {
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
         return Injector.create([
-            { provide: FORMAT_HOST_LISTEN, useValue: function (port) { return "http://localhost:".concat(port, "/"); } },
             { provide: SERVER_HANDLER, useValue: function (_, res) { return res.end(); } },
             { provide: HTTP_SERVER, useFactory: createServer, deps: [SERVER_HANDLER] },
             providers
@@ -48,11 +47,16 @@ var ExpressServerPlatform = /** @class */ (function () {
         });
     };
     ExpressServerPlatform.prototype.listen = function (injector) {
+        var _this = this;
+        var _a;
         var server = injector.get(HTTP_SERVER);
-        var port = (injector.get(APPLICATION_METADATA) || {}).port;
-        global.hotHttpHost = injector.get(FORMAT_HOST_LISTEN)(port);
-        global.hotHttpServer = server && server.listen(port, function () {
-            console.log("The server is running at ".concat(global.hotHttpHost));
+        var port = (_a = injector.get(APPLICATION_METADATA)) === null || _a === void 0 ? void 0 : _a.port;
+        global.hotHttpHost = "http://localhost:".concat(port, "/");
+        server === null || server === void 0 ? void 0 : server.listen(port, function () { return console.log("The server is running at ".concat(global.hotHttpHost)); });
+        hotReload && hotReload(function () {
+            server === null || server === void 0 ? void 0 : server.close();
+            injector.destroy();
+            _this.platformInjector.destroy();
         });
     };
     return ExpressServerPlatform;

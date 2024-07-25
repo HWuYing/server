@@ -14,18 +14,19 @@ export var RouterParams;
 })(RouterParams || (RouterParams = {}));
 export var RequestMethod;
 (function (RequestMethod) {
-    RequestMethod["post"] = "post";
+    RequestMethod["use"] = "use";
     RequestMethod["get"] = "get";
-    RequestMethod["delete"] = "delete";
     RequestMethod["put"] = "put";
     RequestMethod["all"] = "all";
-    RequestMethod["options"] = "options";
+    RequestMethod["post"] = "post";
     RequestMethod["param"] = "param";
-    RequestMethod["use"] = "use";
+    RequestMethod["delete"] = "delete";
+    RequestMethod["options"] = "options";
     RequestMethod["middleware"] = "middleware";
 })(RequestMethod || (RequestMethod = {}));
 export var ExtraMethod;
 (function (ExtraMethod) {
     ExtraMethod["embeddedMiddleware"] = "embeddedMiddleware";
 })(ExtraMethod || (ExtraMethod = {}));
+export const CTX_STORAGE = InjectorToken.get('CTX_STORAGE');
 export const MODULE_QUEUE = InjectorToken.get('MODULE_QUEUE');

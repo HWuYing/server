@@ -30,7 +30,6 @@ var ExpressServerPlatform = /** @class */ (function () {
     ExpressServerPlatform.prototype.beforeBootstrapStart = function (providers) {
         if (providers === void 0) { providers = []; }
         return di_1.Injector.create([
-            { provide: token_2.FORMAT_HOST_LISTEN, useValue: function (port) { return "http://localhost:".concat(port, "/"); } },
             { provide: token_2.SERVER_HANDLER, useValue: function (_, res) { return res.end(); } },
             { provide: token_2.HTTP_SERVER, useFactory: http_1.createServer, deps: [token_2.SERVER_HANDLER] },
             providers
@@ -51,11 +50,16 @@ var ExpressServerPlatform = /** @class */ (function () {
         });
     };
     ExpressServerPlatform.prototype.listen = function (injector) {
+        var _this = this;
+        var _a;
         var server = injector.get(token_2.HTTP_SERVER);
-        var port = (injector.get(token_1.APPLICATION_METADATA) || {}).port;
-        global.hotHttpHost = injector.get(token_2.FORMAT_HOST_LISTEN)(port);
-        global.hotHttpServer = server && server.listen(port, function () {
-            console.log("The server is running at ".concat(global.hotHttpHost));
+        var port = (_a = injector.get(token_1.APPLICATION_METADATA)) === null || _a === void 0 ? void 0 : _a.port;
+        global.hotHttpHost = "http://localhost:".concat(port, "/");
+        server === null || server === void 0 ? void 0 : server.listen(port, function () { return console.log("The server is running at ".concat(global.hotHttpHost)); });
+        hotReload && hotReload(function () {
+            server === null || server === void 0 ? void 0 : server.close();
+            injector.destroy();
+            _this.platformInjector.destroy();
         });
     };
     return ExpressServerPlatform;
