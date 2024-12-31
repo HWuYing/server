@@ -2,7 +2,7 @@ import { __awaiter } from "tslib";
 import { APPLICATION_METADATA, APPLICATION_TOKEN } from '@hwy-fm/core/token';
 import { Injector } from '@hwy-fm/di';
 import { createServer } from 'http';
-import { HTTP_SERVER, SERVER_HANDLER } from '../token';
+import { HTTP_HOST, HTTP_SERVER, SERVER_HANDLER } from '../token';
 export class ExpressServerPlatform {
     constructor(platformInjector) {
         this.platformInjector = platformInjector;
@@ -14,10 +14,15 @@ export class ExpressServerPlatform {
             this.listen(injector);
         });
     }
+    parseHttpHost(injector) {
+        var _a;
+        return `http://localhost:${(_a = injector.get(APPLICATION_METADATA)) === null || _a === void 0 ? void 0 : _a.port}/`;
+    }
     beforeBootstrapStart(providers = []) {
         return Injector.create([
             { provide: SERVER_HANDLER, useValue: (_, res) => res.end() },
             { provide: HTTP_SERVER, useFactory: createServer, deps: [SERVER_HANDLER] },
+            { provide: HTTP_HOST, useFactory: (injector) => this.parseHttpHost(injector), deps: [Injector] },
             providers
         ], this.platformInjector);
     }
@@ -32,12 +37,14 @@ export class ExpressServerPlatform {
         var _a;
         const server = injector.get(HTTP_SERVER);
         const port = (_a = injector.get(APPLICATION_METADATA)) === null || _a === void 0 ? void 0 : _a.port;
-        global.hotHttpHost = `http://localhost:${port}/`;
-        server === null || server === void 0 ? void 0 : server.listen(port, () => console.log(`The server is running at ${global.hotHttpHost}`));
-        hotReload && hotReload(() => {
-            server === null || server === void 0 ? void 0 : server.close();
-            injector.destroy();
-            this.platformInjector.destroy();
+        server === null || server === void 0 ? void 0 : server.listen(port, () => console.log(`The server is running at ${this.parseHttpHost(injector)}`));
+        typeof hotReload === 'function' && hotReload({
+            hotHost: this.parseHttpHost(injector),
+            hotReload: () => {
+                server === null || server === void 0 ? void 0 : server.close();
+                injector.destroy();
+                this.platformInjector.destroy();
+            }
         });
     }
 }

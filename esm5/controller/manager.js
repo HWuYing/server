@@ -20,18 +20,17 @@ var ControllerManager = /** @class */ (function () {
     };
     ControllerManager.prototype.registerControllerModel = function (type) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, controller, module, _i, _b, control;
+            var _a, controller, _i, _b, control;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         _a = reflectCapabilities.getAnnotation(type, CONTROLLER_MODULE).controller, controller = _a === void 0 ? [] : _a;
-                        module = this.injector.get(type);
                         _i = 0, _b = this.sortByOrder(controller);
                         _c.label = 1;
                     case 1:
                         if (!(_i < _b.length)) return [3 /*break*/, 4];
                         control = _b[_i];
-                        return [4 /*yield*/, this.routerManager.register(module, control)];
+                        return [4 /*yield*/, this.routerManager.register(type, control)];
                     case 2:
                         _c.sent();
                         _c.label = 3;
@@ -84,7 +83,7 @@ var ControllerManager = /** @class */ (function () {
     ControllerManager = __decorate([
         Register([
             { provide: express, useFactory: function () { return express(); } },
-            { provide: CTX_STORAGE, useValue: new AsyncLocalStorage() }
+            { provide: CTX_STORAGE, useFactory: function () { return new AsyncLocalStorage(); } }
         ]),
         ApplicationPlugin()
     ], ControllerManager);

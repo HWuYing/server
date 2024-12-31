@@ -18,9 +18,8 @@ let ControllerManager = class ControllerManager {
     registerControllerModel(type) {
         return __awaiter(this, void 0, void 0, function* () {
             const { controller = [] } = reflectCapabilities.getAnnotation(type, CONTROLLER_MODULE);
-            const module = this.injector.get(type);
             for (const control of this.sortByOrder(controller)) {
-                yield this.routerManager.register(module, control);
+                yield this.routerManager.register(type, control);
             }
         });
     }
@@ -50,7 +49,7 @@ __decorate([
 ControllerManager = __decorate([
     Register([
         { provide: express, useFactory: () => express() },
-        { provide: CTX_STORAGE, useValue: new AsyncLocalStorage() }
+        { provide: CTX_STORAGE, useFactory: () => new AsyncLocalStorage() }
     ]),
     ApplicationPlugin()
 ], ControllerManager);

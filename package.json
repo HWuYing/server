@@ -55,6 +55,18 @@
 			"es2015": "./esm/extension/*.js",
 			"default": "./esm5/extension/*.js"
 		},
+		"./http-proxy": {
+			"node": "./cjs/http-proxy/index.js",
+			"require": "./cjs/http-proxy/index.js",
+			"es2015": "./esm/http-proxy/index.js",
+			"default": "./esm5/http-proxy/index.js"
+		},
+		"./http-proxy/*": {
+			"node": "./cjs/http-proxy/*.js",
+			"require": "./cjs/http-proxy/*.js",
+			"es2015": "./esm/http-proxy/*.js",
+			"default": "./esm5/http-proxy/*.js"
+		},
 		"./platform": {
 			"node": "./cjs/platform/index.js",
 			"require": "./cjs/platform/index.js",

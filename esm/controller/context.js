@@ -17,7 +17,7 @@ export class Context {
             case RouterParams.ip: return this.req.ip;
             case RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
-            case RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
+            case RouterParams.param: return this.getObjectByKey(this.req.params, metadata);
             case RouterParams.headers: return this.getObjectByKey(this.req.headers, metadata);
         }
         return data;

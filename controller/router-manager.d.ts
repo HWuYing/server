@@ -9,12 +9,14 @@ export declare class RouterManager {
     app: Express;
     injector: Injector;
     mp: MethodProxy;
+    formatUrl: (url: string) => string;
     private checkRouterMethod;
     private createAgent;
+    private getResponseHeaders;
     private transformEmbedded;
     private getEmbeddedMiddleware;
     private transformUrl;
     private createRouter;
-    register(_module: any, controller: Type): Promise<any>;
+    register(_module: Type, controller: Type): Promise<any>;
 }
 export {};

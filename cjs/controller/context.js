@@ -21,7 +21,7 @@ var Context = /** @class */ (function () {
             case constant_1.RouterParams.ip: return this.req.ip;
             case constant_1.RouterParams.body: return this.getObjectByKey(this.req.body, metadata);
             case constant_1.RouterParams.query: return this.getObjectByKey(this.req.query, metadata);
-            case constant_1.RouterParams.params: return this.getObjectByKey(this.req.params, metadata);
+            case constant_1.RouterParams.param: return this.getObjectByKey(this.req.params, metadata);
             case constant_1.RouterParams.headers: return this.getObjectByKey(this.req.headers, metadata);
         }
         return data;
